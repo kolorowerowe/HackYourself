@@ -9,8 +9,8 @@ function createWindow () {
         }
     })
 
-    win.loadFile('index.html')
-    win.webContents.openDevTools()
+    win.loadFile('src/index.html')
+    // win.webContents.openDevTools()
 }
 
 app.whenReady().then(createWindow)
