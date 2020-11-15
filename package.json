@@ -23,6 +23,7 @@
   },
   "scripts": {
     "dev": "concurrently -k \"SET BROWSER=none && npm start\" \"npm:electron\"",
+    "devlinux": "concurrently -k \"export BROWSER=none && npm start\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && electron .",
     "start": "react-scripts start",
     "build": "react-scripts build",
