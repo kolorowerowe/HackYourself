@@ -7,7 +7,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 function App() {
     return (
         <MuiThemeProvider theme={darkTheme}>
-            <div style={{padding: 20}}>
+            <div>
                 <CssBaseline/>
                 <RootComponent/>
             </div>

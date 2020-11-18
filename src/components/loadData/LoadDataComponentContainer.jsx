@@ -1,16 +1,8 @@
 import React, {useState} from 'react';
 import {Button, TextField} from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Alert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
-
-const useStyles = makeStyles((theme) => ({
-    bigSize: {
-        fontSize: 30
-    }
-}));
 
 
 const LoadDataComponentContainer = (props) => {
@@ -21,7 +13,6 @@ const LoadDataComponentContainer = (props) => {
         fileValidationError
     } = props;
 
-    const classes = useStyles();
 
     const [pathToData, setPathToData] = useState('');
 
