@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Button, Typography} from "@material-ui/core";
+import {Button, Typography, TextField, Grid} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
+import { loadDataFromPath } from '../loader';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -10,11 +10,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const LoadData = (path) => {
+    console.log(loadDataFromPath(path));
+}
+
 const StartComponentContainer = () => {
 
     const classes = useStyles();
 
     const [clickCount, setClickCount] = useState(0);
+    const [pathToData, setPathToData] = useState('scieżka do folderu inbox');
 
     return (
         <Grid container spacing={2} alignItems={'center'}>
@@ -34,8 +39,18 @@ const StartComponentContainer = () => {
                     {clickCount}
                 </Typography>
             </Grid>
+            <Grid item xs={6}>
+                <TextField
+                    id="path"
+                    name="path"
+                    value={pathToData}
+                    />
+                <Button onClick={() => LoadData(pathToData)}
+                        fullWidth>
+                   Wczytaj dane!
+                </Button>
+            </Grid>
         </Grid>
-
     );
 };
 
