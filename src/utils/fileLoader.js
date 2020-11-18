@@ -35,17 +35,21 @@ const readJsonFile = (path, fs) => {
 export const loadDataFromPath = (path) => {
     let fs = window.require('fs');
 
-    if(!fs.existsSync(path)) return false;
+    if(!fs.existsSync(path)) {
+        throw new Error(`Path '${path}' not exists`);
+    }
 
     let stats = fs.lstatSync(path);
 
-    if (!stats.isDirectory()) return false;
+    if (!stats.isDirectory()) {
+        throw new Error(`Path is not a directory`);
+    }
 
     let allDirName = getDirectories(path, fs);
 
     let allMessages = getAllMessages(path, allDirName, fs);
 
-    console.log(allMessages);
+    console.log("All messages: " , allMessages);
 
     return true;
 }
