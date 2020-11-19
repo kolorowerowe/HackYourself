@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import LoadDataComponentContainer from "../loadData/LoadDataComponentContainer";
 import {loadDataFromPath} from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import SideBar from "./SideBar";
 import {Typography} from "@material-ui/core";
+import {getTotalStats} from "../../algorithms/algorithms";
+import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
+import ContactComponent from "../contact/ContactComponent";
 
 const RootComponent = () => {
 
@@ -20,9 +23,11 @@ const RootComponent = () => {
 
     const [route, setRoute] = useState('HELLO');
 
-    const [fileData, setFileData] = useState(undefined);
+    const [messagesMap, setMessagesMap] = useState(undefined);
     const [loading, setLoading] = useState(false);
     const [fileValidationError, setFileValidationError] = useState(null);
+
+    const [totalStats, setTotalStats] = useState(undefined);
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -34,7 +39,7 @@ const RootComponent = () => {
         try {
             const result = loadDataFromPath(path);
             setSnackbarMessage('Loaded successfully');
-            setFileData(result);
+            setMessagesMap(result);
             setRoute('STATS');
         } catch (e) {
             setFileValidationError(e);
@@ -42,6 +47,12 @@ const RootComponent = () => {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        if (messagesMap) {
+            setTotalStats(getTotalStats(messagesMap));
+        }
+    }, [messagesMap])
 
 
     return (
@@ -53,12 +64,13 @@ const RootComponent = () => {
                 {route === 'HELLO' && <Typography>todo: start</Typography>
                 }
                 {route === 'CHOOSE_DIR' && <LoadDataComponentContainer loading={loading}
-                                            fileValidationError={fileValidationError}
-                                            onLoadData={onLoadData}/>
+                                                                       fileValidationError={fileValidationError}
+                                                                       onLoadData={onLoadData}/>
                 }
-                {route === 'STATS' && <Typography>todo: stats</Typography>
+                {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={!!messagesMap}
+                                                                    totalStats={totalStats}/>
                 }
-                {route === 'CONTACT' && <Typography>todo: contact</Typography>
+                {route === 'CONTACT' && <ContactComponent/>
                 }
             </main>
 
@@ -76,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(3),
     },
 }));
 

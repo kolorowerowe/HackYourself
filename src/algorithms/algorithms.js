@@ -1,3 +1,5 @@
+import {replaceRetarded, toRemove} from "./encoding";
+
 const getHourly = (hour, messages) => {
     let filtered = messages.filter(m => m.date.getHours() === hour);
     let contents = filtered.map(e => e.content).filter(e => e);
@@ -36,8 +38,15 @@ const getRecipients = (messages, user_name) => {
 // Gets hourly/weekly stats
 // param: messages - list of serialized jsons from inbox
 export const getTimeStats = (messages, user_name) => {
-    const allMessages = messages.map(e => e.messages).filter(e => e).flat().filter(m => m.sender_name === user_name);
-    const messagesWithDate = allMessages.filter(x => x.timestamp_ms).map(e => ({...e, date: new Date(e.timestamp_ms)}));
+
+    const allMessages = messages.map(e => e.messages)
+        .filter(e => e)
+        .flat()
+        .filter(m => m.sender_name === user_name);
+
+    const messagesWithDate = allMessages.filter(x => x.timestamp_ms)
+        .map(e => ({...e, date: new Date(e.timestamp_ms)}));
+
     let hourly = {};
     for (let i = 0; i < 24; ++i) {
         hourly[i] = getHourly(i, messagesWithDate);
@@ -63,32 +72,21 @@ export const getTimeStatsPerRecipient = (messages, user_name) => {
 };
 
 
-const retardedEncoding = ["\u00c4\u0085", "\u00c4\u0084", "\u00c4\u0087", "\u00c4\u0086", "\u00c4\u0099", "\u00c4\u0098", "\u00c5\u0082", "\u00c5\u0081", "\u00c5\u0084", "\u00c5\u0083", "\u00c3\u00b3", "\u00c3\u0093", "\u00c5\u009b", "\u00c5\u009a", "\u00c5\u00ba", "\u00c5\u00b9", "\u00c5\u00bc", "\u00c5\u00bb"];
-const lessRetardedEncoding = "ąĄćĆęĘłŁńŃóÓśŚźŹżŻ";
-const conversion = ((a, b) => {
-    let res = {};
-    for (let i = 0; i < a.length; ++i) res[a[i]] = b[i];
-    return res;
-})(retardedEncoding, lessRetardedEncoding);
-
-const replaceRetarded = (texts) => {
-    let result = [];
-    for (let t of texts) {
-        for (let key in conversion)
-            t = t.replaceAll(key, conversion[key]);
-        result.push(t);
-    }
-    return result;
-}
-const toRemove = /[0-9!@#$%^&*()\-_+={}[\]\\|:;'"<,.>/?]/g;
-
-
 export const getWordStats = (messages, user_name) => {
     const allMessages = messages.map(e => e.messages).filter(e => e).flat();
     const texts = allMessages.filter(m => m.sender_name === user_name && m.type === 'Generic')
-        .map(m => m.content).filter(m => m);
-    let split = texts.map(t => t.split(/(\s+)/)).flat().map(t => t.trim()).filter(t => t.length > 0);
-    split = replaceRetarded(split).map(m => m.replace(toRemove, "").toLocaleLowerCase()).filter(e => e);
+        .map(m => m.content)
+        .filter(m => m);
+
+    let split = texts.map(t => t.split(/(\s+)/))
+        .flat()
+        .map(t => t.trim())
+        .filter(t => t.length > 0);
+
+    split = replaceRetarded(split)
+        .map(m => m.replace(toRemove, "").toLocaleLowerCase())
+        .filter(e => e);
+
     let occurences = split.reduce((acc, word) => {
         if (typeof acc[word] == 'undefined') {
             acc[word] = 1;
@@ -116,3 +114,33 @@ export const getWordStatsPerRecipient = (messages, user_name) => {
     }
     return stats;
 };
+
+export const getTotalStats = (messagesMap) => {
+
+
+    return {
+        totalMessages: getTotalMessages(messagesMap),
+        topUsers: getTopUsers(messagesMap)
+    }
+}
+
+const getTotalMessages = (messagesMap) => {
+    let totalMessages = 0;
+
+    for (let [name, json] of messagesMap) {
+        totalMessages += json.messages.length;
+    }
+    return totalMessages;
+}
+
+const getTopUsers = (messagesMap, top = 10) => {
+    let allUsers = [];
+    for (let [name, json] of messagesMap) {
+        allUsers.push({
+            name: json.title,
+            messagesCount: json.messages.length
+        })
+    }
+    allUsers.sort((a, b) => a.messagesCount < b.messagesCount ? 1 : -1);
+    return allUsers.slice(0, top).map(user => ({...user, name: replaceRetarded([user.name])[0]}));
+}

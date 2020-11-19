@@ -3,6 +3,7 @@ import {Button, TextField} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Alert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import {useCommonStyles} from "../../theme/commonStyles";
 
 
 const LoadDataComponentContainer = (props) => {
@@ -13,11 +14,13 @@ const LoadDataComponentContainer = (props) => {
         fileValidationError
     } = props;
 
+    const styles = useCommonStyles();
+
 
     const [pathToData, setPathToData] = useState('');
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={3} className={styles.containerPadding}>
             <Grid item xs={12}>
                 <TextField id="path"
                            name="path"

@@ -51,5 +51,5 @@ export const loadDataFromPath = (path) => {
 
     console.log("All messages: " , allMessages);
 
-    return true;
+    return allMessages;
 }
