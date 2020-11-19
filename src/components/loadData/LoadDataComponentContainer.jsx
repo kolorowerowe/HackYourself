@@ -50,7 +50,7 @@ const LoadDataComponentContainer = (props) => {
                                name="username"
                                value={username}
                                placeholder={'Dominik Kołodziej'}
-                               label={'Facebook username'}
+                               label={'Facebook username (optional)'}
                                onChange={e => setUsername(e.target.value)}
                                disabled={loading}
                                fullWidth

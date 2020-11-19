@@ -9,6 +9,8 @@ import {getTotalStats} from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
 import {getWordStats} from "../../algorithms/wordAlgorithms";
+import { enretardize } from '../../algorithms/encoding';
+import { getUsername } from '../../algorithms/utils';
 
 const RootComponent = () => {
 
@@ -56,8 +58,9 @@ const RootComponent = () => {
     useEffect(() => {
         if (messagesMap) {
             setTotalStats(getTotalStats(messagesMap));
-
-            setWordStats(getWordStats([...messagesMap.values()], 'Dominik Ko\u00c5\u0082odziej'));
+            let _username = getUsername([...messagesMap.values()]);
+            setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
+            setUsername(_username);
         }
     }, [messagesMap])
 

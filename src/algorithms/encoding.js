@@ -8,6 +8,12 @@ export const conversion = ((a, b) => {
     return res;
 })(retardedEncoding, lessRetardedEncoding);
 
+export const conversionReverse = ((a, b) => {
+    let res = {};
+    for (let i = 0; i < a.length; ++i) res[a[i]] = b[i];
+    return res;
+})(lessRetardedEncoding, retardedEncoding);
+
 export const replaceRetarded = (texts) => {
     let result = [];
     for (let t of texts) {
@@ -17,5 +23,15 @@ export const replaceRetarded = (texts) => {
     }
     return result;
 }
+
+export const enretardize = (str) => {
+    let res = str;
+    for (let key in conversionReverse){
+        res = res.replaceAll(key, conversionReverse[key]);
+    }
+
+    return res;
+}
+
 
 export const toRemove = /[0-9!@#$%^&*()\-_+={}[\]\\|:;'"<,.>/?]/g;
