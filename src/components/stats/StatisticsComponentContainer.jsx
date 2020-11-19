@@ -9,6 +9,7 @@ import useTheme from "@material-ui/core/styles/useTheme";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import {useCommonStyles} from "../../theme/commonStyles";
+import WordStatistics from "./WordStatistics";
 
 
 const StatisticsComponentContainer = (props) => {
@@ -18,7 +19,8 @@ const StatisticsComponentContainer = (props) => {
         totalStats: {
             totalMessages = 0,
             topUsers = []
-        } = {}
+        } = {},
+        wordStats
     } = props;
 
     const theme = useTheme();
@@ -84,7 +86,7 @@ const StatisticsComponentContainer = (props) => {
                             Time
                         </TabPanel>
                         <TabPanel index={2} dir={theme.direction}>
-                            Words
+                            <WordStatistics wordStats={wordStats}/>
                         </TabPanel>
                     </SwipeableViews>
                 </div>

@@ -5,9 +5,10 @@ import SnackbarAlert from "./SnackbarAlert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import SideBar from "./SideBar";
 import {Typography} from "@material-ui/core";
-import {getTotalStats} from "../../algorithms/algorithms";
+import {getTotalStats} from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
+import {getWordStats} from "../../algorithms/wordAlgorithms";
 
 const RootComponent = () => {
 
@@ -23,18 +24,22 @@ const RootComponent = () => {
 
     const [route, setRoute] = useState('HELLO');
 
+    const [username, setUsername] = useState('');
     const [messagesMap, setMessagesMap] = useState(undefined);
     const [loading, setLoading] = useState(false);
     const [fileValidationError, setFileValidationError] = useState(null);
 
     const [totalStats, setTotalStats] = useState(undefined);
+    const [wordStats, setWordStats] = useState(undefined);
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
-
 
     const onLoadData = (path) => {
         setFileValidationError(null);
         setLoading(true);
+
+        localStorage.setItem('PATH', path);
+        localStorage.setItem('USERNAME', username);
 
         try {
             const result = loadDataFromPath(path);
@@ -51,6 +56,8 @@ const RootComponent = () => {
     useEffect(() => {
         if (messagesMap) {
             setTotalStats(getTotalStats(messagesMap));
+
+            setWordStats(getWordStats([...messagesMap.values()], 'Dominik Ko\u00c5\u0082odziej'));
         }
     }, [messagesMap])
 
@@ -63,12 +70,15 @@ const RootComponent = () => {
 
                 {route === 'HELLO' && <Typography>todo: start</Typography>
                 }
-                {route === 'CHOOSE_DIR' && <LoadDataComponentContainer loading={loading}
+                {route === 'CHOOSE_DIR' && <LoadDataComponentContainer username={username}
+                                                                       setUsername={setUsername}
+                                                                       loading={loading}
                                                                        fileValidationError={fileValidationError}
                                                                        onLoadData={onLoadData}/>
                 }
                 {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={!!messagesMap}
-                                                                    totalStats={totalStats}/>
+                                                                    totalStats={totalStats}
+                                                                    wordStats={wordStats}/>
                 }
                 {route === 'CONTACT' && <ContactComponent/>
                 }
