@@ -58,9 +58,12 @@ const RootComponent = () => {
     useEffect(() => {
         if (messagesMap) {
             setTotalStats(getTotalStats(messagesMap));
-            let _username = getUsername([...messagesMap.values()]);
+            let _username = username;
+            if (!_username){
+                _username = getUsername([...messagesMap.values()]);
+                setUsername(_username);
+            }
             setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
-            setUsername(_username);
         }
     }, [messagesMap])
 
