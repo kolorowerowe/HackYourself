@@ -10,6 +10,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import {useCommonStyles} from "../../theme/commonStyles";
 import WordStatistics from "./WordStatistics";
+import TimeStatistics from './TimeStatistics';
 
 
 const StatisticsComponentContainer = (props) => {
@@ -20,7 +21,8 @@ const StatisticsComponentContainer = (props) => {
             totalMessages = 0,
             topUsers = []
         } = {},
-        wordStats
+        wordStats,
+        timeStats
     } = props;
 
     const theme = useTheme();
@@ -83,7 +85,7 @@ const StatisticsComponentContainer = (props) => {
                                                topUsers={topUsers}/>
                         </TabPanel>
                         <TabPanel index={1} dir={theme.direction}>
-                            Time
+                            <TimeStatistics timeStats={timeStats}/>
                         </TabPanel>
                         <TabPanel index={2} dir={theme.direction}>
                             <WordStatistics wordStats={wordStats}/>

@@ -35,11 +35,11 @@ export const getTimeStats = (messages, user_name) => {
     const messagesWithDate = allMessages.filter(x => x.timestamp_ms)
         .map(e => ({...e, date: new Date(e.timestamp_ms)}));
 
-    let hourly = {};
+    let hourly = [];
     for (let i = 0; i < 24; ++i) {
         hourly[i] = getHourly(i, messagesWithDate);
     }
-    let weekly = {};
+    let weekly = [];
     for (let i = 0; i < 7; ++i) {
         weekly[i] = getWeekly(i, messagesWithDate);
     }

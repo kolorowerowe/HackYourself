@@ -26,6 +26,7 @@ const WordStatistics = (props) => {
 
     }, [occurrencesList, wordPattern]);
 
+    console.log(visibleWord);
 
     return (
         <Grid container spacing={2}>

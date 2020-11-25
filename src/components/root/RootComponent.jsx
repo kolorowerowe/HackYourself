@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import LoadDataComponentContainer from "../loadData/LoadDataComponentContainer";
-import {loadDataFromPath} from "../../utils/fileLoader";
+import { loadDataFromPath } from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import SideBar from "./SideBar";
-import {Typography} from "@material-ui/core";
-import {getTotalStats} from "../../algorithms/totalAlgorithms";
+import { Typography } from "@material-ui/core";
+import { getTotalStats } from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
-import {getWordStats} from "../../algorithms/wordAlgorithms";
+import { getWordStats } from "../../algorithms/wordAlgorithms";
 import { enretardize } from '../../algorithms/encoding';
 import { getUsername } from '../../algorithms/utils';
+import { getTimeStats } from '../../algorithms/timeAlgorithms';
 
 const RootComponent = () => {
 
@@ -33,6 +34,8 @@ const RootComponent = () => {
 
     const [totalStats, setTotalStats] = useState(undefined);
     const [wordStats, setWordStats] = useState(undefined);
+    const [timeStats, setTimeStats] = useState(undefined);
+
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -59,11 +62,12 @@ const RootComponent = () => {
         if (messagesMap) {
             setTotalStats(getTotalStats(messagesMap));
             let _username = username;
-            if (!_username){
+            if (!_username) {
                 _username = getUsername([...messagesMap.values()]);
                 setUsername(_username);
             }
             setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
+            setTimeStats(getTimeStats([...messagesMap.values()], enretardize(_username)));
         }
     }, [messagesMap])
 
@@ -71,27 +75,28 @@ const RootComponent = () => {
     return (
         <div className={classes.root}>
             <SideBar route={route}
-                     setRoute={setRoute}/>
+                setRoute={setRoute} />
             <main className={classes.content}>
 
                 {route === 'HELLO' && <Typography>todo: start</Typography>
                 }
                 {route === 'CHOOSE_DIR' && <LoadDataComponentContainer username={username}
-                                                                       setUsername={setUsername}
-                                                                       loading={loading}
-                                                                       fileValidationError={fileValidationError}
-                                                                       onLoadData={onLoadData}/>
+                    setUsername={setUsername}
+                    loading={loading}
+                    fileValidationError={fileValidationError}
+                    onLoadData={onLoadData} />
                 }
                 {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={!!messagesMap}
-                                                                    totalStats={totalStats}
-                                                                    wordStats={wordStats}/>
+                    totalStats={totalStats}
+                    wordStats={wordStats}
+                    timeStats={timeStats} />
                 }
-                {route === 'CONTACT' && <ContactComponent/>
+                {route === 'CONTACT' && <ContactComponent />
                 }
             </main>
 
             <SnackbarAlert snackbarMessage={snackbarMessage}
-                           setSnackbarMessage={setSnackbarMessage}/>
+                setSnackbarMessage={setSnackbarMessage} />
 
         </div>
     );
