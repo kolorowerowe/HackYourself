@@ -58,7 +58,7 @@ const options = {
             },
             labels: {
                 show: true,
-            }
+            },
         }, {
             type: "linear",
             display: true,
@@ -69,6 +69,9 @@ const options = {
             },
             labels: {
                 show: true,
+            },
+            ticks: {
+                suggestedMin: 0
             }
         }]
     },
