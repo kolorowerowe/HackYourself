@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, IconButton, TextField} from "@material-ui/core";
+import {Button, IconButton, TextField, Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Alert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -24,6 +24,11 @@ const LoadDataComponentContainer = (props) => {
 
     return (
         <Grid container spacing={3} className={styles.containerPadding}>
+            <Grid item xs={12}>
+                <Typography variant={'h4'}>
+                    Hello, let's start hacking!
+                </Typography>
+            </Grid>
             <Grid item xs={12}>
                 <div style={{display:'flex'}}>
                     <TextField id="path"

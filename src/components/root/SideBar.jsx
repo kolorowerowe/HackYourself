@@ -8,7 +8,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Drawer from "@material-ui/core/Drawer";
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import StorageIcon from '@material-ui/icons/Storage';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import MailIcon from '@material-ui/icons/Mail';
@@ -25,10 +25,6 @@ const SideBar = (props) => {
 
 
     const sidebarElements = [{
-        name: 'Hello',
-        value: 'HELLO',
-        IconComponent: DashboardIcon
-    }, {
         name: 'Choose dir',
         value: 'CHOOSE_DIR',
         IconComponent: StorageIcon
@@ -36,6 +32,10 @@ const SideBar = (props) => {
         name: 'Stats',
         value: 'STATS',
         IconComponent: EqualizerIcon
+    }, {
+        name: 'Help',
+        value: 'HELP',
+        IconComponent: HelpOutlineIcon
     }, {
         name: 'Contact',
         value: 'CONTACT',

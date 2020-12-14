@@ -33,21 +33,25 @@ const readJsonFile = (path, fs) => {
 }
 
 export const loadDataFromPath = (path) => {
-    let fs = window.require('fs');
 
-    if(!fs.existsSync(path)) {
-        throw new Error(`Path '${path}' not exists`);
-    }
+    return new Promise(((resolve, reject) => {
+        let fs = window.require('fs');
 
-    let stats = fs.lstatSync(path);
+        if(!fs.existsSync(path)) {
+            reject(Error(`Path '${path}' not exists`));
+        }
 
-    if (!stats.isDirectory()) {
-        throw new Error(`Path is not a directory`);
-    }
+        let stats = fs.lstatSync(path);
 
-    let allDirName = getDirectories(path, fs);
+        if (!stats.isDirectory()) {
+            reject(Error(`Path is not a directory`));
+        }
 
-    let allMessages = getAllMessages(path, allDirName, fs);
+        let allDirName = getDirectories(path, fs);
 
-    return allMessages;
+        let allMessages = getAllMessages(path, allDirName, fs);
+
+        return resolve(allMessages);
+    }))
+
 }

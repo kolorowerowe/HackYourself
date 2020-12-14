@@ -20,5 +20,12 @@ export const useCommonStyles = makeStyles((theme) => ({
     },
     containerPadding: {
         padding: theme.spacing(2)
+    },
+    instructionStep: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        minHeight: 30,
+        paddingLeft: 20
     }
 }));

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import LoadDataComponentContainer from "../loadData/LoadDataComponentContainer";
-import { loadDataFromPath } from "../../utils/fileLoader";
+import {loadDataFromPath} from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import SideBar from "./SideBar";
-import { Typography } from "@material-ui/core";
-import { getTotalStats } from "../../algorithms/totalAlgorithms";
+import {getTotalStats} from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
-import { getWordStats, getWordStatsPerRecipient } from "../../algorithms/wordAlgorithms";
-import { enretardize } from '../../algorithms/encoding';
-import { getUsername } from '../../algorithms/utils';
-import { getTimeStats, getTimeStatsPerRecipient } from '../../algorithms/timeAlgorithms';
+import {getWordStats, getWordStatsPerRecipient} from "../../algorithms/wordAlgorithms";
+import {enretardize} from '../../algorithms/encoding';
+import {getUsername} from '../../algorithms/utils';
+import {getTimeStats, getTimeStatsPerRecipient} from '../../algorithms/timeAlgorithms';
+import HelpComponent from "../hello/HelpComponent";
 
 const RootComponent = () => {
 
@@ -25,7 +25,7 @@ const RootComponent = () => {
 
     const classes = useStyles();
 
-    const [route, setRoute] = useState('HELLO');
+    const [route, setRoute] = useState('CHOOSE_DIR');
 
     const [username, setUsername] = useState('');
     const [messagesMap, setMessagesMap] = useState(undefined);
@@ -44,20 +44,24 @@ const RootComponent = () => {
         setFileValidationError(null);
         setLoading(true);
 
-        localStorage.setItem('PATH', path);
-        localStorage.setItem('USERNAME', username);
-
-        try {
-            const result = loadDataFromPath(path);
-            setSnackbarMessage('Loaded successfully');
-            setMessagesMap(result);
-            setRoute('STATS');
-        } catch (e) {
-            setFileValidationError(e);
-        } finally {
-            setLoading(false);
+        if (path) {
+            localStorage.setItem('PATH', path);
         }
+        if (username) {
+            localStorage.setItem('USERNAME', username);
+        }
+
+        loadDataFromPath(path).then(data => {
+            setSnackbarMessage('Loaded successfully');
+            setMessagesMap(data);
+            setRoute('STATS');
+        }).catch(e => {
+            setFileValidationError(e);
+        }).finally(() => {
+            setLoading(false);
+        })
     }
+
 
     useEffect(() => {
         if (messagesMap) {
@@ -78,30 +82,27 @@ const RootComponent = () => {
     return (
         <div className={classes.root}>
             <SideBar route={route}
-                setRoute={setRoute} />
+                     setRoute={setRoute}/>
             <main className={classes.content}>
-
-                {route === 'HELLO' && <Typography>todo: start</Typography>
-                }
                 {route === 'CHOOSE_DIR' && <LoadDataComponentContainer username={username}
-                    setUsername={setUsername}
-                    loading={loading}
-                    fileValidationError={fileValidationError}
-                    onLoadData={onLoadData} />
+                                                                       setUsername={setUsername}
+                                                                       loading={loading}
+                                                                       fileValidationError={fileValidationError}
+                                                                       onLoadData={onLoadData}/>
                 }
                 {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={!!messagesMap}
-                    totalStats={totalStats}
-                    wordStats={wordStats}
-                    timeStats={timeStats}
-                    wordStatsPerRecipient={wordStatsPerRecipient}
-                    timeStatsPerRecipient={timeStatsPerRecipient}/>
+                                                                    totalStats={totalStats}
+                                                                    wordStats={wordStats}
+                                                                    timeStats={timeStats}
+                                                                    wordStatsPerRecipient={wordStatsPerRecipient}
+                                                                    timeStatsPerRecipient={timeStatsPerRecipient}/>
                 }
-                {route === 'CONTACT' && <ContactComponent />
-                }
+                {route === 'HELP' && <HelpComponent navigateToChooseDir={() => setRoute('CHOOSE_DIR')}/>}
+                {route === 'CONTACT' && <ContactComponent username={username}/>}
             </main>
 
             <SnackbarAlert snackbarMessage={snackbarMessage}
-                setSnackbarMessage={setSnackbarMessage} />
+                           setSnackbarMessage={setSnackbarMessage}/>
 
         </div>
     );

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Typography} from "@material-ui/core";
 import PersonIcon from '@material-ui/icons/Person';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Grid from "@material-ui/core/Grid";
 import {useCommonStyles} from "../../theme/commonStyles";
 
-const ContactComponent = props => {
+const ContactComponent = ({username}) => {
 
     const styles = useCommonStyles();
 
@@ -36,12 +36,24 @@ const ContactComponent = props => {
     }, {
         name: 'Grzegorz Nieużyła',
         email: 'grzegorznieuzyla@gmail.com'
-    }]
+    }];
+
+    const optionalName = useMemo(() => {
+        if (!username) {
+            return "!"
+        }
+        const usernameWords = username.split(" ");
+        if (usernameWords.length > 0){
+            return usernameWords[0] + "!";
+        }
+    }, [username]);
+
+
     return (
         <Grid container spacing={3} className={styles.containerPadding}>
             <Grid item xs={12}>
                 <Typography variant={'h4'}>
-                    Hello there
+                    Hello there {optionalName}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
