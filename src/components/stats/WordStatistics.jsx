@@ -15,8 +15,8 @@ const WordStatistics = (props) => {
     const {
         wordStats: {
             count,
-            occurrencesList,
-        },
+            occurrencesList = [],
+        } = {},
         wordStatsPerRecipient
     } = props;
 

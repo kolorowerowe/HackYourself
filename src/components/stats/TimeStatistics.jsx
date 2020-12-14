@@ -84,9 +84,9 @@ const TimeStatistics = (props) => {
     const NoFilter = "All recipients";
     const {
         timeStats: {
-            hourly,
-            weekly
-        },
+            hourly = [],
+            weekly = []
+        } = {},
         timeStatsPerRecipient
     } = props;
     const [recipient, setRecipient] = useState(NoFilter);
