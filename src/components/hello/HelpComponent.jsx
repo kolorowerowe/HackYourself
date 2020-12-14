@@ -32,7 +32,7 @@ const HelpComponent = ({navigateToChooseDir}) => {
                 Facebook
             </Button>
         }, {
-            text: "In the top bar select Format = HTML."
+            text: "In the top bar select Format = JSON."
         }, {
             text: "Ensure that \"Messages\" option is checked."
         }, {
