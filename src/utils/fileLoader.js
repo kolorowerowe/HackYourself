@@ -49,7 +49,5 @@ export const loadDataFromPath = (path) => {
 
     let allMessages = getAllMessages(path, allDirName, fs);
 
-    console.log("All messages: " , allMessages);
-
     return allMessages;
 }

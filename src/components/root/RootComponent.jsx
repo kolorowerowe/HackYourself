@@ -8,10 +8,10 @@ import { Typography } from "@material-ui/core";
 import { getTotalStats } from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
-import { getWordStats } from "../../algorithms/wordAlgorithms";
+import { getWordStats, getWordStatsPerRecipient } from "../../algorithms/wordAlgorithms";
 import { enretardize } from '../../algorithms/encoding';
 import { getUsername } from '../../algorithms/utils';
-import { getTimeStats } from '../../algorithms/timeAlgorithms';
+import { getTimeStats, getTimeStatsPerRecipient } from '../../algorithms/timeAlgorithms';
 
 const RootComponent = () => {
 
@@ -35,7 +35,8 @@ const RootComponent = () => {
     const [totalStats, setTotalStats] = useState(undefined);
     const [wordStats, setWordStats] = useState(undefined);
     const [timeStats, setTimeStats] = useState(undefined);
-
+    const [wordStatsPerRecipient, setWordStatsPerRecipient] = useState(undefined);
+    const [timeStatsPerRecipient, setTimeStatsPerRecipient] = useState(undefined);
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -68,6 +69,8 @@ const RootComponent = () => {
             }
             setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
             setTimeStats(getTimeStats([...messagesMap.values()], enretardize(_username)));
+            setTimeStatsPerRecipient(getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+            setWordStatsPerRecipient(getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
         }
     }, [messagesMap])
 
@@ -89,7 +92,9 @@ const RootComponent = () => {
                 {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={!!messagesMap}
                     totalStats={totalStats}
                     wordStats={wordStats}
-                    timeStats={timeStats} />
+                    timeStats={timeStats}
+                    wordStatsPerRecipient={wordStatsPerRecipient}
+                    timeStatsPerRecipient={timeStatsPerRecipient}/>
                 }
                 {route === 'CONTACT' && <ContactComponent />
                 }

@@ -22,7 +22,9 @@ const StatisticsComponentContainer = (props) => {
             topUsers = []
         } = {},
         wordStats,
-        timeStats
+        timeStats,
+        wordStatsPerRecipient,
+        timeStatsPerRecipient
     } = props;
 
     const theme = useTheme();
@@ -85,10 +87,10 @@ const StatisticsComponentContainer = (props) => {
                                                topUsers={topUsers}/>
                         </TabPanel>
                         <TabPanel index={1} dir={theme.direction}>
-                            <TimeStatistics timeStats={timeStats}/>
+                            <TimeStatistics timeStats={timeStats} timeStatsPerRecipient={timeStatsPerRecipient}/>
                         </TabPanel>
                         <TabPanel index={2} dir={theme.direction}>
-                            <WordStatistics wordStats={wordStats}/>
+                            <WordStatistics wordStats={wordStats} wordStatsPerRecipient={wordStatsPerRecipient}/>
                         </TabPanel>
                     </SwipeableViews>
                 </div>

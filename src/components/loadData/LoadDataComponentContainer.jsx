@@ -80,7 +80,7 @@ const LoadDataComponentContainer = (props) => {
                         fullWidth
                         disabled={loading}
                         variant={'outlined'}>
-                    Wczytaj dane!
+                    Load data!
                 </Button>
             </Grid>
 

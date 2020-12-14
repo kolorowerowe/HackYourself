@@ -12,7 +12,6 @@ export const getRecipients = (messages, user_name) => {
 }
 
 export const getUsername = (messages) => {
-    console.log(messages);
     let users = {};
     for (let thread of messages) {
         if (thread.participants) {
