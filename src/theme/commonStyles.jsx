@@ -27,5 +27,13 @@ export const useCommonStyles = makeStyles((theme) => ({
         alignItems: 'center',
         minHeight: 30,
         paddingLeft: 20
+    },
+    divider: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
+    },
+    bigDivider: {
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4)
     }
 }));

@@ -6,6 +6,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import {useCommonStyles} from "../../theme/commonStyles";
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
 import Tooltip from "@material-ui/core/Tooltip";
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 const LoadDataComponentContainer = (props) => {
 
@@ -13,6 +14,7 @@ const LoadDataComponentContainer = (props) => {
         username,
         setUsername,
         loading,
+        loadingPercentage,
         onLoadData,
         fileValidationError
     } = props;
@@ -22,6 +24,29 @@ const LoadDataComponentContainer = (props) => {
 
     const [pathToData, setPathToData] = useState('');
 
+
+    const onClick = () => {
+        const {
+            remote: {
+                dialog
+            }
+        } = window.require('electron');
+
+        dialog.showOpenDialog({
+            properties: ['openDirectory']
+        }).then((data) => {
+            const {
+                filePaths
+            } = data;
+
+            if (filePaths.length > 0) {
+                setPathToData(filePaths[0]);
+            }
+        }).catch(e => {
+            console.error(e);
+        });
+    }
+
     return (
         <Grid container spacing={3} className={styles.containerPadding}>
             <Grid item xs={12}>
@@ -30,7 +55,7 @@ const LoadDataComponentContainer = (props) => {
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <div style={{display:'flex'}}>
+                <div style={{display: 'flex'}}>
                     <TextField id="path"
                                name="path"
                                value={pathToData}
@@ -40,8 +65,13 @@ const LoadDataComponentContainer = (props) => {
                                disabled={loading}
                                fullWidth
                     />
+                    <Tooltip title={'Select folder from your drive'}>
+                        <IconButton onClick={onClick}>
+                            <FolderOpenIcon/>
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title={'Paste last used path'}>
-                        <IconButton onClick={()=> {
+                        <IconButton onClick={() => {
                             setPathToData(localStorage.getItem('PATH'));
                         }}>
                             <TransitEnterexitIcon/>
@@ -50,7 +80,7 @@ const LoadDataComponentContainer = (props) => {
                 </div>
             </Grid>
             <Grid item xs={12}>
-                <div style={{display:'flex'}}>
+                <div style={{display: 'flex'}}>
                     <TextField id="username"
                                name="username"
                                value={username}
@@ -61,7 +91,7 @@ const LoadDataComponentContainer = (props) => {
                                fullWidth
                     />
                     <Tooltip title={'Paste last used path'}>
-                        <IconButton onClick={()=> {
+                        <IconButton onClick={() => {
                             setUsername(localStorage.getItem('USERNAME'));
                         }}>
                             <TransitEnterexitIcon/>
@@ -77,7 +107,7 @@ const LoadDataComponentContainer = (props) => {
             </Grid>}
 
             {loading && <Grid item xs={12}>
-                <LinearProgress/>
+                <LinearProgress variant={'determinate'} value={loadingPercentage}/>
             </Grid>}
 
             <Grid item xs={12}>
@@ -88,7 +118,6 @@ const LoadDataComponentContainer = (props) => {
                     Load data!
                 </Button>
             </Grid>
-
         </Grid>
     );
 };

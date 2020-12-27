@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import Grid from "@material-ui/core/Grid";
-import { Line } from 'react-chartjs-2'
+import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { replaceRetarded, enretardize } from '../../algorithms/encoding';
+import {enretardize, replaceRetarded} from '../../algorithms/encoding';
 
 const weeklyChart = {
     labels: ['Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd'],
@@ -90,40 +90,50 @@ const TimeStatistics = (props) => {
         timeStatsPerRecipient
     } = props;
     const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = timeStatsPerRecipient ? replaceRetarded([... new Set(Object.keys(timeStatsPerRecipient))]) : [];
+    let recipients = timeStatsPerRecipient ? replaceRetarded([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
     const weeklyData = useMemo(() => {
         let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[enretardize(recipient)].weekly;
-        weeklyChart.datasets[0].data = data.map((item) => { return item.count });
-        weeklyChart.datasets[1].data = data.map((item) => { return item.averageLength });
+        weeklyChart.datasets[0].data = data.map((item) => {
+            return item.count
+        });
+        weeklyChart.datasets[1].data = data.map((item) => {
+            return item.averageLength
+        });
         return weeklyChart;
 
     }, [weekly, recipient]);
 
     const hourlyData = useMemo(() => {
         let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[enretardize(recipient)].hourly;
-        hourlyChart.labels = data.map((item, index) => { return index });
-        hourlyChart.datasets[0].data = data.map((item) => { return item.count });
-        hourlyChart.datasets[1].data = data.map((item) => { return item.averageLength });
+        hourlyChart.labels = data.map((item, index) => {
+            return index
+        });
+        hourlyChart.datasets[0].data = data.map((item) => {
+            return item.count
+        });
+        hourlyChart.datasets[1].data = data.map((item) => {
+            return item.averageLength
+        });
         return hourlyChart;
 
     }, [hourly, recipient]);
 
-    
 
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Select
-                labelId="select-recipient-time"
-                id="select-recipient-time"
-                value={recipient}
-                onChange={e => setRecipient(e.target.value)}
+                    labelId="select-recipient-time"
+                    id="select-recipient-time"
+                    value={recipient}
+                    onChange={e => setRecipient(e.target.value)}
                 >
-                (<MenuItem value={NoFilter}>{NoFilter}</MenuItem>)
-                {recipients.map(r => 
-                (<MenuItem value={r}>{r}</MenuItem>)
-                )}
-            </Select>
+                    (<MenuItem value={NoFilter}>{NoFilter}</MenuItem>)
+                    {recipients.map(r =>
+                        (<MenuItem value={r}
+                                   key={`R-${r}`}>{r}</MenuItem>)
+                    )}
+                </Select>
             </Grid>
             <Grid item xs={6}>
                 Weekly statistics
@@ -132,17 +142,15 @@ const TimeStatistics = (props) => {
                 Hourly statistics
             </Grid>
             <Grid item xs={6}>
-                <Line data={weeklyData} options={options} />
+                <Line data={weeklyData} options={options}/>
             </Grid>
             <Grid item xs={6}>
-                <Line data={hourlyData} options={options} />
+                <Line data={hourlyData} options={options}/>
             </Grid>
         </Grid>
     );
 };
 
-TimeStatistics.propTypes = {
-
-};
+TimeStatistics.propTypes = {};
 
 export default TimeStatistics;

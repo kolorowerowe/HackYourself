@@ -17,10 +17,7 @@ const StatisticsComponentContainer = (props) => {
 
     const {
         messagesLoaded = false,
-        totalStats: {
-            totalMessages = 0,
-            topUsers = []
-        } = {},
+        totalStats,
         wordStats,
         timeStats,
         wordStatsPerRecipient,
@@ -83,8 +80,7 @@ const StatisticsComponentContainer = (props) => {
                         onChangeIndex={handleChangeIndex}
                     >
                         <TabPanel index={0} dir={theme.direction}>
-                            <GeneralStatistics totalMessages={totalMessages}
-                                               topUsers={topUsers}/>
+                            <GeneralStatistics totalStats={totalStats}/>
                         </TabPanel>
                         <TabPanel index={1} dir={theme.direction}>
                             <TimeStatistics timeStats={timeStats} timeStatsPerRecipient={timeStatsPerRecipient}/>

@@ -1,13 +1,11 @@
 import React, {useMemo, useState} from 'react';
 import Grid from "@material-ui/core/Grid";
-import CountUp from "react-countup";
-import {TableBody, TableContainer, TableHead, TableRow, TextField, Typography} from "@material-ui/core";
+import {TableBody, TableContainer, TableHead, TableRow, TextField} from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
-import {useCommonStyles} from "../../theme/commonStyles";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { replaceRetarded, enretardize } from '../../algorithms/encoding';
+import {enretardize, replaceRetarded} from '../../algorithms/encoding';
 
 const WordStatistics = (props) => {
     const NoFilter = "All recipients";
@@ -21,13 +19,13 @@ const WordStatistics = (props) => {
     } = props;
 
     const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = wordStatsPerRecipient ? replaceRetarded([... new Set(Object.keys(wordStatsPerRecipient))]) : [];
+    let recipients = wordStatsPerRecipient ? replaceRetarded([...new Set(Object.keys(wordStatsPerRecipient))]) : [];
 
     const [wordPattern, setWordPattern] = useState('')
 
-    const visibleWord = useMemo(()=> {
+    const visibleWord = useMemo(() => {
         const occList = recipient === NoFilter ? occurrencesList : wordStatsPerRecipient[enretardize(recipient)].occurrencesList;
-        if (!!wordPattern){
+        if (!!wordPattern) {
             return occList.filter(({word}) => word.includes(wordPattern)).slice(0, 100);
         }
         return occList.slice(0, 100);
@@ -39,16 +37,17 @@ const WordStatistics = (props) => {
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Select
-                labelId="select-recipient-word"
-                id="select-recipient-word"
-                value={recipient}
-                onChange={e => setRecipient(e.target.value)}
+                    labelId="select-recipient-word"
+                    id="select-recipient-word"
+                    value={recipient}
+                    onChange={e => setRecipient(e.target.value)}
                 >
-                (<MenuItem value={NoFilter}>{NoFilter}</MenuItem>)
-                {recipients.map(r => 
-                (<MenuItem value={r}>{r}</MenuItem>)
-                )}
-            </Select>
+                    (<MenuItem value={NoFilter}>{NoFilter}</MenuItem>)
+                    {recipients.map(r =>
+                        (<MenuItem value={r}
+                                   key={`REC-${r}`}>{r}</MenuItem>)
+                    )}
+                </Select>
             </Grid>
             <Grid item xs={6}>
                 <TextField id="wordPattern"
@@ -92,8 +91,6 @@ const WordStatistics = (props) => {
     );
 };
 
-WordStatistics.propTypes = {
-
-};
+WordStatistics.propTypes = {};
 
 export default WordStatistics;

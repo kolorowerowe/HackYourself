@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import LoadDataComponentContainer from "../loadData/LoadDataComponentContainer";
 import {loadDataFromPath} from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
@@ -28,8 +28,8 @@ const RootComponent = () => {
     const [route, setRoute] = useState('CHOOSE_DIR');
 
     const [username, setUsername] = useState('');
-    const [messagesMap, setMessagesMap] = useState(undefined);
     const [loading, setLoading] = useState(false);
+    const [loadingPercentage, setLoadingPercentage] = useState(0);
     const [fileValidationError, setFileValidationError] = useState(null);
 
     const [totalStats, setTotalStats] = useState(undefined);
@@ -37,13 +37,19 @@ const RootComponent = () => {
     const [timeStats, setTimeStats] = useState(undefined);
     const [wordStatsPerRecipient, setWordStatsPerRecipient] = useState(undefined);
     const [timeStatsPerRecipient, setTimeStatsPerRecipient] = useState(undefined);
+    const [allStatsLoaded, setAllStatsLoaded] = useState(false);
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const onLoadData = (path) => {
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    const onLoadData = async (path) => {
         setFileValidationError(null);
         setLoading(true);
-
+        await setStep(0);
         if (path) {
             localStorage.setItem('PATH', path);
         }
@@ -51,32 +57,60 @@ const RootComponent = () => {
             localStorage.setItem('USERNAME', username);
         }
 
-        loadDataFromPath(path).then(data => {
-            setSnackbarMessage('Loaded successfully');
-            setMessagesMap(data);
-            setRoute('STATS');
+        loadDataFromPath(path).then(async data => {
+            await setStep(1);
+            await setStatsFromMessagesMap(data);
         }).catch(e => {
             setFileValidationError(e);
-        }).finally(() => {
-            setLoading(false);
-        })
+        });
+    }
+
+    const allSteps = 7;
+    const setStep = async (step) => {
+        setLoadingPercentage(Math.round((step / allSteps) * 100));
+        await sleep(300);
     }
 
 
-    useEffect(() => {
-        if (messagesMap) {
-            setTotalStats(getTotalStats(messagesMap));
-            let _username = username;
-            if (!_username) {
-                _username = getUsername([...messagesMap.values()]);
-                setUsername(_username);
-            }
-            setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
-            setTimeStats(getTimeStats([...messagesMap.values()], enretardize(_username)));
-            setTimeStatsPerRecipient(getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
-            setWordStatsPerRecipient(getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+    const setStatsFromMessagesMap = async (messagesMap) => {
+
+
+
+        let _username = username;
+        if (!_username) {
+            _username = getUsername([...messagesMap.values()]);
+            setUsername(_username);
         }
-    }, [messagesMap])
+        await setStep(2);
+
+
+        setTotalStats(getTotalStats(messagesMap, enretardize(_username)));
+
+        await setStep(3);
+
+
+        setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
+        await setStep(4);
+
+
+        setTimeStats(getTimeStats([...messagesMap.values()], enretardize(_username)));
+        await setStep(5);
+
+
+        setTimeStatsPerRecipient(getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+        await setStep(6);
+
+
+        // setWordStatsPerRecipient(getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+        // await setStep(7);
+
+
+        setRoute('STATS');
+        setLoading(false);
+        setAllStatsLoaded(true);
+        setSnackbarMessage('Loaded successfully');
+
+    }
 
 
     return (
@@ -87,10 +121,11 @@ const RootComponent = () => {
                 {route === 'CHOOSE_DIR' && <LoadDataComponentContainer username={username}
                                                                        setUsername={setUsername}
                                                                        loading={loading}
+                                                                       loadingPercentage={loadingPercentage}
                                                                        fileValidationError={fileValidationError}
                                                                        onLoadData={onLoadData}/>
                 }
-                {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={!!messagesMap}
+                {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
                                                                     totalStats={totalStats}
                                                                     wordStats={wordStats}
                                                                     timeStats={timeStats}
