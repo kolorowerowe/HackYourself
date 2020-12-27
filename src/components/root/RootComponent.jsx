@@ -101,8 +101,8 @@ const RootComponent = () => {
         await setStep(6);
 
 
-        // setWordStatsPerRecipient(getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
-        // await setStep(7);
+        setWordStatsPerRecipient(getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+        await setStep(7);
 
 
         setRoute('STATS');
