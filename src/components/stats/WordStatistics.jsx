@@ -12,7 +12,6 @@ const WordStatistics = (props) => {
 
     const {
         wordStats: {
-            count,
             occurrencesList = [],
         } = {},
         wordStatsPerRecipient
@@ -30,7 +29,7 @@ const WordStatistics = (props) => {
         }
         return occList.slice(0, 100);
 
-    }, [occurrencesList, wordPattern, recipient]);
+    }, [occurrencesList, wordPattern, recipient, wordStatsPerRecipient]);
 
 
     return (

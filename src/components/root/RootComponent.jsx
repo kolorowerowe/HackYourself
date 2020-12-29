@@ -12,6 +12,7 @@ import {enretardize} from '../../algorithms/encoding';
 import {getUsername} from '../../algorithms/utils';
 import {getTimeStats, getTimeStatsPerRecipient} from '../../algorithms/timeAlgorithms';
 import HelpComponent from "../hello/HelpComponent";
+import {CHOOSE_DIR, CONTACT, HELP, STATS} from "./routes";
 
 const RootComponent = () => {
 
@@ -25,18 +26,15 @@ const RootComponent = () => {
 
     const classes = useStyles();
 
-    const [route, setRoute] = useState('CHOOSE_DIR');
+    const [route, setRoute] = useState(CHOOSE_DIR);
 
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
     const [loadingPercentage, setLoadingPercentage] = useState(0);
     const [fileValidationError, setFileValidationError] = useState(null);
 
-    const [totalStats, setTotalStats] = useState(undefined);
-    const [wordStats, setWordStats] = useState(undefined);
-    const [timeStats, setTimeStats] = useState(undefined);
-    const [wordStatsPerRecipient, setWordStatsPerRecipient] = useState(undefined);
-    const [timeStatsPerRecipient, setTimeStatsPerRecipient] = useState(undefined);
+
+    const [statistics, setStatistics] = useState({});
     const [allStatsLoaded, setAllStatsLoaded] = useState(false);
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -75,7 +73,6 @@ const RootComponent = () => {
     const setStatsFromMessagesMap = async (messagesMap) => {
 
 
-
         let _username = username;
         if (!_username) {
             _username = getUsername([...messagesMap.values()]);
@@ -83,29 +80,40 @@ const RootComponent = () => {
         }
         await setStep(2);
 
-
-        setTotalStats(getTotalStats(messagesMap, enretardize(_username)));
-
+        setStatistics(prevState => ({
+            ...prevState,
+            totalStats: getTotalStats(messagesMap, enretardize(_username))
+        }))
         await setStep(3);
 
-
-        setWordStats(getWordStats([...messagesMap.values()], enretardize(_username)));
+        setStatistics(prevState => ({
+            ...prevState,
+            wordStats: getWordStats([...messagesMap.values()], enretardize(_username))
+        }))
         await setStep(4);
 
 
-        setTimeStats(getTimeStats([...messagesMap.values()], enretardize(_username)));
+        setStatistics(prevState => ({
+            ...prevState,
+            timeStats: getTimeStats([...messagesMap.values()], enretardize(_username))
+        }))
         await setStep(5);
 
 
-        setTimeStatsPerRecipient(getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+        setStatistics(prevState => ({
+            ...prevState,
+            timeStatsPerRecipient: getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username))
+        }))
         await setStep(6);
 
-
-        setWordStatsPerRecipient(getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username)));
+        setStatistics(prevState => ({
+            ...prevState,
+            wordStatsPerRecipient: getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username))
+        }))
         await setStep(7);
 
 
-        setRoute('STATS');
+        setRoute(STATS);
         setLoading(false);
         setAllStatsLoaded(true);
         setSnackbarMessage('Loaded successfully');
@@ -118,22 +126,18 @@ const RootComponent = () => {
             <SideBar route={route}
                      setRoute={setRoute}/>
             <main className={classes.content}>
-                {route === 'CHOOSE_DIR' && <LoadDataComponentContainer username={username}
-                                                                       setUsername={setUsername}
-                                                                       loading={loading}
-                                                                       loadingPercentage={loadingPercentage}
-                                                                       fileValidationError={fileValidationError}
-                                                                       onLoadData={onLoadData}/>
+                {route === CHOOSE_DIR && <LoadDataComponentContainer username={username}
+                                                                     setUsername={setUsername}
+                                                                     loading={loading}
+                                                                     loadingPercentage={loadingPercentage}
+                                                                     fileValidationError={fileValidationError}
+                                                                     onLoadData={onLoadData}/>
                 }
-                {route === 'STATS' && <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
-                                                                    totalStats={totalStats}
-                                                                    wordStats={wordStats}
-                                                                    timeStats={timeStats}
-                                                                    wordStatsPerRecipient={wordStatsPerRecipient}
-                                                                    timeStatsPerRecipient={timeStatsPerRecipient}/>
+                {route === STATS && <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
+                                                                  statistics={statistics}/>
                 }
-                {route === 'HELP' && <HelpComponent navigateToChooseDir={() => setRoute('CHOOSE_DIR')}/>}
-                {route === 'CONTACT' && <ContactComponent username={username}/>}
+                {route === HELP && <HelpComponent navigateToChooseDir={() => setRoute(CHOOSE_DIR)}/>}
+                {route === CONTACT && <ContactComponent username={username}/>}
             </main>
 
             <SnackbarAlert snackbarMessage={snackbarMessage}

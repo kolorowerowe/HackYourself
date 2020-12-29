@@ -17,11 +17,13 @@ const StatisticsComponentContainer = (props) => {
 
     const {
         messagesLoaded = false,
-        totalStats,
-        wordStats,
-        timeStats,
-        wordStatsPerRecipient,
-        timeStatsPerRecipient
+        statistics: {
+            totalStats,
+            wordStats,
+            timeStats,
+            wordStatsPerRecipient,
+            timeStatsPerRecipient
+        }
     } = props;
 
     const theme = useTheme();

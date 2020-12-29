@@ -101,7 +101,7 @@ const TimeStatistics = (props) => {
         });
         return weeklyChart;
 
-    }, [weekly, recipient]);
+    }, [weekly, recipient, timeStatsPerRecipient]);
 
     const hourlyData = useMemo(() => {
         let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[enretardize(recipient)].hourly;
@@ -116,7 +116,7 @@ const TimeStatistics = (props) => {
         });
         return hourlyChart;
 
-    }, [hourly, recipient]);
+    }, [hourly, recipient, timeStatsPerRecipient]);
 
 
     return (

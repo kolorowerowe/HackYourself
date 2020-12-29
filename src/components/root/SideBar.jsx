@@ -13,6 +13,7 @@ import StorageIcon from '@material-ui/icons/Storage';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import MailIcon from '@material-ui/icons/Mail';
 import PropTypes from 'prop-types';
+import {CHOOSE_DIR, CONTACT, HELP, STATS} from "./routes";
 
 const SideBar = (props) => {
 
@@ -26,19 +27,19 @@ const SideBar = (props) => {
 
     const sidebarElements = [{
         name: 'Choose dir',
-        value: 'CHOOSE_DIR',
+        value: CHOOSE_DIR,
         IconComponent: StorageIcon
     }, {
         name: 'Stats',
-        value: 'STATS',
+        value: STATS,
         IconComponent: EqualizerIcon
     }, {
         name: 'Help',
-        value: 'HELP',
+        value: HELP,
         IconComponent: HelpOutlineIcon
     }, {
         name: 'Contact',
-        value: 'CONTACT',
+        value: CONTACT,
         IconComponent: MailIcon
     }]
 

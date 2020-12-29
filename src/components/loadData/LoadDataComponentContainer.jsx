@@ -48,10 +48,15 @@ const LoadDataComponentContainer = (props) => {
     }
 
     return (
-        <Grid container spacing={3} className={styles.containerPadding}>
+        <Grid container spacing={5} className={styles.containerPadding}>
             <Grid item xs={12}>
-                <Typography variant={'h4'}>
+                <Typography variant={'h4'} align={'center'}>
                     Hello, let's start hacking!
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant={'h6'}>
+                    Start analysing from your Facebook data.
                 </Typography>
             </Grid>
             <Grid item xs={12}>
