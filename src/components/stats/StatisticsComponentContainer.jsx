@@ -7,7 +7,6 @@ import Tab from "@material-ui/core/Tab";
 import SwipeableViews from 'react-swipeable-views';
 import useTheme from "@material-ui/core/styles/useTheme";
 import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
 import {useCommonStyles} from "../../theme/commonStyles";
 import WordStatistics from "./WordStatistics";
 import TimeStatistics from './TimeStatistics';
@@ -52,7 +51,7 @@ const StatisticsComponentContainer = (props) => {
             >
                 {value === index && (
                     <Box p={3}>
-                        <Typography>{children}</Typography>
+                        {children}
                     </Box>
                 )}
             </div>
@@ -94,11 +93,11 @@ const StatisticsComponentContainer = (props) => {
                 </div>
                 :
                 <div className={styles.containerPadding}>
-                    <Alert severity={'warning'} variant={'filled'} >
+                    <Alert severity={'warning'} variant={'filled'}>
                         Messages haven't been loaded yet. Go to 'Choose dir' site and load data.
                     </Alert>
                 </div>
-                }
+            }
 
         </div>
 

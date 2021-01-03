@@ -60,15 +60,17 @@ const WordStatistics = (props) => {
                 <TableContainer>
                     <Table>
                         <TableHead>
-                            <TableCell>
-                                No.
-                            </TableCell>
-                            <TableCell>
-                                Word
-                            </TableCell>
-                            <TableCell>
-                                Occurrences
-                            </TableCell>
+                            <TableRow>
+                                <TableCell>
+                                    No.
+                                </TableCell>
+                                <TableCell>
+                                    Word
+                                </TableCell>
+                                <TableCell>
+                                    Occurrences
+                                </TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                             {visibleWord.map(occurrence => <TableRow key={occurrence.word}>

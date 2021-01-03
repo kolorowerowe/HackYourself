@@ -41,21 +41,23 @@ const GeneralStatistics = ({totalStats}) => {
                 <TableContainer>
                     <Table>
                         <TableHead>
-                            <TableCell>
-                                No.
-                            </TableCell>
-                            <TableCell>
-                                Name
-                            </TableCell>
-                            <TableCell>
-                                Messages Sent
-                            </TableCell>
-                            <TableCell>
-                                All messages
-                            </TableCell>
-                            <TableCell>
-                                Participants
-                            </TableCell>
+                            <TableRow>
+                                <TableCell>
+                                    No.
+                                </TableCell>
+                                <TableCell>
+                                    Name
+                                </TableCell>
+                                <TableCell>
+                                    Messages Sent
+                                </TableCell>
+                                <TableCell>
+                                    All messages
+                                </TableCell>
+                                <TableCell>
+                                    Participants
+                                </TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                             {topUsers.map((user, index) => <TableRow key={user.name}>
