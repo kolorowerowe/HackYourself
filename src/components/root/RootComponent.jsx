@@ -80,44 +80,33 @@ const RootComponent = () => {
         }
         await setStep(2);
 
-        setStatistics(prevState => ({
-            ...prevState,
-            totalStats: getTotalStats(messagesMap, enretardize(_username))
-        }))
+        let newStatistics = {};
+
+        newStatistics.totalStats = getTotalStats(messagesMap, enretardize(_username));
         await setStep(3);
 
-        setStatistics(prevState => ({
-            ...prevState,
-            wordStats: getWordStats([...messagesMap.values()], enretardize(_username))
-        }))
+        newStatistics.wordStats = getWordStats([...messagesMap.values()], enretardize(_username));
         await setStep(4);
 
 
-        setStatistics(prevState => ({
-            ...prevState,
-            timeStats: getTimeStats([...messagesMap.values()], enretardize(_username))
-        }))
+        newStatistics.timeStats = getTimeStats([...messagesMap.values()], enretardize(_username));
         await setStep(5);
 
 
-        setStatistics(prevState => ({
-            ...prevState,
-            timeStatsPerRecipient: getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username))
-        }))
+        newStatistics.timeStatsPerRecipient = getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username));
         await setStep(6);
 
-        setStatistics(prevState => ({
-            ...prevState,
-            wordStatsPerRecipient: getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username))
-        }))
+        newStatistics.wordStatsPerRecipient = getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username));
         await setStep(7);
 
 
+        setStatistics(newStatistics);
         setRoute(STATS);
         setLoading(false);
         setAllStatsLoaded(true);
         setSnackbarMessage('Loaded successfully');
 
+        // await saveToFile('stats.json', newStatistics);
     }
 
 
