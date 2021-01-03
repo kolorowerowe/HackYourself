@@ -4,15 +4,13 @@ import {loadDataFromPath} from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import SideBar from "./SideBar";
-import {getTotalStats} from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
-import {getWordStats, getWordStatsPerRecipient} from "../../algorithms/wordAlgorithms";
 import {replaceWithJSONCharacters} from '../../algorithms/encoding';
 import {getUsername} from '../../algorithms/utils';
-import {getTimeStats, getTimeStatsPerRecipient} from '../../algorithms/timeAlgorithms';
 import HelpComponent from "../hello/HelpComponent";
 import {CHOOSE_DIR, CONTACT, HELP, STATS} from "./routes";
+import messageAnalysisWorker from "../../workers/messageAnalysis";
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -30,15 +28,10 @@ const RootComponent = () => {
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     const onLoadData = async (path) => {
         setFileValidationError(null);
         setLoading(true);
-        await setStep(0);
+        setStep(0);
         if (path) {
             localStorage.setItem('PATH', path);
         }
@@ -47,7 +40,7 @@ const RootComponent = () => {
         }
 
         loadDataFromPath(path).then(async data => {
-            await setStep(1);
+            setStep(1);
             await setStatsFromMessagesMap(data);
         }).catch(e => {
             setFileValidationError(e);
@@ -55,11 +48,9 @@ const RootComponent = () => {
     }
 
     const allSteps = 7;
-    const setStep = async (step) => {
+    const setStep = (step) => {
         setLoadingPercentage(Math.round((step / allSteps) * 100));
-        await sleep(300);
     }
-
 
     const setStatsFromMessagesMap = async (messagesMap) => {
 
@@ -69,26 +60,32 @@ const RootComponent = () => {
             _username = getUsername([...messagesMap.values()]);
             setUsername(_username);
         }
-        await setStep(2);
+        setStep(2);
 
         let newStatistics = {};
 
         newStatistics.totalStats = getTotalStats(messagesMap, replaceWithJSONCharacters(_username));
         await setStep(3);
+        const messages = [...messagesMap.values()];
+        const usernameEnretardized = replaceWithJSONCharacters(_username);
 
-        newStatistics.wordStats = getWordStats([...messagesMap.values()], replaceWithJSONCharacters(_username));
-        await setStep(4);
+        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messagesMap, usernameEnretardized);
+        setStep(3);
+
+        newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(messages, usernameEnretardized);
+        setStep(4);
 
 
-        newStatistics.timeStats = getTimeStats([...messagesMap.values()], replaceWithJSONCharacters(_username));
-        await setStep(5);
+        newStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(messages, usernameEnretardized);
+        setStep(5);
 
 
-        newStatistics.timeStatsPerRecipient = getTimeStatsPerRecipient([...messagesMap.values()], replaceWithJSONCharacters(_username));
-        await setStep(6);
+        newStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(messages, usernameEnretardized);
+        setStep(6);
 
-        newStatistics.wordStatsPerRecipient = getWordStatsPerRecipient([...messagesMap.values()], replaceWithJSONCharacters(_username));
-        await setStep(7);
+
+        newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(messages, usernameEnretardized);
+        setStep(7);
 
 
         setStatistics(newStatistics);
