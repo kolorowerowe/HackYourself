@@ -8,22 +8,13 @@ import {getTotalStats} from "../../algorithms/totalAlgorithms";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ContactComponent from "../contact/ContactComponent";
 import {getWordStats, getWordStatsPerRecipient} from "../../algorithms/wordAlgorithms";
-import {enretardize} from '../../algorithms/encoding';
+import {replaceWithJSONCharacters} from '../../algorithms/encoding';
 import {getUsername} from '../../algorithms/utils';
 import {getTimeStats, getTimeStatsPerRecipient} from '../../algorithms/timeAlgorithms';
 import HelpComponent from "../hello/HelpComponent";
 import {CHOOSE_DIR, CONTACT, HELP, STATS} from "./routes";
 
 const RootComponent = () => {
-
-    // let fs = window.require('fs');
-    // let json1 = JSON.parse(fs.readFileSync('json/message_1.json'));
-    // let json2 = JSON.parse(fs.readFileSync('json/message_2.json'));
-    // console.log(getTimeStats([json1, json2],"Grzegorz Nieu\u00c5\u00bcy\u00c5\u0082a"));
-    // console.log(getTimeStatsPerRecipient([json1, json2],"Grzegorz Nieu\u00c5\u00bcy\u00c5\u0082a"));
-    // console.log(getWordStats([json1, json2],"Grzegorz Nieu\u00c5\u00bcy\u00c5\u0082a"));
-    // console.log(getWordStatsPerRecipient([json1, json2],"Grzegorz Nieu\u00c5\u00bcy\u00c5\u0082a"));
-
     const classes = useStyles();
 
     const [route, setRoute] = useState(CHOOSE_DIR);
@@ -82,21 +73,21 @@ const RootComponent = () => {
 
         let newStatistics = {};
 
-        newStatistics.totalStats = getTotalStats(messagesMap, enretardize(_username));
+        newStatistics.totalStats = getTotalStats(messagesMap, replaceWithJSONCharacters(_username));
         await setStep(3);
 
-        newStatistics.wordStats = getWordStats([...messagesMap.values()], enretardize(_username));
+        newStatistics.wordStats = getWordStats([...messagesMap.values()], replaceWithJSONCharacters(_username));
         await setStep(4);
 
 
-        newStatistics.timeStats = getTimeStats([...messagesMap.values()], enretardize(_username));
+        newStatistics.timeStats = getTimeStats([...messagesMap.values()], replaceWithJSONCharacters(_username));
         await setStep(5);
 
 
-        newStatistics.timeStatsPerRecipient = getTimeStatsPerRecipient([...messagesMap.values()], enretardize(_username));
+        newStatistics.timeStatsPerRecipient = getTimeStatsPerRecipient([...messagesMap.values()], replaceWithJSONCharacters(_username));
         await setStep(6);
 
-        newStatistics.wordStatsPerRecipient = getWordStatsPerRecipient([...messagesMap.values()], enretardize(_username));
+        newStatistics.wordStatsPerRecipient = getWordStatsPerRecipient([...messagesMap.values()], replaceWithJSONCharacters(_username));
         await setStep(7);
 
 

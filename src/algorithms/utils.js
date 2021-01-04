@@ -1,4 +1,4 @@
-import {replaceRetarded} from './encoding';
+import {replaceWithJSCharacters} from './encoding';
 
 export const getRecipients = (messages, user_name) => {
     let recipients = [];
@@ -23,5 +23,5 @@ export const getUsername = (messages) => {
             }
         }
     }
-    return Object.keys(users).length ? replaceRetarded([Object.keys(users).reduce((a, b) => users[a] > users[b] ? a : b)])[0] : "";
+    return Object.keys(users).length ? replaceWithJSCharacters([Object.keys(users).reduce((a, b) => users[a] > users[b] ? a : b)])[0] : "";
 }

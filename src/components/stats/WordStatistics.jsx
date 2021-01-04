@@ -5,7 +5,7 @@ import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {enretardize, replaceRetarded} from '../../algorithms/encoding';
+import {replaceWithJSONCharacters, replaceWithJSCharacters} from '../../algorithms/encoding';
 
 const WordStatistics = (props) => {
     const NoFilter = "All recipients";
@@ -18,12 +18,12 @@ const WordStatistics = (props) => {
     } = props;
 
     const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = wordStatsPerRecipient ? replaceRetarded([...new Set(Object.keys(wordStatsPerRecipient))]) : [];
+    let recipients = wordStatsPerRecipient ? replaceWithJSCharacters([...new Set(Object.keys(wordStatsPerRecipient))]) : [];
 
     const [wordPattern, setWordPattern] = useState('')
 
     const visibleWord = useMemo(() => {
-        const occList = recipient === NoFilter ? occurrencesList : wordStatsPerRecipient[enretardize(recipient)].occurrencesList;
+        const occList = recipient === NoFilter ? occurrencesList : wordStatsPerRecipient[replaceWithJSONCharacters(recipient)].occurrencesList;
         if (!!wordPattern) {
             return occList.filter(({word}) => word.includes(wordPattern)).slice(0, 100);
         }

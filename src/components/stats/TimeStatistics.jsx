@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {enretardize, replaceRetarded} from '../../algorithms/encoding';
+import {replaceWithJSONCharacters, replaceWithJSCharacters} from '../../algorithms/encoding';
 
 const weeklyChart = {
     labels: ['Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd'],
@@ -90,9 +90,9 @@ const TimeStatistics = (props) => {
         timeStatsPerRecipient
     } = props;
     const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = timeStatsPerRecipient ? replaceRetarded([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
+    let recipients = timeStatsPerRecipient ? replaceWithJSCharacters([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
     const weeklyData = useMemo(() => {
-        let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[enretardize(recipient)].weekly;
+        let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].weekly;
         weeklyChart.datasets[0].data = data.map((item) => {
             return item.count
         });
@@ -104,7 +104,7 @@ const TimeStatistics = (props) => {
     }, [weekly, recipient, timeStatsPerRecipient]);
 
     const hourlyData = useMemo(() => {
-        let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[enretardize(recipient)].hourly;
+        let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].hourly;
         hourlyChart.labels = data.map((item, index) => {
             return index
         });

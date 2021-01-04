@@ -1,4 +1,4 @@
-import {replaceRetarded} from "./encoding";
+import {replaceWithJSCharacters} from "./encoding";
 
 
 export const getTotalStats = (messagesMap, userName) => {
@@ -27,5 +27,5 @@ const getTopUsers = (messagesMap, userName, top = 10) => {
     }));
 
     allUsers.sort((a, b) => a.allMessagesCount < b.allMessagesCount ? 1 : -1);
-    return allUsers.slice(0, top).map(user => ({...user, name: replaceRetarded([user.name])[0]}));
+    return allUsers.slice(0, top).map(user => ({...user, name: replaceWithJSCharacters([user.name])[0]}));
 }

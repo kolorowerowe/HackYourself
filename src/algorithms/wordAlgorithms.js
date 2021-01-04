@@ -1,4 +1,4 @@
-import {replaceRetarded, toRemove} from "./encoding";
+import {replaceWithJSCharacters, toRemove} from "./encoding";
 import {getRecipients} from "./utils";
 
 export const getWordStats = (messages, user_name) => {
@@ -12,7 +12,7 @@ export const getWordStats = (messages, user_name) => {
         .map(t => t.trim())
         .filter(t => t.length > 0);
 
-    split = replaceRetarded(split)
+    split = replaceWithJSCharacters(split)
         .map(m => m.replace(toRemove, "").toLocaleLowerCase())
         .filter(e => e);
 
