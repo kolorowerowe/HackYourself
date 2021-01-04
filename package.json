@@ -37,7 +37,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:windows": "electron-packager . --out=dist --ignore=/data --asar --overwrite --icon=build/favicon.ico --version-string.CompanyName=kolorowerowe --version-string.FileDescription=hackyourself --version-string.ProductName=hackyourself",
-    "build:linux": "electron-packager . --out=dist --ignore=/data --asar --overwrite --icon=build/logo192.png"
+    "build:linux": "electron-packager . --out=dist --ignore=/data  --overwrite --icon=build/logo192.png"
   },
   "eslintConfig": {
     "extends": "react-app"
