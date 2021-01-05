@@ -25,3 +25,5 @@ export const getUsername = (messages) => {
     }
     return Object.keys(users).length ? replaceWithJSCharacters([Object.keys(users).reduce((a, b) => users[a] > users[b] ? a : b)])[0] : "";
 }
+
+export const UNKNOWN = "UNKNOWN";
