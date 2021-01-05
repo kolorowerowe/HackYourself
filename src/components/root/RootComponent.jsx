@@ -42,6 +42,13 @@ const RootComponent = () => {
         loadDataFromPath(path).then(async data => {
             setStep(1);
             await setStatsFromMessagesMap(data);
+
+            setRoute(STATS);
+            setLoading(false);
+            setAllStatsLoaded(true);
+            setSnackbarMessage('Loaded successfully');
+
+            // await saveToFile('stats.json', newStatistics);
         }).catch(e => {
             setFileValidationError(e);
         });
@@ -54,7 +61,6 @@ const RootComponent = () => {
 
     const setStatsFromMessagesMap = async (messagesMap) => {
 
-
         let _username = username;
         if (!_username) {
             _username = getUsername([...messagesMap.values()]);
@@ -62,39 +68,32 @@ const RootComponent = () => {
         }
         setStep(2);
 
+        const messages = [...messagesMap.values()];
+        const usernameNormalized = replaceWithJSONCharacters(_username);
+
         let newStatistics = {};
 
-        newStatistics.totalStats = getTotalStats(messagesMap, replaceWithJSONCharacters(_username));
-        await setStep(3);
-        const messages = [...messagesMap.values()];
-        const usernameEnretardized = replaceWithJSONCharacters(_username);
-
-        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messagesMap, usernameEnretardized);
+        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messagesMap, usernameNormalized);
         setStep(3);
 
-        newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(messages, usernameEnretardized);
+        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messagesMap, usernameNormalized);
+        setStep(3);
+
+        newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(messages, usernameNormalized);
         setStep(4);
 
-
-        newStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(messages, usernameEnretardized);
+        newStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(messages, usernameNormalized);
         setStep(5);
 
-
-        newStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(messages, usernameEnretardized);
+        newStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(messages, usernameNormalized);
         setStep(6);
 
-
-        newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(messages, usernameEnretardized);
+        newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(messages, usernameNormalized);
         setStep(7);
 
-
         setStatistics(newStatistics);
-        setRoute(STATS);
-        setLoading(false);
-        setAllStatsLoaded(true);
-        setSnackbarMessage('Loaded successfully');
 
-        // await saveToFile('stats.json', newStatistics);
+        return newStatistics;
     }
 
 
