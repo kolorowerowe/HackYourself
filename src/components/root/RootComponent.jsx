@@ -1,21 +1,25 @@
 import React, {useState} from 'react';
-import LoadDataComponentContainer from "../loadData/LoadDataComponentContainer";
-import {loadDataFromPath} from "../../utils/fileLoader";
+import {loadDataFromDirPath, loadDataFromStatsFile} from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import SideBar from "./SideBar";
-import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
-import ContactComponent from "../contact/ContactComponent";
 import {replaceWithJSONCharacters} from '../../algorithms/encoding';
 import {getUsername} from '../../algorithms/utils';
-import HelpComponent from "../hello/HelpComponent";
-import {CHOOSE_DIR, CONTACT, HELP, STATS} from "./routes";
+import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS} from "./routes";
 import messageAnalysisWorker from "../../workers/messageAnalysis";
+import {saveToFile} from "../../utils/fileSaver";
+import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
+import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USERNAME} from "./localStorageKeys";
+import {Route, Switch, useHistory} from "react-router-dom";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import HelpComponent from "../hello/HelpComponent";
+import ContactComponent from "../contact/ContactComponent";
+import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
+import ChooseFolderComponent from "../loadData/ChooseFolderComponent";
+import {Typography} from "@material-ui/core";
 
 const RootComponent = () => {
     const classes = useStyles();
-
-    const [route, setRoute] = useState(CHOOSE_DIR);
+    const history = useHistory();
 
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
@@ -28,27 +32,51 @@ const RootComponent = () => {
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const onLoadData = async (path) => {
+    const onStartAnalysingDataClick = async (pathToFolder) => {
         setFileValidationError(null);
         setLoading(true);
         setStep(0);
-        if (path) {
-            localStorage.setItem('PATH', path);
+        if (pathToFolder) {
+            localStorage.setItem(PATH_TO_FOLDER, pathToFolder);
         }
         if (username) {
-            localStorage.setItem('USERNAME', username);
+            localStorage.setItem(USERNAME, username);
         }
 
-        loadDataFromPath(path).then(async data => {
+        loadDataFromDirPath(pathToFolder).then(async data => {
             setStep(1);
-            await setStatsFromMessagesMap(data);
 
-            setRoute(STATS);
+            const newStatistics = await getStatsFromMessagesMap(data);
+            setStatistics(newStatistics);
+
+            history.push(R_STATS);
             setLoading(false);
             setAllStatsLoaded(true);
-            setSnackbarMessage('Loaded successfully');
+            setSnackbarMessage('Successfully analysed data');
 
-            // await saveToFile('stats.json', newStatistics);
+            saveToFile('stats.json', newStatistics);
+        }).catch(e => {
+            setFileValidationError(e);
+        });
+    }
+
+    const onLoadStatisticsFromFileClick = async (pathToStatsFile) => {
+        setFileValidationError(null);
+        setLoading(true);
+
+        if (pathToStatsFile) {
+            localStorage.setItem(PATH_TO_STATS_FILE, pathToStatsFile);
+        }
+
+        loadDataFromStatsFile(pathToStatsFile).then(async data => {
+
+            setStatistics(data);
+
+            history.push(R_STATS);
+            setLoading(false);
+            setAllStatsLoaded(true);
+            setSnackbarMessage('Loaded successfully from file');
+
         }).catch(e => {
             setFileValidationError(e);
         });
@@ -59,7 +87,7 @@ const RootComponent = () => {
         setLoadingPercentage(Math.round((step / allSteps) * 100));
     }
 
-    const setStatsFromMessagesMap = async (messagesMap) => {
+    const getStatsFromMessagesMap = async (messagesMap) => {
 
         let _username = username;
         if (!_username) {
@@ -91,29 +119,48 @@ const RootComponent = () => {
         newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(messages, usernameNormalized);
         setStep(7);
 
-        setStatistics(newStatistics);
-
         return newStatistics;
     }
 
 
     return (
         <div className={classes.root}>
-            <SideBar route={route}
-                     setRoute={setRoute}/>
+            <SideBar/>
             <main className={classes.content}>
-                {route === CHOOSE_DIR && <LoadDataComponentContainer username={username}
-                                                                     setUsername={setUsername}
-                                                                     loading={loading}
-                                                                     loadingPercentage={loadingPercentage}
-                                                                     fileValidationError={fileValidationError}
-                                                                     onLoadData={onLoadData}/>
-                }
-                {route === STATS && <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
-                                                                  statistics={statistics}/>
-                }
-                {route === HELP && <HelpComponent navigateToChooseDir={() => setRoute(CHOOSE_DIR)}/>}
-                {route === CONTACT && <ContactComponent username={username}/>}
+                <Switch>
+                    <Route exact path="/">
+                        <Typography>
+                            What do you want to do?
+                        </Typography>
+                    </Route>
+                    <Route exact path={R_CHOOSE_FOLDER}>
+                        <ChooseFolderComponent username={username}
+                                               setUsername={setUsername}
+                                               loading={loading}
+                                               loadingPercentage={loadingPercentage}
+                                               fileValidationError={fileValidationError}
+                                               onStartAnalysingDataClick={onStartAnalysingDataClick}
+                                               goToChooseStatsFile={() => history.push(R_CHOOSE_STATS_FILE)}/>
+                    </Route>
+                    <Route exact path={R_CHOOSE_STATS_FILE}>
+                        <ChooseStatsFileComponent goToChooseFolder={() => history.push(R_CHOOSE_FOLDER)}
+                                                  onLoadStatisticsFromFileClick={onLoadStatisticsFromFileClick}
+                                                  loading={loading}
+                                                  loadingPercentage={loadingPercentage}
+                                                  fileValidationError={fileValidationError}/>
+                    </Route>
+                    <Route exact path={R_STATS}>
+                        <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
+                                                      statistics={statistics}
+                        />
+                    </Route>
+                    <Route exact path={R_HELP}>
+                        <HelpComponent navigateToChooseDir={() => history.push(R_CHOOSE_FOLDER)}/>
+                    </Route>
+                    <Route exact path={R_CONTACT}>
+                        <ContactComponent username={username}/>
+                    </Route>
+                </Switch>
             </main>
 
             <SnackbarAlert snackbarMessage={snackbarMessage}

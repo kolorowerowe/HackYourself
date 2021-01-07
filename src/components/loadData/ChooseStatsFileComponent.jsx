@@ -7,23 +7,22 @@ import {useCommonStyles} from "../../theme/commonStyles";
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
 import Tooltip from "@material-ui/core/Tooltip";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import {PATH_TO_STATS_FILE} from "../root/localStorageKeys";
+import Link from "@material-ui/core/Link";
 
-const LoadDataComponentContainer = (props) => {
+const ChooseStatsFileComponent = (props) => {
 
     const {
-        username,
-        setUsername,
+        goToChooseFolder,
+        onLoadStatisticsFromFileClick,
         loading,
         loadingPercentage,
-        onLoadData,
         fileValidationError
     } = props;
 
     const styles = useCommonStyles();
 
-
-    const [pathToData, setPathToData] = useState('');
-
+    const [pathToStatsFile, setPathToStatsFile] = useState('');
 
     const onClick = () => {
         const {
@@ -33,14 +32,17 @@ const LoadDataComponentContainer = (props) => {
         } = window.require('electron');
 
         dialog.showOpenDialog({
-            properties: ['openDirectory']
+            properties: ['openFile'],
+            filters: [
+                {name: 'json files', extensions: ['json']}
+            ]
         }).then((data) => {
             const {
                 filePaths
             } = data;
 
             if (filePaths.length > 0) {
-                setPathToData(filePaths[0]);
+                setPathToStatsFile(filePaths[0]);
             }
         }).catch(e => {
             console.error(e);
@@ -56,17 +58,17 @@ const LoadDataComponentContainer = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Typography variant={'h6'}>
-                    Start analysing from your Facebook data.
+                    Let's load already analysed data.
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <div style={{display: 'flex'}}>
                     <TextField id="path"
                                name="path"
-                               value={pathToData}
-                               placeholder={'./data/facebook-kolorowerowe/messages/inbox'}
-                               label={'Relative path to the inbox folder'}
-                               onChange={e => setPathToData(e.target.value)}
+                               value={pathToStatsFile}
+                               placeholder={'C:\\Users\\domin\\Documents\\Downloads\\stats.json'}
+                               label={'Path to the json file with statistics'}
+                               onChange={e => setPathToStatsFile(e.target.value)}
                                disabled={loading}
                                fullWidth
                     />
@@ -77,27 +79,7 @@ const LoadDataComponentContainer = (props) => {
                     </Tooltip>
                     <Tooltip title={'Paste last used path'}>
                         <IconButton onClick={() => {
-                            setPathToData(localStorage.getItem('PATH'));
-                        }}>
-                            <TransitEnterexitIcon/>
-                        </IconButton>
-                    </Tooltip>
-                </div>
-            </Grid>
-            <Grid item xs={12}>
-                <div style={{display: 'flex'}}>
-                    <TextField id="username"
-                               name="username"
-                               value={username}
-                               placeholder={'Dominik Kołodziej'}
-                               label={'Facebook username (optional)'}
-                               onChange={e => setUsername(e.target.value)}
-                               disabled={loading}
-                               fullWidth
-                    />
-                    <Tooltip title={'Paste last used path'}>
-                        <IconButton onClick={() => {
-                            setUsername(localStorage.getItem('USERNAME'));
+                            setPathToStatsFile(localStorage.getItem(PATH_TO_STATS_FILE) || '');
                         }}>
                             <TransitEnterexitIcon/>
                         </IconButton>
@@ -116,16 +98,25 @@ const LoadDataComponentContainer = (props) => {
             </Grid>}
 
             <Grid item xs={12}>
-                <Button onClick={() => onLoadData(pathToData, username)}
+                <Button onClick={() => onLoadStatisticsFromFileClick(pathToStatsFile)}
                         fullWidth
                         disabled={loading}
                         variant={'outlined'}>
                     Load data!
                 </Button>
             </Grid>
+            <Grid item xs={12}>
+                <Link
+                    component="button"
+                    variant="body2"
+                    onClick={goToChooseFolder}
+                >
+                    Want to analyse data from beginning? Click here!
+                </Link>
+            </Grid>
         </Grid>
     );
 };
 
 
-export default LoadDataComponentContainer;
+export default ChooseStatsFileComponent;

@@ -12,36 +12,33 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import StorageIcon from '@material-ui/icons/Storage';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import MailIcon from '@material-ui/icons/Mail';
-import PropTypes from 'prop-types';
-import {CHOOSE_DIR, CONTACT, HELP, STATS} from "./routes";
+import {R_CHOOSE_FOLDER, R_CONTACT, R_HELP, R_HOME, R_STATS} from "./routes";
+import {useHistory, useLocation} from "react-router-dom";
 
-const SideBar = (props) => {
-
-    const {
-        route,
-        setRoute
-    } = props;
+const SideBar = () => {
 
     const classes = useStyles();
 
-
     const sidebarElements = [{
         name: 'Choose dir',
-        value: CHOOSE_DIR,
+        value: R_CHOOSE_FOLDER,
         IconComponent: StorageIcon
     }, {
         name: 'Stats',
-        value: STATS,
+        value: R_STATS,
         IconComponent: EqualizerIcon
     }, {
         name: 'Help',
-        value: HELP,
+        value: R_HELP,
         IconComponent: HelpOutlineIcon
     }, {
         name: 'Contact',
-        value: CONTACT,
+        value: R_CONTACT,
         IconComponent: MailIcon
     }]
+
+    const history = useHistory();
+    const {pathname} = useLocation();
 
     return (
         <Drawer
@@ -54,35 +51,34 @@ const SideBar = (props) => {
         >
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar variant={'dense'}>
-                    <Typography variant="h6" noWrap>
+                    <Typography variant="h6" noWrap onClick={() => history.push(R_HOME)}>
                         Hack Yourself
                     </Typography>
                 </Toolbar>
             </AppBar>
             <div className={classes.toolbar}/>
             <List>
-                {sidebarElements.map(({name, value, IconComponent}) => (
-                    <ListItem button
-                              key={value}
-                              onClick={() => {
-                                  setRoute(value)
-                              }}>
-                        <ListItemIcon color={value === route ? 'primary' : 'textPrimary'}>
-                            <IconComponent color={value === route ? 'primary' : 'action'}/>
+                {sidebarElements.map(({name, value, IconComponent}) => {
+                    const isSelected = value.split("/")[1] === pathname.split("/")[1]
+
+                    return <ListItem button
+                                     key={value}
+                                     onClick={() => {
+                                         history.push(value)
+                                     }}>
+                        <ListItemIcon color={isSelected ? 'primary' : 'textPrimary'}>
+                            <IconComponent color={isSelected ? 'primary' : 'action'}/>
                         </ListItemIcon>
                         <ListItemText primary={name}
-                                      primaryTypographyProps={{color: value === route ? 'primary' : 'textPrimary'}}/>
+                                      primaryTypographyProps={{color: isSelected ? 'primary' : 'textPrimary'}}/>
                     </ListItem>
-                ))}
+                })}
             </List>
         </Drawer>
     );
 };
 
-SideBar.propTypes = {
-    route: PropTypes.string,
-    setRoute: PropTypes.func
-};
+SideBar.propTypes = {};
 
 const drawerWidth = 200;
 
