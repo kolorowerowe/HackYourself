@@ -1,0 +1,96 @@
+{
+  "participants": [
+    {
+      "name": "Agata T"
+    },
+    {
+      "name": "Dominik Ko\u00c5\u0082odziej"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1556212356267,
+      "content": "Oki, dzi\u00c4\u0099ki wielkie",
+      "type": "Generic",
+      "TEST_date": "Thursday, 25 April 2019 17:12:36.267"
+    },
+    {
+      "sender_name": "Agata T",
+      "timestamp_ms": 1556211777862,
+      "content": "Tym co Beti spi",
+      "type": "Generic",
+      "TEST_date": "Thursday, 25 April 2019 17:02:57.862"
+    },
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1556209076508,
+      "content": "W kt\u00c3\u00b3rym pokoju? xd",
+      "type": "Generic",
+      "TEST_date": "Thursday, 25 April 2019 16:17:56.508"
+    },
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1556176709538,
+      "content": "Oki",
+      "type": "Generic",
+      "TEST_date": "Thursday, 25 April 2019 07:18:29.538"
+    },
+    {
+      "sender_name": "Agata T",
+      "timestamp_ms": 1556175684365,
+      "content": "Dominik twoja przej\u00c5\u009bci\u00c3\u00b3wk\u00c4\u0099 zostawi\u00c5\u0082am w pokoju na szafce nocnej",
+      "type": "Generic",
+      "TEST_date": "Thursday, 25 April 2019 07:01:24.365"
+    },
+    {
+      "sender_name": "Agata T",
+      "timestamp_ms": 1547071593516,
+      "content": "Oki",
+      "type": "Generic",
+      "TEST_date": "Wednesday, 9 January 2019 22:06:33.516"
+    },
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1547070655732,
+      "content": "ale jutro to zrobi\u00c4\u0099 i ci pode\u00c5\u009bl\u00c4\u0099 z ch\u00c4\u0099ci\u00c4\u0085! ^^",
+      "type": "Generic",
+      "TEST_date": "Wednesday, 9 January 2019 21:50:55.732"
+    },
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1547070640976,
+      "content": "oooo, super :D",
+      "type": "Generic",
+      "TEST_date": "Wednesday, 9 January 2019 21:50:40.976"
+    },
+    {
+      "sender_name": "Agata T",
+      "timestamp_ms": 1547070156850,
+      "content": "Dominik, ja nie by\u00c5\u0082am pewna weekendu, czy b\u00c4\u0099d\u00c4\u0099, ale ju\u00c5\u00bc wiem! Mo\u00c5\u00bcesz mi da\u00c4\u0087 jakie\u00c5\u009b fuchy, b\u00c4\u0099d\u00c4\u0099 wi\u00c4\u0099kszo\u00c5\u009b\u00c4\u0087 soboty!",
+      "type": "Generic",
+      "TEST_date": "Wednesday, 9 January 2019 21:42:36.850"
+    },
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1546464446209,
+      "content": "no heeeej, jak tam twoja dost\u00c4\u0099pno\u00c5\u009b\u00c4\u0087 na BITEhacka? pssssst, arkusz czeka \u00f0\u009f\u0098\u0080 -> https://docs.google.com/spreadsheets/d/1x7-ZmhxcVu_G25Svk8jeKtvTQyNCZWpCqbtZJ5kx0rY/edit?usp=sharing",
+      "share": {
+        "link": "https://accounts.google.com/ServiceLogin?service=wise&passive=1209600&continue=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1x7-ZmhxcVu_G25Svk8jeKtvTQyNCZWpCqbtZJ5kx0rY%2Fedit%3Fusp%3Dsharing&followup=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1x7-ZmhxcVu_G25Svk8jeKtvTQyNCZWpCqbtZJ5kx0rY%2Fedit%3Fusp%3Dsharing&ltmpl=sheets"
+      },
+      "type": "Share",
+      "TEST_date": "Wednesday, 2 January 2019 21:27:26.209"
+    },
+    {
+      "sender_name": "Dominik Ko\u00c5\u0082odziej",
+      "timestamp_ms": 1521383450346,
+      "content": "Mo\u00c5\u00bcecie teraz porozmawia\u00c4\u0087 ze sob\u00c4\u0085 w Messengerze.",
+      "type": "Generic",
+      "TEST_date": "Sunday, 18 March 2018 14:30:50.346"
+    }
+  ],
+  "title": "Agata T",
+  "is_still_participant": true,
+  "thread_type": "Regular",
+  "thread_path": "inbox/agatat_yvmxafbmfq"
+}

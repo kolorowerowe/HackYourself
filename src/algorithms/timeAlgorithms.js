@@ -42,17 +42,19 @@ const getHourly = (hour, messages) => {
     let averageLength = contents.length === 0 ? 0
         : (contents.reduce((acc, curr) => acc + (curr ? curr.length : 0), 0) / contents.length);
     return {
+        hour,
         count: filtered.length,
         averageLength
     };
 };
 
-const getWeekly = (day, messages) => {
-    let filtered = messages.filter(m => m.date.getDay() === day);
+const getWeekly = (isoWeekday, messages) => {
+    let filtered = messages.filter(m => moment(m.timestamp_ms).isoWeekday() === isoWeekday);
     let contents = filtered.map(e => e.content).filter(e => e);
     let averageLength = contents.length === 0 ? 0
         : (contents.reduce((acc, curr) => acc + (curr ? curr.length : 0), 0) / contents.length);
     return {
+        isoWeekday,
         count: filtered.length,
         averageLength
     };
@@ -78,8 +80,8 @@ export const getTimeStats = (messages, user_name) => {
         hourly[i] = getHourly(i, messagesWithDate);
     }
     let weekly = [];
-    for (let i = 0; i < 7; ++i) {
-        weekly[i] = getWeekly(i, messagesWithDate);
+    for (let i = 1; i <= 7; ++i) {
+        weekly = [...weekly, getWeekly(i, messagesWithDate)];
     }
 
     return {hourly, weekly, timelineStats};

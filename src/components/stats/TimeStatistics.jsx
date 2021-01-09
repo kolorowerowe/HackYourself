@@ -4,9 +4,10 @@ import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {replaceWithJSONCharacters, replaceWithJSCharacters} from '../../algorithms/encoding';
+import moment from "moment";
 
 const weeklyChart = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: [],
     datasets: [
         {
             label: 'Count',
@@ -117,7 +118,9 @@ const TimeStatistics = (props) => {
 
     const weeklyData = useMemo(() => {
         let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].weekly;
-
+        weeklyChart.labels = data.map((item, index) => {
+            return moment().isoWeekday(item.isoWeekday).format('dddd');
+        });
         weeklyChart.datasets[0].data = data.map((item) => {
             return item.count
         });
