@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {replaceWithJSONCharacters, replaceWithJSCharacters} from '../../algorithms/encoding';
 
 const weeklyChart = {
-    labels: ['Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd'],
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
         {
             label: 'Count',
@@ -28,6 +28,28 @@ const weeklyChart = {
 }
 
 const hourlyChart = {
+    labels: [],
+    datasets: [
+        {
+            label: 'Count',
+            data: null,
+            fill: false,
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgba(255, 99, 132, 0.2)',
+            yAxisID: 'y-axis-1'
+        },
+        {
+            label: 'Avg',
+            data: null,
+            fill: false,
+            backgroundColor: 'rgb(100, 99, 2)',
+            borderColor: 'rgba(100, 99, 2, 0.2)',
+            yAxisID: 'y-axis-2'
+        },
+    ],
+}
+
+const timelineChart = {
     labels: [],
     datasets: [
         {
@@ -85,14 +107,17 @@ const TimeStatistics = (props) => {
     const {
         timeStats: {
             hourly = [],
-            weekly = []
+            weekly = [],
+            timelineStats = []
         } = {},
         timeStatsPerRecipient
     } = props;
     const [recipient, setRecipient] = useState(NoFilter);
     let recipients = timeStatsPerRecipient ? replaceWithJSCharacters([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
+
     const weeklyData = useMemo(() => {
         let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].weekly;
+
         weeklyChart.datasets[0].data = data.map((item) => {
             return item.count
         });
@@ -117,6 +142,21 @@ const TimeStatistics = (props) => {
         return hourlyChart;
 
     }, [hourly, recipient, timeStatsPerRecipient]);
+
+    const timelineData = useMemo(() => {
+        let data = recipient === NoFilter ? timelineStats : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].timelineStats;
+        timelineChart.labels = data.map((item) => {
+            return item.date
+        });
+        timelineChart.datasets[0].data = data.map((item) => {
+            return item.count
+        });
+        timelineChart.datasets[1].data = data.map((item) => {
+            return item.averageLength
+        });
+        return timelineChart;
+
+    }, [timelineStats, recipient, timeStatsPerRecipient]);
 
 
     return (
@@ -146,6 +186,12 @@ const TimeStatistics = (props) => {
             </Grid>
             <Grid item xs={6}>
                 <Line data={hourlyData} options={options}/>
+            </Grid>
+            <Grid item xs={6}>
+                Timeline statistics
+            </Grid>
+            <Grid item xs={12}>
+                <Line data={timelineData} options={options}/>
             </Grid>
         </Grid>
     );

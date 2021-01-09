@@ -7,7 +7,7 @@ import {getTotalStats} from "../../algorithms/totalAlgorithms";
 registerPromiseWorker((message) => {
 
     if (message.type === 'getTotalStats') {
-        return getTotalStats(message.messagesMap, message.username);
+        return getTotalStats(message.messages, message.username);
     }
 
     if (message.type === 'getWordStats') {

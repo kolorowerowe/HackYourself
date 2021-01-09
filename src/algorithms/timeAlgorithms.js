@@ -1,4 +1,40 @@
 import {getRecipients} from "./utils";
+import moment from "moment";
+
+const getMonthYear = (timestamp) => {
+    return moment(timestamp).format("YYYY-MM");
+}
+
+const getTimelineStats = (messages) => {
+
+    const resMap = messages.reduce((map, message) => {
+        const monthYear = getMonthYear(message.timestamp_ms);
+
+        const currObj = map.get(monthYear);
+
+        map.set(monthYear, currObj ? {
+                count: currObj.count + 1,
+                wordCount: currObj.wordCount + message.content.length
+            } :
+            {
+                count: 1,
+                wordCount: message.content.length
+            });
+
+        return map;
+    }, new Map());
+
+    return [...resMap.entries()].sort(compareYearMonth).map(obj => ({
+        date: moment(obj[0]).format('MMM YYYY'),
+        count: obj[1].count,
+        averageLength: obj[1].wordCount / obj[1].count
+    }))
+
+};
+
+const compareYearMonth = (a,b) => {
+    return moment(a[0]).valueOf() - moment(b[0]).valueOf();
+}
 
 const getHourly = (hour, messages) => {
     let filtered = messages.filter(m => m.date.getHours() === hour);
@@ -32,8 +68,10 @@ export const getTimeStats = (messages, user_name) => {
         .flat()
         .filter(m => m.sender_name === user_name);
 
-    const messagesWithDate = allMessages.filter(x => x.timestamp_ms)
+    const messagesWithDate = allMessages.filter(x => x.timestamp_ms && x.content)
         .map(e => ({...e, date: new Date(e.timestamp_ms)}));
+
+    const timelineStats = getTimelineStats(messagesWithDate);
 
     let hourly = [];
     for (let i = 0; i < 24; ++i) {
@@ -44,7 +82,7 @@ export const getTimeStats = (messages, user_name) => {
         weekly[i] = getWeekly(i, messagesWithDate);
     }
 
-    return {hourly, weekly};
+    return {hourly, weekly, timelineStats};
 }
 
 export const getTimeStatsPerRecipient = (messages, user_name) => {

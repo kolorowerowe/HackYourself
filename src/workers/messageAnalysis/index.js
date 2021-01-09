@@ -7,8 +7,8 @@ import Worker from 'worker-loader!./worker';
 const worker = new Worker();
 const promiseWorker = new PromiseWorker(worker);
 
-const postForTotalStats = (messagesMap, username) => promiseWorker.postMessage({
-    type: 'getTotalStats', messagesMap, username
+const postForTotalStats = (messages, username) => promiseWorker.postMessage({
+    type: 'getTotalStats', messages, username
 });
 
 const postForWordStats = (messages, username) => promiseWorker.postMessage({

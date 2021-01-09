@@ -101,10 +101,7 @@ const RootComponent = () => {
 
         let newStatistics = {};
 
-        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messagesMap, usernameNormalized);
-        setStep(3);
-
-        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messagesMap, usernameNormalized);
+        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messages, usernameNormalized);
         setStep(3);
 
         newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(messages, usernameNormalized);

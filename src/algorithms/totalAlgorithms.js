@@ -1,26 +1,25 @@
 import {replaceWithJSCharacters} from "./encoding";
 
 
-export const getTotalStats = (messagesMap, userName) => {
+export const getTotalStats = (messages, userName) => {
 
     return {
-        totalMessagesSent: getTotalMessagesSent(messagesMap, userName),
-        totalMessages: getTotalMessages(messagesMap),
-        topUsers: getTopUsers(messagesMap, userName)
+        totalMessagesSent: getTotalMessagesSent(messages, userName),
+        totalMessages: getTotalMessages(messages),
+        topUsers: getTopUsers(messages, userName)
     }
 }
 
-const getTotalMessagesSent = (messagesMap, userName) => {
-    return [...messagesMap.values()].reduce((acc, json) => acc + json.messages.filter(m => m.sender_name === userName && m.type === 'Generic').length, 0);
+const getTotalMessagesSent = (messages, userName) => {
+    return messages.reduce((acc, json) => acc + json.messages.filter(m => m.sender_name === userName && m.type === 'Generic').length, 0);
 }
 
-const getTotalMessages = (messagesMap) => {
-    return [...messagesMap.values()].reduce((acc, json) => acc + json.messages.length, 0);
+const getTotalMessages = (messages) => {
+    return messages.reduce((acc, json) => acc + json.messages.length, 0);
 }
 
-const getTopUsers = (messagesMap, userName, top = 10) => {
-    let allUsers = [...messagesMap.values()]
-        .filter(({title}) => !!title).map(json => ({
+const getTopUsers = (messages, userName, top = 10) => {
+    let allUsers = messages.filter(({title}) => !!title).map(json => ({
             name: json.title,
             sentMessagesCount: json.messages.filter(m => m.sender_name === userName && m.type === 'Generic').length,
             allMessagesCount: json.messages.length,
