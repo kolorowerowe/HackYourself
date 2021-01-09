@@ -11,11 +11,11 @@ import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
 import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USERNAME} from "./localStorageKeys";
 import {Route, Switch, useHistory} from "react-router-dom";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import HelpComponent from "../hello/HelpComponent";
+import HelpComponent from "../help/HelpComponent";
 import ContactComponent from "../contact/ContactComponent";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ChooseFolderComponent from "../loadData/ChooseFolderComponent";
-import {Typography} from "@material-ui/core";
+import HelloComponent from "../hello/HelloComponent";
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -126,9 +126,7 @@ const RootComponent = () => {
             <main className={classes.content}>
                 <Switch>
                     <Route exact path="/">
-                        <Typography>
-                            What do you want to do?
-                        </Typography>
+                        <HelloComponent/>
                     </Route>
                     <Route exact path={R_CHOOSE_FOLDER}>
                         <ChooseFolderComponent username={username}
