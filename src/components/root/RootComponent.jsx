@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import {loadDataFromDirPath, loadDataFromStatsFile} from "../../utils/fileLoader";
 import SnackbarAlert from "./SnackbarAlert";
 import SideBar from "./SideBar";
-import {replaceWithJSONCharacters} from '../../algorithms/encoding';
-import {getUsername} from '../../algorithms/utils';
+import {unfixEncoding} from '../../algorithms/encoding';
+import {getUserNameFromThreads} from '../../algorithms/utils';
 import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS} from "./routes";
 import messageAnalysisWorker from "../../workers/messageAnalysis";
 import {saveToFile} from "../../utils/fileSaver";
 import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
-import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USERNAME} from "./localStorageKeys";
+import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USER_NAME} from "./localStorageKeys";
 import {Route, Switch, useHistory} from "react-router-dom";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import HelpComponent from "../help/HelpComponent";
@@ -21,7 +21,7 @@ const RootComponent = () => {
     const classes = useStyles();
     const history = useHistory();
 
-    const [username, setUsername] = useState('');
+    const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(false);
     const [loadingPercentage, setLoadingPercentage] = useState(0);
     const [fileValidationError, setFileValidationError] = useState(null);
@@ -35,18 +35,19 @@ const RootComponent = () => {
     const onStartAnalysingDataClick = async (pathToFolder) => {
         setFileValidationError(null);
         setLoading(true);
+
         setStep(0);
         if (pathToFolder) {
             localStorage.setItem(PATH_TO_FOLDER, pathToFolder);
         }
-        if (username) {
-            localStorage.setItem(USERNAME, username);
+        if (userName) {
+            localStorage.setItem(USER_NAME, userName);
         }
 
-        loadDataFromDirPath(pathToFolder).then(async data => {
+        loadDataFromDirPath(pathToFolder).then(async threadList => {
             setStep(1);
 
-            const newStatistics = await getStatsFromMessagesMap(data);
+            const newStatistics = await getStatsFromThreads(threadList);
             setStatistics(newStatistics);
 
             history.push(R_STATS);
@@ -87,33 +88,32 @@ const RootComponent = () => {
         setLoadingPercentage(Math.round((step / allSteps) * 100));
     }
 
-    const getStatsFromMessagesMap = async (messagesMap) => {
+    const getStatsFromThreads = async (threadList) => {
 
-        let _username = username;
-        if (!_username) {
-            _username = getUsername([...messagesMap.values()]);
-            setUsername(_username);
+        let _userName = userName;
+        if (!_userName) {
+            _userName = getUserNameFromThreads(threadList);
+            setUserName(_userName);
         }
         setStep(2);
 
-        const messages = [...messagesMap.values()];
-        const usernameNormalized = replaceWithJSONCharacters(_username);
+        const userNameOriginal = unfixEncoding(_userName);
 
         let newStatistics = {};
 
-        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(messages, usernameNormalized);
+        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(threadList, userNameOriginal);
         setStep(3);
 
-        newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(messages, usernameNormalized);
+        newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(threadList, userNameOriginal);
         setStep(4);
 
-        newStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(messages, usernameNormalized);
+        newStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(threadList, userNameOriginal);
         setStep(5);
 
-        newStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(messages, usernameNormalized);
+        newStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
         setStep(6);
 
-        newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(messages, usernameNormalized);
+        newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
         setStep(7);
 
         return newStatistics;
@@ -129,8 +129,8 @@ const RootComponent = () => {
                         <HelloComponent/>
                     </Route>
                     <Route exact path={R_CHOOSE_FOLDER}>
-                        <ChooseFolderComponent username={username}
-                                               setUsername={setUsername}
+                        <ChooseFolderComponent userName={userName}
+                                               setUserName={setUserName}
                                                loading={loading}
                                                loadingPercentage={loadingPercentage}
                                                fileValidationError={fileValidationError}
@@ -153,7 +153,7 @@ const RootComponent = () => {
                         <HelpComponent navigateToChooseDir={() => history.push(R_CHOOSE_FOLDER)}/>
                     </Route>
                     <Route exact path={R_CONTACT}>
-                        <ContactComponent username={username}/>
+                        <ContactComponent userName={userName}/>
                     </Route>
                 </Switch>
             </main>

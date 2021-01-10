@@ -1,18 +1,27 @@
 import iconv from 'iconv-lite';
 
-export const fixEncoding = (string) => {
+const fixEnc = (string) => {
     return iconv.decode(iconv.encode(string, "latin1"), "utf8");
 }
 
-export const unfixEncoding = (string) => {
+const unfixEnc = (string) => {
     return iconv.decode(iconv.encode(string, "utf8"), "latin1")
 }
 
-export const replaceWithJSCharacters = (texts) => texts.map(t => fixEncoding(t));
+export const fixEncoding = (object) => {
+    if (object.constructor === String) {
+        return fixEnc(object);
+    } else if (object.constructor === Array) {
+        return object.map(text => fixEnc(text));
+    }
+}
 
-
-export const replaceWithJSONCharacters = (str) => {
-    return unfixEncoding(str);
+export const unfixEncoding = (object) => {
+    if (object.constructor === String) {
+        return unfixEnc(object);
+    } else if (object.constructor === Array) {
+        return object.map(text => unfixEnc(text));
+    }
 }
 
 export const linkRegex = /(https?:\/\/[^\s]+)/g;

@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {replaceWithJSONCharacters, replaceWithJSCharacters} from '../../algorithms/encoding';
+import {fixEncoding, unfixEncoding} from '../../algorithms/encoding';
 import moment from "moment";
 
 const weeklyChart = {
@@ -114,10 +114,10 @@ const TimeStatistics = (props) => {
         timeStatsPerRecipient
     } = props;
     const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = timeStatsPerRecipient ? replaceWithJSCharacters([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
+    let recipients = timeStatsPerRecipient ? fixEncoding([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
 
     const weeklyData = useMemo(() => {
-        let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].weekly;
+        let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[unfixEncoding(recipient)].weekly;
         weeklyChart.labels = data.map((item, index) => {
             return moment().isoWeekday(item.isoWeekday).format('dddd');
         });
@@ -132,7 +132,7 @@ const TimeStatistics = (props) => {
     }, [weekly, recipient, timeStatsPerRecipient]);
 
     const hourlyData = useMemo(() => {
-        let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].hourly;
+        let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[unfixEncoding(recipient)].hourly;
         hourlyChart.labels = data.map((item, index) => {
             return index
         });
@@ -147,7 +147,7 @@ const TimeStatistics = (props) => {
     }, [hourly, recipient, timeStatsPerRecipient]);
 
     const timelineData = useMemo(() => {
-        let data = recipient === NoFilter ? timelineStats : timeStatsPerRecipient[replaceWithJSONCharacters(recipient)].timelineStats;
+        let data = recipient === NoFilter ? timelineStats : timeStatsPerRecipient[unfixEncoding(recipient)].timelineStats;
         timelineChart.labels = data.map((item) => {
             return item.date
         });

@@ -1,5 +1,5 @@
 import React from 'react';
-import messages from './resources/thread1.json'
+import messages from './resources/threadAgataT.json'
 import {getTotalStats} from "../algorithms/totalAlgorithms";
 
 
@@ -9,7 +9,6 @@ test('Get correct word stats', () => {
 
     const totalStats = getTotalStats([messages], userName);
 
-    console.log(totalStats);
     expect(totalStats).toEqual({
         totalMessagesSent: 6,
         totalMessages: 11,

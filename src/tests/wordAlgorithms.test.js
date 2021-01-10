@@ -1,5 +1,5 @@
 import React from 'react';
-import messages from './resources/thread1.json'
+import messages from './resources/threadAgataT.json'
 import {getWordStats} from "../algorithms/wordAlgorithms";
 
 
@@ -9,7 +9,6 @@ test('Get correct word stats', () => {
 
     const wordStats = getWordStats([messages], userName);
 
-    console.log(wordStats)
     expect(wordStats).toEqual({
         occurrencesList: [
             {word: 'w', value: 2, order: 1},

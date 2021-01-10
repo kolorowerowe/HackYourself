@@ -1,19 +1,19 @@
-import {replaceWithJSCharacters} from './encoding';
+import {fixEncoding} from './encoding';
 
-export const getRecipients = (messages, user_name) => {
+export const getRecipients = (threadList, userName) => {
     let recipients = [];
-    for (let thread of messages) {
+    for (let thread of threadList) {
         if (thread.participants) {
-            recipients = [...recipients, ...thread.participants.map(p => p.name).filter(p => p && p !== user_name)];
+            recipients = [...recipients, ...thread.participants.map(p => p.name).filter(p => p && p !== userName)];
         }
     }
 
     return recipients;
 }
 
-export const getUsername = (messages) => {
+export const getUserNameFromThreads = (threadList) => {
     let users = {};
-    for (let thread of messages) {
+    for (let thread of threadList) {
         if (thread.participants) {
             for (let part of thread.participants.filter(p => p.name)){
                 if (!users[part.name])
@@ -23,7 +23,5 @@ export const getUsername = (messages) => {
             }
         }
     }
-    return Object.keys(users).length ? replaceWithJSCharacters([Object.keys(users).reduce((a, b) => users[a] > users[b] ? a : b)])[0] : "";
+    return Object.keys(users).length ? fixEncoding(Object.keys(users).reduce((a, b) => users[a] > users[b] ? a : b)) : "";
 }
-
-export const UNKNOWN = "UNKNOWN";

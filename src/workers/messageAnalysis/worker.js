@@ -7,23 +7,23 @@ import {getTotalStats} from "../../algorithms/totalAlgorithms";
 registerPromiseWorker((message) => {
 
     if (message.type === 'getTotalStats') {
-        return getTotalStats(message.messages, message.username);
+        return getTotalStats(message.threadList, message.userName);
     }
 
     if (message.type === 'getWordStats') {
-        return getWordStats(message.messages, message.username);
+        return getWordStats(message.threadList, message.userName);
     }
 
     if (message.type === 'getTimeStats') {
-        return getTimeStats(message.messages, message.username);
+        return getTimeStats(message.threadList, message.userName);
     }
 
     if (message.type === 'getWordStatsPerRecipient') {
-        return getWordStatsPerRecipient(message.messages, message.username);
+        return getWordStatsPerRecipient(message.threadList, message.userName);
     }
 
     if (message.type === 'getTimeStatsPerRecipient') {
-        return getTimeStatsPerRecipient(message.messages, message.username);
+        return getTimeStatsPerRecipient(message.threadList, message.userName);
     }
 
 

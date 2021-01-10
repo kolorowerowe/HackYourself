@@ -1,5 +1,5 @@
 import React from 'react';
-import messages from './resources/thread1.json'
+import messages from './resources/threadAgataT.json'
 import {getTimeStats} from "../algorithms/timeAlgorithms";
 
 

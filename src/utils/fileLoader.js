@@ -1,31 +1,29 @@
-const MessageFileName = "message_";
+const MESSAGE_FILE_PREFIX = "message_";
 
-const getDirectories = (source, fs) => {
-    let allDirName = fs.readdirSync(source, {withFileTypes: true})
+const getDirectoriesInsidePath = (source, fs) => {
+    return fs.readdirSync(source, {withFileTypes: true})
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name);
-
-    return allDirName
 }
 
-const getAllMessages = (path, dirNames, fs) => {
+const getAllThreads = (rootDirPath, dirNames, fs) => {
     let map = new Map();
-    dirNames.forEach(element => {
-        let messagesFilesInDir = fs.readdirSync(`${path}/${element}`, {withFileTypes: true})
-            .filter(dirent => dirent.name.includes(MessageFileName))
+    dirNames.forEach(dirName => {
+        let messagesFilesInDir = fs.readdirSync(`${rootDirPath}/${dirName}`, {withFileTypes: true})
+            .filter(dirent => dirent.name.includes(MESSAGE_FILE_PREFIX))
             .map(dirent => dirent.name);
 
-        var data = readJsonFile(`${path}/${element}/${messagesFilesInDir[0]}`, fs);
+        let data = readJsonFile(`${rootDirPath}/${dirName}/${messagesFilesInDir[0]}`, fs);
 
         if (messagesFilesInDir.length > 1) {
             for (let index = 1; index < messagesFilesInDir.length; index++) {
-                data.messages = data.messages.concat(readJsonFile(`${path}/${element}/${messagesFilesInDir[index]}`, fs).messages);
+                data.messages = data.messages.concat(readJsonFile(`${rootDirPath}/${dirName}/${messagesFilesInDir[index]}`, fs).messages);
             }
         }
-        map.set(element, data);
+        map.set(dirName, data);
     });
 
-    return map;
+    return [...map.values()];
 }
 
 const readJsonFile = (path, fs) => {
@@ -41,17 +39,17 @@ export const loadDataFromDirPath = (dirPath) => {
             reject(Error(`Path '${dirPath}' not exists`));
         }
 
-        let stats = fs.lstatSync(dirPath);
+        let dirStatus = fs.lstatSync(dirPath);
 
-        if (!stats.isDirectory()) {
+        if (!dirStatus.isDirectory()) {
             reject(Error(`Path is not a directory`));
         }
 
-        let allDirName = getDirectories(dirPath, fs);
+        let allDirNames = getDirectoriesInsidePath(dirPath, fs);
 
-        let allMessages = getAllMessages(dirPath, allDirName, fs);
+        let allThreads = getAllThreads(dirPath, allDirNames, fs);
 
-        return resolve(allMessages);
+        return resolve(allThreads);
     }))
 }
 

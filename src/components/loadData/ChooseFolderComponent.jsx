@@ -7,14 +7,14 @@ import {useCommonStyles} from "../../theme/commonStyles";
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
 import Tooltip from "@material-ui/core/Tooltip";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import {PATH_TO_FOLDER, USERNAME} from "../root/localStorageKeys";
+import {PATH_TO_FOLDER, USER_NAME} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
 
 const ChooseFolderComponent = (props) => {
 
     const {
-        username,
-        setUsername,
+        userName,
+        setUserName,
         loading,
         loadingPercentage,
         onStartAnalysingDataClick,
@@ -84,16 +84,16 @@ const ChooseFolderComponent = (props) => {
                 <div style={{display: 'flex'}}>
                     <TextField id="username"
                                name="username"
-                               value={username}
+                               value={userName}
                                placeholder={'Dominik Kołodziej'}
                                label={'Facebook username (optional)'}
-                               onChange={e => setUsername(e.target.value)}
+                               onChange={e => setUserName(e.target.value)}
                                disabled={loading}
                                fullWidth
                     />
                     <Tooltip title={'Paste last used path'}>
                         <IconButton onClick={() => {
-                            setUsername(localStorage.getItem(USERNAME) || '');
+                            setUserName(localStorage.getItem(USER_NAME) || '');
                         }}>
                             <TransitEnterexitIcon/>
                         </IconButton>
@@ -112,7 +112,7 @@ const ChooseFolderComponent = (props) => {
             </Grid>}
 
             <Grid item xs={12}>
-                <Button onClick={() => onStartAnalysingDataClick(pathToFolder, username)}
+                <Button onClick={() => onStartAnalysingDataClick(pathToFolder)}
                         fullWidth
                         disabled={loading}
                         variant={'outlined'}>

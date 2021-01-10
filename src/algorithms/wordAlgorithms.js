@@ -1,9 +1,9 @@
-import {linkRegex, replaceWithJSCharacters, toRemove} from "./encoding";
+import {fixEncoding, linkRegex, toRemove} from "./encoding";
 import {getRecipients} from "./utils";
 
-export const getWordStats = (messages, user_name) => {
-    const allMessages = messages.map(e => e.messages).filter(e => e).flat();
-    const texts = allMessages.filter(m => m.sender_name === user_name && (m.type === 'Generic' || m.type === 'Share'))
+export const getWordStats = (threadList, userName) => {
+    const allMessages = threadList.map(e => e.messages).filter(e => e).flat();
+    const texts = allMessages.filter(m => m.sender_name === userName && (m.type === 'Generic' || m.type === 'Share'))
         .map(m => m.content)
         .filter(m => m);
 
@@ -13,7 +13,7 @@ export const getWordStats = (messages, user_name) => {
         .filter(t => t.length > 0);
 
 
-    split = replaceWithJSCharacters(split)
+    split = fixEncoding(split)
         .map(m => m.replace(linkRegex, ""))
         .map(m => m.replace(toRemove, "").toLocaleLowerCase())
         .filter(e => e);
@@ -50,14 +50,14 @@ const compareOccurrence = (a, b) => {
     return 0;
 }
 
-export const getWordStatsPerRecipient = (messages, user_name) => {
-    const recipients = getRecipients(messages, user_name);
+export const getWordStatsPerRecipient = (threadList, userName) => {
+    const recipients = getRecipients(threadList, userName);
     const stats = {};
     for (let rec of recipients) {
-        const filtered = messages.filter(m => m.participants
+        const filtered = threadList.filter(m => m.participants
             && m.participants.map(p => p.name).length < 3
             && m.participants.map(p => p.name).includes(rec));
-        stats[rec] = getWordStats(filtered, user_name);
+        stats[rec] = getWordStats(filtered, userName);
     }
     return stats;
 };

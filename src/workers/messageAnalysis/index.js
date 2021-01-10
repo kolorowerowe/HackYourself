@@ -7,24 +7,24 @@ import Worker from 'worker-loader!./worker';
 const worker = new Worker();
 const promiseWorker = new PromiseWorker(worker);
 
-const postForTotalStats = (messages, username) => promiseWorker.postMessage({
-    type: 'getTotalStats', messages, username
+const postForTotalStats = (threadList, userName) => promiseWorker.postMessage({
+    type: 'getTotalStats', threadList, userName
 });
 
-const postForWordStats = (messages, username) => promiseWorker.postMessage({
-    type: 'getWordStats', messages, username
+const postForWordStats = (threadList, userName) => promiseWorker.postMessage({
+    type: 'getWordStats', threadList, userName
 });
 
-const postForTimeStats = (messages, username) => promiseWorker.postMessage({
-    type: 'getTimeStats', messages, username
+const postForTimeStats = (threadList, userName) => promiseWorker.postMessage({
+    type: 'getTimeStats', threadList, userName
 });
 
-const postForTimeStatsPerRecipient = (messages, username) => promiseWorker.postMessage({
-    type: 'getTimeStatsPerRecipient', messages, username
+const postForTimeStatsPerRecipient = (threadList, userName) => promiseWorker.postMessage({
+    type: 'getTimeStatsPerRecipient', threadList, userName
 });
 
-const postForWordStatsPerRecipient = (messages, username) => promiseWorker.postMessage({
-    type: 'getWordStatsPerRecipient', messages, username
+const postForWordStatsPerRecipient = (threadList, userName) => promiseWorker.postMessage({
+    type: 'getWordStatsPerRecipient', threadList, userName
 });
 
 export default {

@@ -5,7 +5,7 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Grid from "@material-ui/core/Grid";
 import {useCommonStyles} from "../../theme/commonStyles";
 
-const ContactComponent = ({username}) => {
+const ContactComponent = ({userName}) => {
 
     const styles = useCommonStyles();
 
@@ -39,14 +39,14 @@ const ContactComponent = ({username}) => {
     }];
 
     const optionalName = useMemo(() => {
-        if (!username) {
+        if (!userName) {
             return "!"
         }
-        const usernameWords = username.split(" ");
-        if (usernameWords.length > 0){
-            return usernameWords[0] + "!";
+        const userNameWords = userName.split(" ");
+        if (userNameWords.length > 0) {
+            return userNameWords[0] + "!";
         }
-    }, [username]);
+    }, [userName]);
 
 
     return (

@@ -63,12 +63,12 @@ const getWeekly = (isoWeekday, messages) => {
 
 // Gets hourly/weekly stats
 // param: messages - list of serialized jsons from inbox
-export const getTimeStats = (messages, user_name) => {
+export const getTimeStats = (threadList, userName) => {
 
-    const allMessages = messages.map(e => e.messages)
+    const allMessages = threadList.map(e => e.messages)
         .filter(e => e)
         .flat()
-        .filter(m => m.sender_name === user_name);
+        .filter(m => m.sender_name === userName);
 
     const messagesWithDate = allMessages.filter(x => x.timestamp_ms && x.content)
         .map(e => ({...e, date: new Date(e.timestamp_ms)}));
@@ -87,14 +87,14 @@ export const getTimeStats = (messages, user_name) => {
     return {hourly, weekly, timelineStats};
 }
 
-export const getTimeStatsPerRecipient = (messages, user_name) => {
-    const recipients = getRecipients(messages, user_name);
+export const getTimeStatsPerRecipient = (threadList, userName) => {
+    const recipients = getRecipients(threadList, userName);
     const stats = {};
     for (let rec of recipients) {
-        const filtered = messages.filter(m => m.participants
+        const filtered = threadList.filter(m => m.participants
             && m.participants.map(p => p.name).length < 3
             && m.participants.map(p => p.name).includes(rec));
-        stats[rec] = getTimeStats(filtered, user_name);
+        stats[rec] = getTimeStats(filtered, userName);
     }
     return stats;
 };

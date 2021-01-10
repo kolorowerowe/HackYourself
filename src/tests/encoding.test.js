@@ -1,8 +1,8 @@
 import React from 'react';
-import {replaceWithJSCharacters} from "../algorithms/encoding";
+import {fixEncoding} from "../algorithms/encoding";
 
 
-test('Get encoding', () => {
+test('Fix encoding from array of string', () => {
 
     const texts = [
         'zrobi\u00c4\u0099',
@@ -12,7 +12,7 @@ test('Get encoding', () => {
         'dost\u00c4\u0099pno\u00c5\u009b\u00c4\u0087'
     ];
 
-    const replacedTexts = replaceWithJSCharacters(texts);
+    const replacedTexts = fixEncoding(texts);
 
     expect(replacedTexts).toEqual([
         'zrobię',
@@ -21,5 +21,15 @@ test('Get encoding', () => {
         'już',
         'dostępność'
     ])
+
+});
+
+test('Fix encoding from string', () => {
+
+    const text = "przej\u00c5\u009bci\u00c3\u00b3wk\u00c4\u0099";
+
+    const replacedTexts = fixEncoding(text);
+
+    expect(replacedTexts).toEqual('przejściówkę');
 
 });
