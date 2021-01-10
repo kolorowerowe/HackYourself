@@ -1,4 +1,4 @@
-import {replaceWithJSCharacters} from "./encoding";
+import {fixEncoding, replaceWithJSCharacters} from "./encoding";
 
 
 export const getTotalStats = (messages, userName) => {

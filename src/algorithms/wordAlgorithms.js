@@ -1,9 +1,9 @@
-import {replaceWithJSCharacters, toRemove} from "./encoding";
+import {linkRegex, replaceWithJSCharacters, toRemove} from "./encoding";
 import {getRecipients} from "./utils";
 
 export const getWordStats = (messages, user_name) => {
     const allMessages = messages.map(e => e.messages).filter(e => e).flat();
-    const texts = allMessages.filter(m => m.sender_name === user_name && m.type === 'Generic')
+    const texts = allMessages.filter(m => m.sender_name === user_name && (m.type === 'Generic' || m.type === 'Share'))
         .map(m => m.content)
         .filter(m => m);
 
@@ -12,7 +12,9 @@ export const getWordStats = (messages, user_name) => {
         .map(t => t.trim())
         .filter(t => t.length > 0);
 
+
     split = replaceWithJSCharacters(split)
+        .map(m => m.replace(linkRegex, ""))
         .map(m => m.replace(toRemove, "").toLocaleLowerCase())
         .filter(e => e);
 
@@ -35,7 +37,6 @@ export const getWordStats = (messages, user_name) => {
 
     return {
         occurrencesList,
-        count: texts.length
     };
 }
 
