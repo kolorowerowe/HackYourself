@@ -18,7 +18,7 @@ const HelloComponent = () => {
     const MenuCard = ({title, path, description, xs}) => {
 
         return <Grid item xs={xs} className={styles.gridItem}>
-            <Card>
+            <Card className={styles.card}>
                 <CardActionArea onClick={() => history.push(path)}>
                     <CardHeader title={title}/>
                     <CardContent className={styles.cardContent}>
@@ -75,7 +75,12 @@ const HelloComponent = () => {
 
 const useStyles = makeStyles((theme) => ({
     gridItem: {
-        width: '100%',
+        width: '100%'
+    },
+    card:{
+        '&:hover': {
+            backgroundImage: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.main} 4px, transparent 4px, transparent)`,
+        }
     },
     cardContent: {
         minHeight: 55,

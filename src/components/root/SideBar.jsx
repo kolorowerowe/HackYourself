@@ -61,7 +61,7 @@ const SideBar = () => {
                 {sidebarElements.map(({name, value, IconComponent}) => {
                     const isSelected = value.split("/")[1] === pathname.split("/")[1]
 
-                    const selectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 2%, transparent 2%, transparent)`;
+                    const selectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 4px, transparent 4px, transparent)`;
                     const notSelectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 0%, transparent 0%, transparent)`;
 
                     return <ListItem button
@@ -75,7 +75,7 @@ const SideBar = () => {
 
 
                         <ListItemIcon>
-                            <IconComponent color={isSelected ? 'action' : 'disabled'}/>
+                            <IconComponent color={isSelected ? 'action' : 'disabled'} className={classes.iconOnHover}/>
                         </ListItemIcon>
                         <ListItemText primary={name}
                                       primaryTypographyProps={{color: isSelected ? 'textPrimary' : 'textSecondary'}}/>
@@ -105,6 +105,12 @@ const useStyles = makeStyles((theme) => ({
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
+    '&:hover' :{
+        iconOnHover: {
+            color: '#000'
+        }
+    }
+
 }));
 
 export default SideBar;
