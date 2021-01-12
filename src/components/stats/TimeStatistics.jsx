@@ -1,10 +1,11 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import Grid from "@material-ui/core/Grid";
 import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {fixEncoding, unfixEncoding} from '../../algorithms/encoding';
+import {unfixEncoding} from '../../algorithms/encoding';
 import moment from "moment";
+import {NO_FILTER} from "../root/constans";
 
 const weeklyChart = {
     labels: [],
@@ -104,21 +105,22 @@ const options = {
 }
 
 const TimeStatistics = (props) => {
-    const NoFilter = "All recipients";
+
     const {
         timeStats: {
             hourly = [],
             weekly = [],
             timelineStats = []
         } = {},
-        timeStatsPerRecipient
+        timeStatsPerRecipient,
+        recipients,
+        recipientFilter,
+        setRecipientFilter
     } = props;
-    const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = timeStatsPerRecipient ? fixEncoding([...new Set(Object.keys(timeStatsPerRecipient))]) : [];
 
     const weeklyData = useMemo(() => {
-        let data = recipient === NoFilter ? weekly : timeStatsPerRecipient[unfixEncoding(recipient)].weekly;
-        weeklyChart.labels = data.map((item, index) => {
+        let data = recipientFilter === NO_FILTER ? weekly : timeStatsPerRecipient[unfixEncoding(recipientFilter)].weekly;
+        weeklyChart.labels = data.map(item => {
             return moment().isoWeekday(item.isoWeekday).format('dddd');
         });
         weeklyChart.datasets[0].data = data.map((item) => {
@@ -129,12 +131,12 @@ const TimeStatistics = (props) => {
         });
         return weeklyChart;
 
-    }, [weekly, recipient, timeStatsPerRecipient]);
+    }, [weekly, recipientFilter, timeStatsPerRecipient]);
 
     const hourlyData = useMemo(() => {
-        let data = recipient === NoFilter ? hourly : timeStatsPerRecipient[unfixEncoding(recipient)].hourly;
-        hourlyChart.labels = data.map((item, index) => {
-            return index
+        let data = recipientFilter === NO_FILTER ? hourly : timeStatsPerRecipient[unfixEncoding(recipientFilter)].hourly;
+        hourlyChart.labels = data.map(item => {
+            return item.hour
         });
         hourlyChart.datasets[0].data = data.map((item) => {
             return item.count
@@ -144,10 +146,10 @@ const TimeStatistics = (props) => {
         });
         return hourlyChart;
 
-    }, [hourly, recipient, timeStatsPerRecipient]);
+    }, [hourly, recipientFilter, timeStatsPerRecipient]);
 
     const timelineData = useMemo(() => {
-        let data = recipient === NoFilter ? timelineStats : timeStatsPerRecipient[unfixEncoding(recipient)].timelineStats;
+        let data = recipientFilter === NO_FILTER ? timelineStats : timeStatsPerRecipient[unfixEncoding(recipientFilter)].timelineStats;
         timelineChart.labels = data.map((item) => {
             return item.date
         });
@@ -159,7 +161,7 @@ const TimeStatistics = (props) => {
         });
         return timelineChart;
 
-    }, [timelineStats, recipient, timeStatsPerRecipient]);
+    }, [timelineStats, recipientFilter, timeStatsPerRecipient]);
 
 
     return (
@@ -168,13 +170,13 @@ const TimeStatistics = (props) => {
                 <Select
                     labelId="select-recipient-time"
                     id="select-recipient-time"
-                    value={recipient}
-                    onChange={e => setRecipient(e.target.value)}
+                    value={recipientFilter}
+                    onChange={e => setRecipientFilter(e.target.value)}
                 >
-                    (<MenuItem value={NoFilter}>{NoFilter}</MenuItem>)
-                    {recipients.map(r =>
-                        (<MenuItem value={r}
-                                   key={`R-${r}`}>{r}</MenuItem>)
+                    (<MenuItem value={NO_FILTER}>{NO_FILTER}</MenuItem>)
+                    {recipients.map(r => <MenuItem value={r}
+                                                   key={`R-${r}`}>{r}
+                        </MenuItem>
                     )}
                 </Select>
             </Grid>

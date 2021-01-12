@@ -1,6 +1,15 @@
 import {makeStyles} from "@material-ui/core/styles";
 
 export const useCommonStyles = makeStyles((theme) => ({
+    '@global': {
+        '*::-webkit-scrollbar': {
+            width: '0.8em',
+            backgroundColor: '#404040',
+        },
+        '*::-webkit-scrollbar-thumb': {
+            backgroundColor: '#6e6e6e',
+        }
+    },
     nextToEachOther: {
         display: 'flex',
         justifyContent: 'center',

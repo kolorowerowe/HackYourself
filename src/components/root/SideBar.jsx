@@ -61,16 +61,24 @@ const SideBar = () => {
                 {sidebarElements.map(({name, value, IconComponent}) => {
                     const isSelected = value.split("/")[1] === pathname.split("/")[1]
 
+                    const selectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 2%, transparent 2%, transparent)`;
+                    const notSelectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 0%, transparent 0%, transparent)`;
+
                     return <ListItem button
                                      key={value}
                                      onClick={() => {
                                          history.push(value)
+                                     }}
+                                     style={{
+                                         backgroundImage: isSelected ? selectedStyle : notSelectedStyle
                                      }}>
-                        <ListItemIcon color={isSelected ? 'primary' : 'textPrimary'}>
-                            <IconComponent color={isSelected ? 'primary' : 'action'}/>
+
+
+                        <ListItemIcon>
+                            <IconComponent color={isSelected ? 'action' : 'disabled'}/>
                         </ListItemIcon>
                         <ListItemText primary={name}
-                                      primaryTypographyProps={{color: isSelected ? 'primary' : 'textPrimary'}}/>
+                                      primaryTypographyProps={{color: isSelected ? 'textPrimary' : 'textSecondary'}}/>
                     </ListItem>
                 })}
             </List>

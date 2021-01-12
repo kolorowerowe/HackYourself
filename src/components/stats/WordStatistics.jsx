@@ -5,32 +5,31 @@ import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {fixEncoding, unfixEncoding} from '../../algorithms/encoding';
+import {unfixEncoding} from '../../algorithms/encoding';
+import {NO_FILTER} from "../root/constans";
 
 const WordStatistics = (props) => {
-    const NoFilter = "All recipients";
 
     const {
         wordStats: {
             occurrencesList = [],
         } = {},
-        wordStatsPerRecipient
+        wordStatsPerRecipient,
+        recipients,
+        recipientFilter,
+        setRecipientFilter
     } = props;
-
-    const [recipient, setRecipient] = useState(NoFilter);
-    let recipients = wordStatsPerRecipient ? fixEncoding([...new Set(Object.keys(wordStatsPerRecipient))]) : [];
 
     const [wordPattern, setWordPattern] = useState('')
 
     const visibleWord = useMemo(() => {
-        const occList = recipient === NoFilter ? occurrencesList : wordStatsPerRecipient[unfixEncoding(recipient)].occurrencesList;
+        const occList = recipientFilter === NO_FILTER ? occurrencesList : wordStatsPerRecipient[unfixEncoding(recipientFilter)].occurrencesList;
         if (!!wordPattern) {
             return occList.filter(({word}) => word.includes(wordPattern)).slice(0, 100);
         }
         return occList.slice(0, 100);
 
-    }, [occurrencesList, wordPattern, recipient, wordStatsPerRecipient]);
-
+    }, [occurrencesList, wordPattern, recipientFilter, wordStatsPerRecipient]);
 
     return (
         <Grid container spacing={2}>
@@ -38,10 +37,10 @@ const WordStatistics = (props) => {
                 <Select
                     labelId="select-recipient-word"
                     id="select-recipient-word"
-                    value={recipient}
-                    onChange={e => setRecipient(e.target.value)}
+                    value={recipientFilter}
+                    onChange={e => setRecipientFilter(e.target.value)}
                 >
-                    (<MenuItem value={NoFilter}>{NoFilter}</MenuItem>)
+                    (<MenuItem value={NO_FILTER}>{NO_FILTER}</MenuItem>)
                     {recipients.map(r =>
                         (<MenuItem value={r}
                                    key={`REC-${r}`}>{r}</MenuItem>)
