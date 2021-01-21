@@ -11,6 +11,10 @@ test('Get correct word stats', () => {
 
     expect(totalStats).toEqual({
         totalMessagesSent: 6,
+        totalImagesSent: 1,
+        totalVideosSent: 0,
+        totalFilesSent: 0,
+        totalSharesSent: 1,
         totalMessages: 11,
         topUsers: [
             {

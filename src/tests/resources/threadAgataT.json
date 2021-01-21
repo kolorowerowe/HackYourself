@@ -13,6 +13,12 @@
       "timestamp_ms": 1556212356267,
       "content": "Oki, dzi\u00c4\u0099ki wielkie",
       "type": "Generic",
+      "photos": [
+        {
+          "uri": "test.jpg",
+          "creation_timestamp": 1435236794
+        }
+      ],
       "TEST_date": "Thursday, 25 April 2019 17:12:36.267"
     },
     {
