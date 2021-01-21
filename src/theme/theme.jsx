@@ -5,6 +5,13 @@ export const darkTheme = createMuiTheme({
         type: 'dark',
         primary: {
             main: '#4267B2',
+            light: '#5E94FF',
+            dark: '#2A4373'
+        },
+        secondary: {
+            main: '#B3A539',
+            light: '#FFEB52',
+            dark: '#736A25'
         }
     }
 });

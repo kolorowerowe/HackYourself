@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import Grid from "@material-ui/core/Grid";
 import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
@@ -6,162 +6,100 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {unfixEncoding} from '../../algorithms/encoding';
 import moment from "moment";
 import {NO_FILTER} from "../root/constans";
-
-const weeklyChart = {
-    labels: [],
-    datasets: [
-        {
-            label: 'Count',
-            data: null,
-            fill: false,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-1'
-        },
-        {
-            label: 'Avg',
-            data: null,
-            fill: false,
-            backgroundColor: 'rgb(100, 99, 2)',
-            borderColor: 'rgba(100, 99, 2, 0.2)',
-            yAxisID: 'y-axis-2'
-        },
-    ],
-}
-
-const hourlyChart = {
-    labels: [],
-    datasets: [
-        {
-            label: 'Count',
-            data: null,
-            fill: false,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-1'
-        },
-        {
-            label: 'Avg',
-            data: null,
-            fill: false,
-            backgroundColor: 'rgb(100, 99, 2)',
-            borderColor: 'rgba(100, 99, 2, 0.2)',
-            yAxisID: 'y-axis-2'
-        },
-    ],
-}
-
-const timelineChart = {
-    labels: [],
-    datasets: [
-        {
-            label: 'Count',
-            data: null,
-            fill: false,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-1'
-        },
-        {
-            label: 'Avg',
-            data: null,
-            fill: false,
-            backgroundColor: 'rgb(100, 99, 2)',
-            borderColor: 'rgba(100, 99, 2, 0.2)',
-            yAxisID: 'y-axis-2'
-        },
-    ],
-}
-
-const options = {
-    scales: {
-        yAxes: [{
-            type: "linear",
-            display: true,
-            position: "left",
-            id: "y-axis-1",
-            gridLines: {
-                display: false
-            },
-            labels: {
-                show: true,
-            },
-        }, {
-            type: "linear",
-            display: true,
-            position: "right",
-            id: "y-axis-2",
-            gridLines: {
-                display: false
-            },
-            labels: {
-                show: true,
-            },
-            ticks: {
-                suggestedMin: 0
-            }
-        }]
-    },
-}
+import {Typography, useTheme} from "@material-ui/core";
 
 const TimeStatistics = (props) => {
 
     const {
-        timeStats: {
-            hourly = [],
-            weekly = [],
-            timelineStats = []
-        } = {},
+        timeStats,
         timeStatsPerRecipient,
         recipients,
         recipientFilter,
         setRecipientFilter
     } = props;
 
-    const weeklyData = useMemo(() => {
-        let data = recipientFilter === NO_FILTER ? weekly : timeStatsPerRecipient[unfixEncoding(recipientFilter)].weekly;
-        weeklyChart.labels = data.map(item => {
-            return moment().isoWeekday(item.isoWeekday).format('dddd');
-        });
-        weeklyChart.datasets[0].data = data.map((item) => {
-            return item.count
-        });
-        weeklyChart.datasets[1].data = data.map((item) => {
-            return item.averageLength
-        });
-        return weeklyChart;
+    const theme = useTheme();
 
-    }, [weekly, recipientFilter, timeStatsPerRecipient]);
+    const getLineChartBase = useCallback((data = [], getLabel = () => '') => () => ({
+        labels: data.map(getLabel),
+        datasets: [
+            {
+                label: 'Messages sent',
+                data: data.map(({count}) => count),
+                fill: false,
+                backgroundColor: theme.palette.secondary.main,
+                borderColor: theme.palette.secondary.dark,
+                yAxisID: 'y-axis-1'
+            },
+            {
+                label: 'Avg msg length',
+                data: data.map(({averageLength}) => averageLength),
+                fill: false,
+                backgroundColor: theme.palette.primary.main,
+                borderColor: theme.palette.primary.dark,
+                yAxisID: 'y-axis-2'
+            },
+        ],
+    }), [theme]);
+
+    const chartOptions = {
+        scales: {
+            yAxes: [{
+                type: "linear",
+                display: true,
+                position: "left",
+                id: "y-axis-1",
+                gridLines: {
+                    display: false
+                },
+                labels: {
+                    show: true,
+                },
+            }, {
+                type: "linear",
+                display: true,
+                position: "right",
+                id: "y-axis-2",
+                gridLines: {
+                    display: false
+                },
+                labels: {
+                    show: true,
+                },
+                ticks: {
+                    suggestedMin: 0
+                }
+            }]
+        },
+    }
+
+    const currentData = useMemo(() => recipientFilter === NO_FILTER ?
+        timeStats :
+        timeStatsPerRecipient[unfixEncoding(recipientFilter)],
+        [recipientFilter, timeStats, timeStatsPerRecipient]);
 
     const hourlyData = useMemo(() => {
-        let data = recipientFilter === NO_FILTER ? hourly : timeStatsPerRecipient[unfixEncoding(recipientFilter)].hourly;
-        hourlyChart.labels = data.map(item => {
-            return item.hour
-        });
-        hourlyChart.datasets[0].data = data.map((item) => {
-            return item.count
-        });
-        hourlyChart.datasets[1].data = data.map((item) => {
-            return item.averageLength
-        });
-        return hourlyChart;
+        let data = currentData.hourly;
+        const getHourLabel = ({hour}) => hour;
+        return getLineChartBase(data, getHourLabel);
 
-    }, [hourly, recipientFilter, timeStatsPerRecipient]);
+    }, [currentData, getLineChartBase]);
+
+    const weeklyData = useMemo(() => {
+        let data = currentData.weekly;
+        const getWeeklyLabel = item => moment().isoWeekday(item.isoWeekday).format('dddd');
+        return getLineChartBase(data, getWeeklyLabel);
+
+    }, [currentData, getLineChartBase]);
+
 
     const timelineData = useMemo(() => {
-        let data = recipientFilter === NO_FILTER ? timelineStats : timeStatsPerRecipient[unfixEncoding(recipientFilter)].timelineStats;
-        timelineChart.labels = data.map((item) => {
-            return item.date
-        });
-        timelineChart.datasets[0].data = data.map((item) => {
-            return item.count
-        });
-        timelineChart.datasets[1].data = data.map((item) => {
-            return item.averageLength
-        });
-        return timelineChart;
+        let data = currentData.timelineStats;
 
-    }, [timelineStats, recipientFilter, timeStatsPerRecipient]);
+        const getTimelineLabel = ({date}) => date;
+        return getLineChartBase(data, getTimelineLabel);
+
+    }, [currentData, getLineChartBase]);
 
 
     return (
@@ -181,22 +119,22 @@ const TimeStatistics = (props) => {
                 </Select>
             </Grid>
             <Grid item xs={6}>
-                Weekly statistics
+                <Typography>
+                    Hourly statistics
+                </Typography>
+                <Line data={hourlyData} options={chartOptions}/>
             </Grid>
             <Grid item xs={6}>
-                Hourly statistics
-            </Grid>
-            <Grid item xs={6}>
-                <Line data={weeklyData} options={options}/>
-            </Grid>
-            <Grid item xs={6}>
-                <Line data={hourlyData} options={options}/>
-            </Grid>
-            <Grid item xs={6}>
-                Timeline statistics
+                <Typography>
+                    Weekly statistics
+                </Typography>
+                <Line data={weeklyData} options={chartOptions}/>
             </Grid>
             <Grid item xs={12}>
-                <Line data={timelineData} options={options}/>
+                <Typography>
+                    Timeline statistics
+                </Typography>
+                <Line data={timelineData} options={chartOptions}/>
             </Grid>
         </Grid>
     );

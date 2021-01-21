@@ -33,14 +33,14 @@ test('Get correct time stats', () => {
             { hour: 19, count: 1, averageLength: 20 },
             { hour: 20, count: 0, averageLength: 0 },
             { hour: 21, count: 0, averageLength: 0 },
-            { hour: 22, count: 3, averageLength: 82.33333333333333 },
+            { hour: 22, count: 3, averageLength: 82.3 },
             { hour: 23, count: 0, averageLength: 0 }
         ],
         weekly: [
             { isoWeekday: 1, count: 0, averageLength: 0 },
             { isoWeekday: 2, count: 0, averageLength: 0 },
-            { isoWeekday: 3, count: 3, averageLength: 82.33333333333333 },
-            { isoWeekday: 4, count: 3, averageLength: 14.333333333333334 },
+            { isoWeekday: 3, count: 3, averageLength: 82.3},
+            { isoWeekday: 4, count: 3, averageLength: 14.3},
             { isoWeekday: 5, count: 0, averageLength: 0 },
             { isoWeekday: 6, count: 0, averageLength: 0 },
             { isoWeekday: 7, count: 1, averageLength: 51 },
@@ -48,8 +48,8 @@ test('Get correct time stats', () => {
         ],
         timelineStats: [
             { date: 'Mar 2018', count: 1, averageLength: 51 },
-            { date: 'Jan 2019', count: 3, averageLength: 82.33333333333333 },
-            { date: 'Apr 2019', count: 3, averageLength: 14.333333333333334 }
+            { date: 'Jan 2019', count: 3, averageLength: 82.3},
+            { date: 'Apr 2019', count: 3, averageLength: 14.3}
         ]
     })
 
