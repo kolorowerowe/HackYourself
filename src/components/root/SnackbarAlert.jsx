@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 
-const SnackbarAlert = ({snackbarMessage, setSnackbarMessage}) => {
+const SnackbarAlert = ({snackbarMessage, snackbarSeverity, setSnackbarMessage}) => {
 
 
     const handleClose = (event, reason) => {
@@ -12,8 +12,8 @@ const SnackbarAlert = ({snackbarMessage, setSnackbarMessage}) => {
     }
 
     return (
-        <Snackbar open={!!snackbarMessage} autoHideDuration={3000} onClose={handleClose}>
-            <Alert severity="success" variant={'filled'} onClose={handleClose}>
+        <Snackbar open={!!snackbarMessage} onClose={handleClose}>
+            <Alert severity={snackbarSeverity} variant={'filled'} onClose={handleClose}>
                 {snackbarMessage}
             </Alert>
         </Snackbar>

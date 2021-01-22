@@ -34,7 +34,6 @@ const GeneralStatistics = ({totalStats}) => {
     } = totalStats;
 
     const styles = useCommonStyles();
-    const theme = useTheme();
 
     const [userPattern, setUserPattern] = useState('')
 

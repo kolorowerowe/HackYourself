@@ -30,42 +30,43 @@ const readJsonFile = (path, fs) => {
     return JSON.parse(fs.readFileSync(path));
 }
 
-export const loadDataFromDirPath = (dirPath) => {
+export const loadDataFromDirPath = async (fbDataDirPath) => {
+    let fs = window.require('fs');
 
-    return new Promise(((resolve, reject) => {
-        let fs = window.require('fs');
+    checkIfIsDirectory(fs, fbDataDirPath);
 
-        if (!fs.existsSync(dirPath)) {
-            reject(Error(`Path '${dirPath}' not exists`));
-        }
+    const inboxPath = fbDataDirPath + '/messages/inbox';
+    checkIfIsDirectory(fs, inboxPath);
 
-        let dirStatus = fs.lstatSync(dirPath);
+    let threadDirs = getDirectoriesInsidePath(inboxPath, fs);
 
-        if (!dirStatus.isDirectory()) {
-            reject(Error(`Path is not a directory`));
-        }
+    let allThreads = getAllThreads(inboxPath, threadDirs, fs);
 
-        let allDirNames = getDirectoriesInsidePath(dirPath, fs);
-
-        let allThreads = getAllThreads(dirPath, allDirNames, fs);
-
-        return resolve(allThreads);
-    }))
+    return allThreads;
 }
 
-export const loadDataFromStatsFile = (pathToStatsFile) => {
+const checkIfIsDirectory = (fs, dirPath) => {
+    if (!fs.existsSync(dirPath)) {
+        throw new Error(`Path '${dirPath}' not exists`);
+    }
 
-    return new Promise(((resolve, reject) => {
-        let fs = window.require('fs');
+    let dirStatus = fs.lstatSync(dirPath);
+    if (!dirStatus.isDirectory()) {
+        throw new Error(`Path should be a directory`);
+    }
+}
 
-        if (!fs.existsSync(pathToStatsFile)) {
-            reject(Error(`Path '${pathToStatsFile}' not exists`));
-        }
+export const loadDataFromStatsFile = async (pathToStatsFile) => {
+    let fs = window.require('fs');
 
-        //TODO: add file falidation
+    if (!fs.existsSync(pathToStatsFile)) {
+        throw new Error(`Path '${pathToStatsFile}' not exists`);
+    }
 
-        const statistics = readJsonFile(pathToStatsFile, fs);
+    //TODO: add file validation
 
-        return resolve(statistics);
-    }))
+    const statistics = readJsonFile(pathToStatsFile, fs);
+
+    return statistics;
+
 }

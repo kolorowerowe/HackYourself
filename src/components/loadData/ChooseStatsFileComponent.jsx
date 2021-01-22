@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Button, IconButton, TextField, Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import Alert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import {useCommonStyles} from "../../theme/commonStyles";
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
@@ -17,7 +16,6 @@ const ChooseStatsFileComponent = (props) => {
         onLoadStatisticsFromFileClick,
         loading,
         loadingPercentage,
-        fileValidationError
     } = props;
 
     const styles = useCommonStyles();
@@ -81,12 +79,6 @@ const ChooseStatsFileComponent = (props) => {
                     </Tooltip>
                 </div>
             </Grid>
-
-            {!!fileValidationError && <Grid item xs={12}>
-                <Alert severity="error" variant={'filled'}>
-                    {fileValidationError.message}
-                </Alert>
-            </Grid>}
 
             {loading && <Grid item xs={12}>
                 <LinearProgress variant={'determinate'} value={loadingPercentage}/>

@@ -18,7 +18,6 @@ const ChooseFolderComponent = (props) => {
         loading,
         loadingPercentage,
         onStartAnalysingDataClick,
-        fileValidationError,
         goToChooseStatsFile
     } = props;
 
@@ -60,8 +59,8 @@ const ChooseFolderComponent = (props) => {
                     <TextField id="path"
                                name="path"
                                value={pathToFolder}
-                               placeholder={'C:\\Users\\domin\\Documents\\Downloads\\facebook-kolorowerowe\\messages\\inbox'}
-                               label={'Relative path to the inbox folder'}
+                               placeholder={'C:\\Users\\domin\\Documents\\Downloads\\facebook-kolorowerowe'}
+                               label={'Relative path to the facebook data folder'}
                                onChange={e => setPathToFolder(e.target.value)}
                                disabled={loading}
                                fullWidth
@@ -100,12 +99,6 @@ const ChooseFolderComponent = (props) => {
                     </Tooltip>
                 </div>
             </Grid>
-
-            {!!fileValidationError && <Grid item xs={12}>
-                <Alert severity="error" variant={'filled'}>
-                    {fileValidationError.message}
-                </Alert>
-            </Grid>}
 
             {loading && <Grid item xs={12}>
                 <LinearProgress variant={'determinate'} value={loadingPercentage}/>

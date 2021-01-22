@@ -24,16 +24,19 @@ const RootComponent = () => {
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(false);
     const [loadingPercentage, setLoadingPercentage] = useState(0);
-    const [fileValidationError, setFileValidationError] = useState(null);
-
 
     const [statistics, setStatistics] = useState({});
     const [allStatsLoaded, setAllStatsLoaded] = useState(false);
 
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+    const setMessage = (message, severity = 'success') => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+    }
 
     const onStartAnalysingDataClick = async (pathToFolder) => {
-        setFileValidationError(null);
         setLoading(true);
 
         setStep(0);
@@ -53,16 +56,19 @@ const RootComponent = () => {
             history.push(R_STATS);
             setLoading(false);
             setAllStatsLoaded(true);
-            setSnackbarMessage('Successfully analysed data');
+
+            setMessage('Successfully analysed data');
 
             saveToFile('stats.json', newStatistics);
         }).catch(e => {
-            setFileValidationError(e);
+            console.error(e);
+            setMessage(e.message, 'error');
+        }).finally(() => {
+            setLoading(false);
         });
     }
 
     const onLoadStatisticsFromFileClick = async (pathToStatsFile) => {
-        setFileValidationError(null);
         setLoading(true);
 
         if (pathToStatsFile) {
@@ -79,7 +85,10 @@ const RootComponent = () => {
             setSnackbarMessage('Loaded successfully from file');
 
         }).catch(e => {
-            setFileValidationError(e);
+            console.error(e);
+            setMessage(e.message, 'error');
+        }).finally(() => {
+            setLoading(false);
         });
     }
 
@@ -133,7 +142,6 @@ const RootComponent = () => {
                                                setUserName={setUserName}
                                                loading={loading}
                                                loadingPercentage={loadingPercentage}
-                                               fileValidationError={fileValidationError}
                                                onStartAnalysingDataClick={onStartAnalysingDataClick}
                                                goToChooseStatsFile={() => history.push(R_CHOOSE_STATS_FILE)}/>
                     </Route>
@@ -141,8 +149,7 @@ const RootComponent = () => {
                         <ChooseStatsFileComponent goToChooseFolder={() => history.push(R_CHOOSE_FOLDER)}
                                                   onLoadStatisticsFromFileClick={onLoadStatisticsFromFileClick}
                                                   loading={loading}
-                                                  loadingPercentage={loadingPercentage}
-                                                  fileValidationError={fileValidationError}/>
+                                                  loadingPercentage={loadingPercentage}/>
                     </Route>
                     <Route exact path={R_STATS}>
                         <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
@@ -159,7 +166,8 @@ const RootComponent = () => {
             </main>
 
             <SnackbarAlert snackbarMessage={snackbarMessage}
-                           setSnackbarMessage={setSnackbarMessage}/>
+                           setSnackbarMessage={setSnackbarMessage}
+                           snackbarSeverity={snackbarSeverity}/>
 
         </div>
     );
