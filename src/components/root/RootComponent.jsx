@@ -1,12 +1,8 @@
 import React, {useState} from 'react';
 import {loadDataFromDirPath, loadDataFromStatsFile} from "../../utils/fileLoader";
-import SnackbarAlert from "./SnackbarAlert";
 import SideBar from "./SideBar";
-import {unfixEncoding} from '../../algorithms/encoding';
 import {getUserNameFromThreads} from '../../algorithms/utils';
 import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS} from "./routes";
-import messageAnalysisWorker from "../../workers/messageAnalysis";
-import {saveToFile} from "../../utils/fileSaver";
 import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
 import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USER_NAME} from "./localStorageKeys";
 import {Route, Switch, useHistory} from "react-router-dom";
@@ -16,30 +12,28 @@ import ContactComponent from "../contact/ContactComponent";
 import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
 import ChooseFolderComponent from "../loadData/ChooseFolderComponent";
 import HelloComponent from "../hello/HelloComponent";
+import {useSnackbar} from "notistack";
+import {useStatistics} from "../../hooks/StatisticsHook";
 
 const RootComponent = () => {
     const classes = useStyles();
     const history = useHistory();
+    const {enqueueSnackbar} = useSnackbar();
 
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(false);
-    const [loadingPercentage, setLoadingPercentage] = useState(0);
 
-    const [statistics, setStatistics] = useState({});
-    const [allStatsLoaded, setAllStatsLoaded] = useState(false);
-
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-
-    const setMessage = (message, severity = 'success') => {
-        setSnackbarMessage(message);
-        setSnackbarSeverity(severity);
-    }
+    const {
+        statistics,
+        loadingPercentage,
+        allStatisticsLoaded,
+        setStatisticsFromThreads,
+        setStatisticsManually
+    } = useStatistics();
 
     const onStartAnalysingDataClick = async (pathToFolder) => {
         setLoading(true);
 
-        setStep(0);
         if (pathToFolder) {
             localStorage.setItem(PATH_TO_FOLDER, pathToFolder);
         }
@@ -48,21 +42,20 @@ const RootComponent = () => {
         }
 
         loadDataFromDirPath(pathToFolder).then(async threadList => {
-            setStep(1);
 
-            const newStatistics = await getStatsFromThreads(threadList);
-            setStatistics(newStatistics);
+            let _userName = userName;
+            if (!_userName) {
+                _userName = getUserNameFromThreads(threadList);
+                setUserName(_userName);
+            }
 
+            await setStatisticsFromThreads(threadList, _userName);
             history.push(R_STATS);
-            setLoading(false);
-            setAllStatsLoaded(true);
+            enqueueSnackbar('Successfully analysed data', {variant: 'success'});
 
-            setMessage('Successfully analysed data');
-
-            saveToFile('stats.json', newStatistics);
         }).catch(e => {
             console.error(e);
-            setMessage(e.message, 'error');
+            enqueueSnackbar(e.message, {variant: 'error'});
         }).finally(() => {
             setLoading(false);
         });
@@ -77,55 +70,18 @@ const RootComponent = () => {
 
         loadDataFromStatsFile(pathToStatsFile).then(async data => {
 
-            setStatistics(data);
-
+            setStatisticsManually(data);
             history.push(R_STATS);
             setLoading(false);
-            setAllStatsLoaded(true);
-            setSnackbarMessage('Loaded successfully from file');
+
+            enqueueSnackbar('Loaded successfully from file', {variant: 'success'});
 
         }).catch(e => {
             console.error(e);
-            setMessage(e.message, 'error');
+            enqueueSnackbar(e.message, {variant: 'error'});
         }).finally(() => {
             setLoading(false);
         });
-    }
-
-    const allSteps = 7;
-    const setStep = (step) => {
-        setLoadingPercentage(Math.round((step / allSteps) * 100));
-    }
-
-    const getStatsFromThreads = async (threadList) => {
-
-        let _userName = userName;
-        if (!_userName) {
-            _userName = getUserNameFromThreads(threadList);
-            setUserName(_userName);
-        }
-        setStep(2);
-
-        const userNameOriginal = unfixEncoding(_userName);
-
-        let newStatistics = {};
-
-        newStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(threadList, userNameOriginal);
-        setStep(3);
-
-        newStatistics.wordStats = await messageAnalysisWorker.postForWordStats(threadList, userNameOriginal);
-        setStep(4);
-
-        newStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(threadList, userNameOriginal);
-        setStep(5);
-
-        newStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
-        setStep(6);
-
-        newStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
-        setStep(7);
-
-        return newStatistics;
     }
 
 
@@ -152,7 +108,7 @@ const RootComponent = () => {
                                                   loadingPercentage={loadingPercentage}/>
                     </Route>
                     <Route exact path={R_STATS}>
-                        <StatisticsComponentContainer messagesLoaded={allStatsLoaded}
+                        <StatisticsComponentContainer messagesLoaded={allStatisticsLoaded}
                                                       statistics={statistics}
                         />
                     </Route>
@@ -164,10 +120,6 @@ const RootComponent = () => {
                     </Route>
                 </Switch>
             </main>
-
-            <SnackbarAlert snackbarMessage={snackbarMessage}
-                           setSnackbarMessage={setSnackbarMessage}
-                           snackbarSeverity={snackbarSeverity}/>
 
         </div>
     );
