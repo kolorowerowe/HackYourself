@@ -3,9 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import {Line} from 'react-chartjs-2'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {unfixEncoding} from '../../algorithms/encoding';
+import {unfixEncoding} from '../../../algorithms/encoding';
 import moment from "moment";
-import {NO_FILTER} from "../root/constans";
+import {NO_FILTER} from "../../root/constans";
 import {Typography, useTheme} from "@material-ui/core";
 
 const TimeStatistics = (props) => {

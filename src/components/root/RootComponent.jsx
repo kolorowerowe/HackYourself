@@ -2,18 +2,19 @@ import React, {useState} from 'react';
 import {loadDataFromDirPath, loadDataFromStatsFile} from "../../utils/fileLoader";
 import SideBar from "./SideBar";
 import {getUserNameFromThreads} from '../../algorithms/utils';
-import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS} from "./routes";
+import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS_MESSAGE, R_STATS_TOPICS} from "./routes";
 import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
 import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USER_NAME} from "./localStorageKeys";
 import {Route, Switch, useHistory} from "react-router-dom";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import HelpComponent from "../help/HelpComponent";
 import ContactComponent from "../contact/ContactComponent";
-import StatisticsComponentContainer from "../stats/StatisticsComponentContainer";
+import StatisticsComponentContainer from "../stats/messageStatistics/StatisticsComponentContainer";
 import ChooseFolderComponent from "../loadData/ChooseFolderComponent";
 import HelloComponent from "../hello/HelloComponent";
 import {useSnackbar} from "notistack";
 import {useStatistics} from "../../hooks/StatisticsHook";
+import TopicsComponentContainer from "../stats/topics/TopicsComponentContainer";
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -24,10 +25,13 @@ const RootComponent = () => {
     const [loading, setLoading] = useState(false);
 
     const {
-        statistics,
+        statistics: {
+            messengerStatistics = {},
+            topics = []
+        } = {},
         loadingPercentage,
-        allStatisticsLoaded,
-        setStatisticsFromThreads,
+        statisticsStatus,
+        setStatisticsFromRawData,
         setStatisticsManually
     } = useStatistics();
 
@@ -41,16 +45,16 @@ const RootComponent = () => {
             localStorage.setItem(USER_NAME, userName);
         }
 
-        loadDataFromDirPath(pathToFolder).then(async threadList => {
+        loadDataFromDirPath(pathToFolder).then(async (data) => {
 
             let _userName = userName;
             if (!_userName) {
-                _userName = getUserNameFromThreads(threadList);
+                _userName = getUserNameFromThreads(data.threadList);
                 setUserName(_userName);
             }
 
-            await setStatisticsFromThreads(threadList, _userName);
-            history.push(R_STATS);
+            await setStatisticsFromRawData(data, _userName);
+            history.push(R_STATS_MESSAGE);
             enqueueSnackbar('Successfully analysed data', {variant: 'success'});
 
         }).catch(e => {
@@ -71,7 +75,7 @@ const RootComponent = () => {
         loadDataFromStatsFile(pathToStatsFile).then(async data => {
 
             setStatisticsManually(data);
-            history.push(R_STATS);
+            history.push(R_STATS_MESSAGE);
             setLoading(false);
 
             enqueueSnackbar('Loaded successfully from file', {variant: 'success'});
@@ -107,10 +111,14 @@ const RootComponent = () => {
                                                   loading={loading}
                                                   loadingPercentage={loadingPercentage}/>
                     </Route>
-                    <Route exact path={R_STATS}>
-                        <StatisticsComponentContainer messagesLoaded={allStatisticsLoaded}
-                                                      statistics={statistics}
+                    <Route exact path={R_STATS_MESSAGE}>
+                        <StatisticsComponentContainer messengerStatistics={messengerStatistics}
+                                                      messengerStatisticsStatus={statisticsStatus.message}
                         />
+                    </Route>
+                    <Route exact path={R_STATS_TOPICS}>
+                        <TopicsComponentContainer topics={topics}
+                                                  topicsStatisticsStatus={statisticsStatus.topics}/>
                     </Route>
                     <Route exact path={R_HELP}>
                         <HelpComponent navigateToChooseDir={() => history.push(R_CHOOSE_FOLDER)}/>

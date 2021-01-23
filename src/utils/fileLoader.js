@@ -26,6 +26,11 @@ const getAllThreads = (rootDirPath, dirNames, fs) => {
     return [...map.values()];
 }
 
+const getTopics = (topicsDirPath, fs) => {
+    let data = readJsonFile(`${topicsDirPath}/your_topics.json`, fs);
+    return data.inferred_topics;
+}
+
 const readJsonFile = (path, fs) => {
     return JSON.parse(fs.readFileSync(path));
 }
@@ -37,12 +42,17 @@ export const loadDataFromDirPath = async (fbDataDirPath) => {
 
     const inboxPath = fbDataDirPath + '/messages/inbox';
     checkIfIsDirectory(fs, inboxPath);
+    const threadDirs = getDirectoriesInsidePath(inboxPath, fs);
+    const allThreads = getAllThreads(inboxPath, threadDirs, fs);
 
-    let threadDirs = getDirectoriesInsidePath(inboxPath, fs);
+    const topicsPath = fbDataDirPath + '/your_topics';
+    checkIfIsDirectory(fs, topicsPath);
+    const topics = getTopics(topicsPath, fs);
 
-    let allThreads = getAllThreads(inboxPath, threadDirs, fs);
-
-    return allThreads;
+    return {
+        threadList: allThreads,
+        topics
+    };
 }
 
 const checkIfIsDirectory = (fs, dirPath) => {

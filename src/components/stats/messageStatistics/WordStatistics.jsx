@@ -5,8 +5,8 @@ import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {unfixEncoding} from '../../algorithms/encoding';
-import {NO_FILTER} from "../root/constans";
+import {unfixEncoding} from '../../../algorithms/encoding';
+import {NO_FILTER} from "../../root/constans";
 
 const WordStatistics = (props) => {
 

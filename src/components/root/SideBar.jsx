@@ -10,10 +10,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Drawer from "@material-ui/core/Drawer";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import StorageIcon from '@material-ui/icons/Storage';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
 import MailIcon from '@material-ui/icons/Mail';
-import {R_CHOOSE_FOLDER, R_CONTACT, R_HELP, R_HOME, R_STATS} from "./routes";
+import MessageIcon from '@material-ui/icons/Message';
+import GamesIcon from '@material-ui/icons/Games';
+import {R_CHOOSE_FOLDER, R_CONTACT, R_HELP, R_HOME, R_STATS_MESSAGE, R_STATS_TOPICS} from "./routes";
 import {useHistory, useLocation} from "react-router-dom";
+import Divider from "@material-ui/core/Divider";
 
 const SideBar = () => {
 
@@ -22,11 +24,17 @@ const SideBar = () => {
     const sidebarElements = [{
         name: 'Choose dir',
         value: R_CHOOSE_FOLDER,
-        IconComponent: StorageIcon
+        IconComponent: StorageIcon,
+        divider: true
     }, {
-        name: 'Stats',
-        value: R_STATS,
-        IconComponent: EqualizerIcon
+        name: 'Messenger stats',
+        value: R_STATS_MESSAGE,
+        IconComponent: MessageIcon
+    }, {
+        name: 'Topics',
+        value: R_STATS_TOPICS,
+        IconComponent: GamesIcon,
+        divider: true
     }, {
         name: 'Help',
         value: R_HELP,
@@ -58,28 +66,31 @@ const SideBar = () => {
             </AppBar>
             <div className={classes.toolbar}/>
             <List>
-                {sidebarElements.map(({name, value, IconComponent}) => {
+                {sidebarElements.map(({name, value, IconComponent, divider}) => {
                     const isSelected = value.split("/")[1] === pathname.split("/")[1]
 
                     const selectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 4px, transparent 4px, transparent)`;
                     const notSelectedStyle = `linear-gradient(90deg, #4267B2, #4267B2 0%, transparent 0%, transparent)`;
 
-                    return <ListItem button
-                                     key={value}
-                                     onClick={() => {
-                                         history.push(value)
-                                     }}
-                                     style={{
-                                         backgroundImage: isSelected ? selectedStyle : notSelectedStyle
-                                     }}>
+                    return <React.Fragment key={value}>
+                        <ListItem button
+                                  onClick={() => {
+                                      history.push(value)
+                                  }}
+                                  style={{
+                                      backgroundImage: isSelected ? selectedStyle : notSelectedStyle
+                                  }}>
 
 
-                        <ListItemIcon>
-                            <IconComponent color={isSelected ? 'action' : 'disabled'} className={classes.iconOnHover}/>
-                        </ListItemIcon>
-                        <ListItemText primary={name}
-                                      primaryTypographyProps={{color: isSelected ? 'textPrimary' : 'textSecondary'}}/>
-                    </ListItem>
+                            <ListItemIcon>
+                                <IconComponent color={isSelected ? 'action' : 'disabled'}
+                                               className={classes.iconOnHover}/>
+                            </ListItemIcon>
+                            <ListItemText primary={name}
+                                          primaryTypographyProps={{color: isSelected ? 'textPrimary' : 'textSecondary'}}/>
+                        </ListItem>
+                        {!!divider && <Divider className={classes.divider}/>}
+                    </React.Fragment>
                 })}
             </List>
         </Drawer>
@@ -105,12 +116,15 @@ const useStyles = makeStyles((theme) => ({
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
-    '&:hover' :{
+    '&:hover': {
         iconOnHover: {
             color: '#000'
         }
+    },
+    divider: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
     }
-
 }));
 
 export default SideBar;

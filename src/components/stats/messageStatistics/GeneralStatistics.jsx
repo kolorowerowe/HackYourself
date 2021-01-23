@@ -9,11 +9,10 @@ import {
     TableRow,
     TextField,
     Typography,
-    useTheme
 } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
-import {useCommonStyles} from "../../theme/commonStyles";
+import {useCommonStyles} from "../../../theme/commonStyles";
 import ImageIcon from '@material-ui/icons/Image';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
