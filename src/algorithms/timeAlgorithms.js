@@ -124,12 +124,10 @@ export const getTimeStats = (threadList, userName) => {
 }
 
 export const getTimeStatsPerRecipient = (threadList, userName) => {
-    const recipients = getRecipients(threadList, userName);
+    const recipients = getRecipients(threadList);
     const stats = {};
     for (let rec of recipients) {
-        const filtered = threadList.filter(m => m.participants
-            && m.participants.map(p => p.name).length < 3
-            && m.participants.map(p => p.name).includes(rec));
+        const filtered = threadList.filter(thread => thread.title === rec);
         stats[rec] = getTimeStats(filtered, userName);
     }
     return stats;

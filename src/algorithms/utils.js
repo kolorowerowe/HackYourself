@@ -1,24 +1,17 @@
 import {fixEncoding} from './encoding';
 
-export const getRecipients = (threadList, userName) => {
-    let recipients = [];
-    for (let thread of threadList) {
-        if (thread.participants) {
-            recipients = [...recipients, ...thread.participants.map(p => p.name).filter(p => p && p !== userName)];
-        }
-    }
-
-    return recipients;
+export const getRecipients = (threadList) => {
+    return threadList.map(thread => thread.title).filter(title => !!title);
 }
 
 export const getUserNameFromThreads = (threadList) => {
     let users = {};
     for (let thread of threadList) {
         if (thread.participants) {
-            for (let part of thread.participants.filter(p => p.name)){
+            for (let part of thread.participants.filter(p => p.name)) {
                 if (!users[part.name])
                     users[part.name] = 1;
-                else 
+                else
                     users[part.name] += 1;
             }
         }
