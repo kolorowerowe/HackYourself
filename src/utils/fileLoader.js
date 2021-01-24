@@ -68,7 +68,6 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
 export const inspectDataExists = (pathToDataFolder, inspectionResults, setInspectionResults) => {
     let fs = window.require('fs');
 
-    console.log('bb')
     const newInspectionResults = inspectionResults.map(inspect => {
         try {
             checkIfIsDirectory(fs, `${pathToDataFolder}/${inspect.dirPath}`);

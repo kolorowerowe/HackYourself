@@ -3,8 +3,11 @@ import moment from "moment";
 
 const AVG_LENGTH_ROUNDING_FACTOR = 10;
 
+export const MONTH_YEAR_FORMAT = 'YYYY-MM';
+
+
 const getMonthYear = (timestamp) => {
-    return moment(timestamp).format("YYYY-MM");
+    return moment(timestamp).format(MONTH_YEAR_FORMAT);
 }
 
 const compareYearMonth = (a, b) => {
@@ -49,12 +52,39 @@ const getTimelineStats = (messages) => {
         return map;
     }, new Map());
 
-    return [...resMap.entries()].sort(compareYearMonth).map(obj => ({
-        date: moment(obj[0]).format('MMM YYYY'),
+
+    const timelineStatsInActiveMonth = [...resMap.entries()].sort(compareYearMonth).map(obj => ({
+        date: moment(obj[0]).format(MONTH_YEAR_FORMAT),
         count: obj[1].count,
         averageLength: Math.round(obj[1].wordCount * AVG_LENGTH_ROUNDING_FACTOR / obj[1].count) / AVG_LENGTH_ROUNDING_FACTOR
-    }))
+    }));
 
+    if (timelineStatsInActiveMonth.length === 0) {
+        return [];
+    }
+
+    let firstMonth = moment(timelineStatsInActiveMonth[0].date, MONTH_YEAR_FORMAT);
+    const lastMonth = moment(timelineStatsInActiveMonth[timelineStatsInActiveMonth.length - 1].date, MONTH_YEAR_FORMAT);
+
+    let generatedMonths = [];
+    while (moment(firstMonth).isSameOrBefore(lastMonth, 'month')) {
+        generatedMonths.push(firstMonth.format(MONTH_YEAR_FORMAT));
+        firstMonth = firstMonth.add(1, 'month');
+    }
+
+    let timelineStatsPointer = 0;
+    const timelineStatsAllMonths = generatedMonths.map(month => {
+        if (month === timelineStatsInActiveMonth[timelineStatsPointer].date) {
+            return timelineStatsInActiveMonth[timelineStatsPointer++]
+        }
+        return {
+            date: month,
+            count: 0,
+            averageLength: 0
+        }
+    });
+
+    return timelineStatsAllMonths;
 };
 
 const getAverageLengthFromMessages = (messages) => {

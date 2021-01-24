@@ -7,6 +7,7 @@ import {unfixEncoding} from '../../../algorithms/encoding';
 import moment from "moment";
 import {NO_FILTER} from "../../root/constans";
 import {Typography, useTheme} from "@material-ui/core";
+import {MONTH_YEAR_FORMAT} from "../../../algorithms/timeAlgorithms";
 
 const TimeStatistics = (props) => {
 
@@ -96,7 +97,7 @@ const TimeStatistics = (props) => {
     const timelineData = useMemo(() => {
         let data = currentData.timelineStats;
 
-        const getTimelineLabel = ({date}) => date;
+        const getTimelineLabel = ({date}) => moment(date, MONTH_YEAR_FORMAT).format('MMM YYYY');
         return getLineChartBase(data, getTimelineLabel);
 
     }, [currentData, getLineChartBase]);
