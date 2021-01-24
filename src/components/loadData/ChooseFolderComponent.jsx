@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, IconButton, TextField, Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import LinearProgress from '@material-ui/core/LinearProgress';
 import {useCommonStyles} from "../../theme/commonStyles";
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
 import Tooltip from "@material-ui/core/Tooltip";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {PATH_TO_FOLDER, USER_NAME} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
+import InspectionDataResult from "./InspectionDataResult";
+import {S_MESSENGER, S_TOPICS} from "../root/constans";
+import CustomLinearProgress from "../generic/CustomLinearProgress";
+import {inspectDataExists} from "../../utils/fileLoader";
+import _ from 'lodash';
 
 const ChooseFolderComponent = (props) => {
 
@@ -15,7 +19,7 @@ const ChooseFolderComponent = (props) => {
         userName,
         setUserName,
         loading,
-        loadingPercentage,
+        loadingLabel,
         onStartAnalysingDataClick,
         goToChooseStatsFile
     } = props;
@@ -23,6 +27,37 @@ const ChooseFolderComponent = (props) => {
     const styles = useCommonStyles();
 
     const [pathToFolder, setPathToFolder] = useState('');
+
+    const [inspectionResults, setInspectionResults] = useState([{
+        type: S_MESSENGER,
+        name: 'Messenger',
+        dirPath: '/messages/inbox',
+        available: false,
+        enabled: true
+    }, {
+        type: S_TOPICS,
+        name: 'Topics',
+        dirPath: '/your_topics',
+        available: false,
+        enabled: false
+    }]);
+
+
+    const inspectDataCallback = useCallback(_.debounce(() => {
+        inspectDataExists(pathToFolder, inspectionResults, setInspectionResults);
+    }, 500), [pathToFolder, inspectionResults, setInspectionResults]);
+
+    useEffect(inspectDataCallback, [pathToFolder]);
+
+
+    const handleEnableStatisticsChange = (type, checked) => {
+        setInspectionResults(prevState => prevState.map(result => result.type === type ? {
+            ...result,
+            enabled: checked
+        } : result))
+    };
+
+    const analyzeDisabled = useMemo(() => !inspectionResults.map(({enabled}) => enabled).includes(true), [inspectionResults])
 
     const onClick = () => {
         const {
@@ -99,14 +134,20 @@ const ChooseFolderComponent = (props) => {
                 </div>
             </Grid>
 
-            {loading && <Grid item xs={12}>
-                <LinearProgress variant={'determinate'} value={loadingPercentage}/>
-            </Grid>}
 
             <Grid item xs={12}>
-                <Button onClick={() => onStartAnalysingDataClick(pathToFolder)}
+                <InspectionDataResult results={inspectionResults}
+                                      handleEnableStatisticsChange={handleEnableStatisticsChange}/>
+            </Grid>
+
+            <Grid item xs={12}>
+                <CustomLinearProgress loading={loading} label={loadingLabel}/>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Button onClick={() => onStartAnalysingDataClick(pathToFolder, inspectionResults)}
                         fullWidth
-                        disabled={loading}
+                        disabled={loading || analyzeDisabled}
                         variant={'outlined'}>
                     Start analysing data!
                 </Button>

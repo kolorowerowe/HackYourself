@@ -2,7 +2,7 @@ import {useState} from "react";
 import {unfixEncoding} from "../algorithms/encoding";
 import messageAnalysisWorker from "../workers/messageAnalysis";
 import {saveToFile} from "../utils/fileSaver";
-import {STATS_NOT_READY, STATS_OK} from "../components/root/constans";
+import {STATS_MISSING, STATS_NOT_READY, STATS_OK} from "../components/root/constans";
 
 
 export const useStatistics = () => {
@@ -14,18 +14,13 @@ export const useStatistics = () => {
         topics: STATS_NOT_READY
     });
 
-    const [loadingPercentage, setLoadingPercentage] = useState(0);
-
-    const allSteps = 6;
-    const setStep = (step) => {
-        setLoadingPercentage(Math.round((step / allSteps) * 100));
-    }
+    const [loadingLabel, setLoadingLabel] = useState('');
 
     const setStatisticsFromRawData = async (data, userName) => {
 
         const {threadList, topics} = data;
 
-        setStep(1);
+        setLoadingLabel('Started analyzing data');
         const userNameOriginal = unfixEncoding(userName);
 
 
@@ -34,54 +29,96 @@ export const useStatistics = () => {
             topics: []
         };
 
-        newStatistics.messengerStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(threadList, userNameOriginal);
-        setStep(2);
+        if (!isObjectEmpty(threadList)) {
+            setLoadingLabel('Analyzing total statistics ...');
+            newStatistics.messengerStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(threadList, userNameOriginal);
 
-        newStatistics.messengerStatistics.wordStats = await messageAnalysisWorker.postForWordStats(threadList, userNameOriginal);
-        setStep(3);
+            setLoadingLabel('Analyzing time statistics ...');
+            newStatistics.messengerStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(threadList, userNameOriginal);
 
-        newStatistics.messengerStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(threadList, userNameOriginal);
-        setStep(4);
+            setLoadingLabel('Analyzing word statistics ...');
+            newStatistics.messengerStatistics.wordStats = await messageAnalysisWorker.postForWordStats(threadList, userNameOriginal);
 
-        newStatistics.messengerStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
-        setStep(5);
+            setLoadingLabel('Analyzing time statistics per recipient ...');
+            newStatistics.messengerStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
 
-        newStatistics.messengerStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
-        setStep(6);
 
-        newStatistics.topics = topics;
+            setLoadingLabel('Analyzing word statistics per recipient ...');
+            newStatistics.messengerStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
+
+            setLoadingLabel('Analyzed messenger statistics.');
+            setStatisticsStatus(prev => ({
+                ...prev,
+                message: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                message: STATS_MISSING
+            }));
+        }
+
+
+        if (!isObjectEmpty(topics)) {
+            setLoadingLabel('Setting topics ...');
+            newStatistics.topics = topics;
+            setStatisticsStatus(prev => ({
+                ...prev,
+                topics: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                topics: STATS_MISSING
+            }));
+        }
 
         setStatistics(newStatistics);
+        setLoadingLabel('Done!');
+
         saveToFile('stats.json', newStatistics);
 
-        //TODO: handle cases
-        setStatisticsStatus(prev => ({
-            ...prev,
-            message: STATS_OK,
-            topics: STATS_OK
-        }));
-
-        setTimeout(() => setStep(0), 3000);
-
+        setTimeout(() => setLoadingLabel(''), 3000);
 
     }
 
     const setStatisticsManually = (newStats) => {
         setStatistics(newStats);
 
-        //TODO: handle cases
-        setStatisticsStatus(prev => ({
-            ...prev,
-            message: STATS_OK,
-            topics: STATS_OK
-        }));
+        if (!isObjectEmpty(newStats.messengerStatistics)) {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                message: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                message: STATS_MISSING
+            }));
+        }
+
+        if (!isObjectEmpty(newStats.topics)) {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                topics: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                topics: STATS_MISSING
+            }));
+        }
     }
 
     return {
         statistics,
-        loadingPercentage,
+        loadingLabel,
         statisticsStatus,
         setStatisticsFromRawData,
         setStatisticsManually
     }
+}
+
+const isObjectEmpty = (obj) => {
+    return !obj || Object.keys(obj).length === 0;
 }

@@ -29,13 +29,13 @@ const RootComponent = () => {
             messengerStatistics = {},
             topics = []
         } = {},
-        loadingPercentage,
+        loadingLabel,
         statisticsStatus,
         setStatisticsFromRawData,
         setStatisticsManually
     } = useStatistics();
 
-    const onStartAnalysingDataClick = async (pathToFolder) => {
+    const onStartAnalysingDataClick = async (pathToFolder, inspectionResults) => {
         setLoading(true);
 
         if (pathToFolder) {
@@ -45,11 +45,11 @@ const RootComponent = () => {
             localStorage.setItem(USER_NAME, userName);
         }
 
-        loadDataFromDirPath(pathToFolder).then(async (data) => {
+        loadDataFromDirPath(pathToFolder, inspectionResults).then(async (data) => {
 
             let _userName = userName;
             if (!_userName) {
-                _userName = getUserNameFromThreads(data.threadList);
+                _userName = getUserNameFromThreads(data.threadList || []);
                 setUserName(_userName);
             }
 
@@ -101,7 +101,7 @@ const RootComponent = () => {
                         <ChooseFolderComponent userName={userName}
                                                setUserName={setUserName}
                                                loading={loading}
-                                               loadingPercentage={loadingPercentage}
+                                               loadingLabel={loadingLabel}
                                                onStartAnalysingDataClick={onStartAnalysingDataClick}
                                                goToChooseStatsFile={() => history.push(R_CHOOSE_STATS_FILE)}/>
                     </Route>
@@ -109,7 +109,7 @@ const RootComponent = () => {
                         <ChooseStatsFileComponent goToChooseFolder={() => history.push(R_CHOOSE_FOLDER)}
                                                   onLoadStatisticsFromFileClick={onLoadStatisticsFromFileClick}
                                                   loading={loading}
-                                                  loadingPercentage={loadingPercentage}/>
+                                                  loadingLabel={loadingLabel}/>
                     </Route>
                     <Route exact path={R_STATS_MESSAGE}>
                         <StatisticsComponentContainer messengerStatistics={messengerStatistics}

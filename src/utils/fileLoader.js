@@ -1,3 +1,5 @@
+import {S_MESSENGER, S_TOPICS} from "../components/root/constans";
+
 const MESSAGE_FILE_PREFIX = "message_";
 
 const getDirectoriesInsidePath = (source, fs) => {
@@ -35,24 +37,48 @@ const readJsonFile = (path, fs) => {
     return JSON.parse(fs.readFileSync(path));
 }
 
-export const loadDataFromDirPath = async (fbDataDirPath) => {
+export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     let fs = window.require('fs');
 
     checkIfIsDirectory(fs, fbDataDirPath);
 
-    const inboxPath = fbDataDirPath + '/messages/inbox';
-    checkIfIsDirectory(fs, inboxPath);
-    const threadDirs = getDirectoriesInsidePath(inboxPath, fs);
-    const allThreads = getAllThreads(inboxPath, threadDirs, fs);
-
-    const topicsPath = fbDataDirPath + '/your_topics';
-    checkIfIsDirectory(fs, topicsPath);
-    const topics = getTopics(topicsPath, fs);
-
-    return {
-        threadList: allThreads,
-        topics
+    let rawDataResult = {
+        threadList: undefined,
+        topics: undefined
     };
+
+
+    const messengerResult = inspectionResults.filter(({type}) => type === S_MESSENGER)[0];
+    if (messengerResult.enabled){
+        const inboxPath = `${fbDataDirPath}/${messengerResult.dirPath}`
+        const threadDirs = getDirectoriesInsidePath(inboxPath, fs);
+        rawDataResult.threadList = getAllThreads(inboxPath, threadDirs, fs);
+    }
+
+
+    const topicsResult = inspectionResults.filter(({type}) => type === S_TOPICS)[0];
+    if (topicsResult.enabled){
+        const topicsPath = `${fbDataDirPath}/${topicsResult.dirPath}`
+        rawDataResult.topics = getTopics(topicsPath, fs);
+    }
+
+    return rawDataResult;
+};
+
+export const inspectDataExists = (pathToDataFolder, inspectionResults, setInspectionResults) => {
+    let fs = window.require('fs');
+
+    console.log('bb')
+    const newInspectionResults = inspectionResults.map(inspect => {
+        try {
+            checkIfIsDirectory(fs, `${pathToDataFolder}/${inspect.dirPath}`);
+            return {...inspect, available: true};
+        } catch (e) {
+            return {...inspect, available: false, enabled: false};
+        }
+    });
+
+    setInspectionResults(newInspectionResults);
 }
 
 const checkIfIsDirectory = (fs, dirPath) => {

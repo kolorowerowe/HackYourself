@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Button, IconButton, TextField, Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import LinearProgress from '@material-ui/core/LinearProgress';
 import {useCommonStyles} from "../../theme/commonStyles";
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
 import Tooltip from "@material-ui/core/Tooltip";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {PATH_TO_STATS_FILE} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
+import CustomLinearProgress from "../generic/CustomLinearProgress";
 
 const ChooseStatsFileComponent = (props) => {
 
@@ -15,7 +15,7 @@ const ChooseStatsFileComponent = (props) => {
         goToChooseFolder,
         onLoadStatisticsFromFileClick,
         loading,
-        loadingPercentage,
+        loadingLabel,
     } = props;
 
     const styles = useCommonStyles();
@@ -80,9 +80,9 @@ const ChooseStatsFileComponent = (props) => {
                 </div>
             </Grid>
 
-            {loading && <Grid item xs={12}>
-                <LinearProgress variant={'determinate'} value={loadingPercentage}/>
-            </Grid>}
+            <Grid item xs={12}>
+                <CustomLinearProgress loading={loading} label={loadingLabel}/>
+            </Grid>
 
             <Grid item xs={12}>
                 <Button onClick={() => onLoadStatisticsFromFileClick(pathToStatsFile)}
