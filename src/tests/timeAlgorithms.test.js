@@ -1,6 +1,6 @@
 import React from 'react';
 import messages from './resources/threadAgataT.json'
-import {getTimeStats} from "../algorithms/timeAlgorithms";
+import {getTimeStats} from "../algorithms/message/timeAlgorithms";
 
 
 test('Get correct time stats', () => {

@@ -12,8 +12,9 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import StorageIcon from '@material-ui/icons/Storage';
 import MailIcon from '@material-ui/icons/Mail';
 import MessageIcon from '@material-ui/icons/Message';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import GamesIcon from '@material-ui/icons/Games';
-import {R_CHOOSE_FOLDER, R_CONTACT, R_HELP, R_HOME, R_STATS_MESSAGE, R_STATS_TOPICS} from "./routes";
+import {R_CHOOSE_FOLDER, R_CONTACT, R_HELP, R_HOME, R_STATS_MESSAGE, R_STATS_TOPICS, R_STATS_ABOUT_YOU} from "./routes";
 import {useHistory, useLocation} from "react-router-dom";
 import Divider from "@material-ui/core/Divider";
 
@@ -30,6 +31,10 @@ const SideBar = () => {
         name: 'Messenger stats',
         value: R_STATS_MESSAGE,
         IconComponent: MessageIcon
+    }, {
+        name: 'About you',
+        value: R_STATS_ABOUT_YOU,
+        IconComponent: VisibilityIcon
     }, {
         name: 'Topics',
         value: R_STATS_TOPICS,

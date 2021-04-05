@@ -10,5 +10,5 @@ export const STATS_OK = 'STATS_OK';
 
 // types of statistics
 export const S_MESSENGER = 'S_MESSENGER';
-export const S_PAGE_LIKES = 'S_PAGE_LIKES';
+export const S_ABOUT_YOU = 'S_ABOUT_YOU';
 export const S_TOPICS = 'S_TOPICS';

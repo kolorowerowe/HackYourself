@@ -1,7 +1,7 @@
 {
   "name": "hack-yourself",
   "description": "Desktop app for facebook data analysis.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "src/electron.js",
   "homepage": "./",
   "private": true,

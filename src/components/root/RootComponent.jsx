@@ -1,8 +1,16 @@
 import React, {useState} from 'react';
 import {loadDataFromDirPath, loadDataFromStatsFile} from "../../utils/fileLoader";
-import SideBar from "./SideBar";
+import SideBar from "./sidebar/SideBar";
 import {getUserNameFromThreads} from '../../algorithms/utils';
-import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS_MESSAGE, R_STATS_TOPICS} from "./routes";
+import {
+    R_CHOOSE_FOLDER,
+    R_CHOOSE_STATS_FILE,
+    R_CONTACT,
+    R_HELP,
+    R_STATS_MESSAGE,
+    R_STATS_TOPICS,
+    R_STATS_ABOUT_YOU
+} from "./sidebar/routes";
 import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
 import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USER_NAME} from "./localStorageKeys";
 import {Route, Switch, useHistory} from "react-router-dom";
@@ -15,6 +23,7 @@ import HelloComponent from "../hello/HelloComponent";
 import {useSnackbar} from "notistack";
 import {useStatistics} from "../../hooks/StatisticsHook";
 import TopicsComponentContainer from "../stats/topics/TopicsComponentContainer";
+import AboutYouComponentContainer from "../stats/aboutYou/AboutYouComponentContainer";
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -27,6 +36,7 @@ const RootComponent = () => {
     const {
         statistics: {
             messengerStatistics = {},
+            aboutYouStatistics = {},
             topics = []
         } = {},
         loadingLabel,
@@ -115,6 +125,10 @@ const RootComponent = () => {
                         <StatisticsComponentContainer messengerStatistics={messengerStatistics}
                                                       messengerStatisticsStatus={statisticsStatus.message}
                         />
+                    </Route>
+                    <Route exact path={R_STATS_ABOUT_YOU}>
+                        <AboutYouComponentContainer aboutYouStatistics={aboutYouStatistics}
+                                                    aboutYouStatisticsStatus={statisticsStatus.aboutYou}/>
                     </Route>
                     <Route exact path={R_STATS_TOPICS}>
                         <TopicsComponentContainer topics={topics}

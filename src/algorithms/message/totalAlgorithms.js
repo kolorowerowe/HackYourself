@@ -1,4 +1,5 @@
-import {fixEncoding} from "./encoding";
+import {fixEncoding} from "../encoding";
+import {reduceToSum} from "../utils";
 
 
 export const getTotalStats = (threadList, userName) => {
@@ -14,7 +15,6 @@ export const getTotalStats = (threadList, userName) => {
     }
 }
 
-const reduceToSum = (acc, x) => acc + x;
 
 const getTotalImagesSent = (threadList, userName) => {
     return threadList.reduce(

@@ -1,6 +1,6 @@
 import React from 'react';
 import messages from './resources/threadAgataT.json'
-import {getWordStats} from "../algorithms/wordAlgorithms";
+import {getWordStats} from "../algorithms/message/wordAlgorithms";
 
 
 test('Get correct word stats', () => {

@@ -27,10 +27,15 @@ const postForWordStatsPerRecipient = (threadList, userName) => promiseWorker.pos
     type: 'getWordStatsPerRecipient', threadList, userName
 });
 
+const postForAboutYouStatistics = (aboutYou) => promiseWorker.postMessage({
+    type: 'getAboutYouStatistics', aboutYou
+});
+
 export default {
     postForTotalStats,
     postForWordStats,
     postForTimeStats,
     postForTimeStatsPerRecipient,
-    postForWordStatsPerRecipient
+    postForWordStatsPerRecipient,
+    postForAboutYouStatistics
 }

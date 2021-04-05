@@ -1,5 +1,5 @@
-import {fixEncoding, linkRegex, toRemove} from "./encoding";
-import {getRecipients} from "./utils";
+import {fixEncoding, linkRegex, toRemove} from "../encoding";
+import {getRecipients} from "../utils";
 
 export const getWordStats = (threadList, userName) => {
     const allMessages = threadList.map(e => e.messages).filter(e => e).flat();

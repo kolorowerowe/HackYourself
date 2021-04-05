@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {unfixEncoding} from "../algorithms/encoding";
-import messageAnalysisWorker from "../workers/messageAnalysis";
+import analysisWorker from "../workers/messageAnalysis";
 import {saveToFile} from "../utils/fileSaver";
 import {STATS_MISSING, STATS_NOT_READY, STATS_OK} from "../components/root/constans";
 
@@ -11,6 +11,7 @@ export const useStatistics = () => {
 
     const [statisticsStatus, setStatisticsStatus] = useState({
         message: STATS_NOT_READY,
+        aboutYou: STATS_NOT_READY,
         topics: STATS_NOT_READY
     });
 
@@ -18,7 +19,7 @@ export const useStatistics = () => {
 
     const setStatisticsFromRawData = async (data, userName) => {
 
-        const {threadList, topics} = data;
+        const {threadList, aboutYou, topics} = data;
 
         setLoadingLabel('Started analyzing data');
         const userNameOriginal = unfixEncoding(userName);
@@ -26,25 +27,26 @@ export const useStatistics = () => {
 
         let newStatistics = {
             messengerStatistics: {},
+            aboutYouStatistics: {},
             topics: []
         };
 
         if (!isObjectEmpty(threadList)) {
             setLoadingLabel('Analyzing total statistics ...');
-            newStatistics.messengerStatistics.totalStats = await messageAnalysisWorker.postForTotalStats(threadList, userNameOriginal);
+            newStatistics.messengerStatistics.totalStats = await analysisWorker.postForTotalStats(threadList, userNameOriginal);
 
             setLoadingLabel('Analyzing time statistics ...');
-            newStatistics.messengerStatistics.timeStats = await messageAnalysisWorker.postForTimeStats(threadList, userNameOriginal);
+            newStatistics.messengerStatistics.timeStats = await analysisWorker.postForTimeStats(threadList, userNameOriginal);
 
             setLoadingLabel('Analyzing word statistics ...');
-            newStatistics.messengerStatistics.wordStats = await messageAnalysisWorker.postForWordStats(threadList, userNameOriginal);
+            newStatistics.messengerStatistics.wordStats = await analysisWorker.postForWordStats(threadList, userNameOriginal);
 
             setLoadingLabel('Analyzing time statistics per recipient ...');
-            newStatistics.messengerStatistics.timeStatsPerRecipient = await messageAnalysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
+            newStatistics.messengerStatistics.timeStatsPerRecipient = await analysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
 
 
             setLoadingLabel('Analyzing word statistics per recipient ...');
-            newStatistics.messengerStatistics.wordStatsPerRecipient = await messageAnalysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
+            newStatistics.messengerStatistics.wordStatsPerRecipient = await analysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
 
             setLoadingLabel('Analyzed messenger statistics.');
             setStatisticsStatus(prev => ({
@@ -58,6 +60,20 @@ export const useStatistics = () => {
             }));
         }
 
+        if (!isObjectEmpty(aboutYou)) {
+            setLoadingLabel('Analyzing about you ...');
+            newStatistics.aboutYouStatistics = await analysisWorker.postForAboutYouStatistics(aboutYou);
+
+            setStatisticsStatus(prev => ({
+                ...prev,
+                aboutYou: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                aboutYou: STATS_MISSING
+            }));
+        }
 
         if (!isObjectEmpty(topics)) {
             setLoadingLabel('Setting topics ...');
@@ -94,6 +110,18 @@ export const useStatistics = () => {
             setStatisticsStatus(prev => ({
                 ...prev,
                 message: STATS_MISSING
+            }));
+        }
+
+        if (isObjectEmpty(newStats.aboutYou)) {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                aboutYou: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                aboutYou: STATS_MISSING
             }));
         }
 

@@ -1,15 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import Grid from "@material-ui/core/Grid";
-import CountUp from "react-countup";
-import {
-    Divider,
-    TableBody,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TextField,
-    Typography,
-} from "@material-ui/core";
+import {Divider, TableBody, TableContainer, TableHead, TableRow, TextField,} from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import {useCommonStyles} from "../../../theme/commonStyles";
@@ -17,8 +8,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ShareIcon from '@material-ui/icons/Share';
-
-import Tooltip from "@material-ui/core/Tooltip";
+import {BigCountUp, SmallCountUp} from "../../generic/DataDisplay";
 
 const GeneralStatistics = ({totalStats}) => {
 
@@ -41,29 +31,6 @@ const GeneralStatistics = ({totalStats}) => {
         topUsers,
         [topUsers, userPattern]);
 
-    const BigCountUp = ({value, label,}) => (
-        <Grid item xs={6}>
-            <div className={styles.oneUnderAnother}>
-                <CountUp end={value} className={styles.countUp}/>
-                <Typography variant={'h5'} align={'center'} color={'secondary'}>
-                    {label}
-                </Typography>
-            </div>
-        </Grid>
-    );
-
-    const SmallCountUp = ({value, label, iconComponent}) => (
-        <Grid item xs={3}>
-            <div className={styles.oneUnderAnother}>
-                <Tooltip title={label}>
-                    <div className={styles.flexAligned}>
-                        {iconComponent}
-                        <CountUp end={value} className={styles.countUpSmall}/>
-                    </div>
-                </Tooltip>
-            </div>
-        </Grid>
-    );
 
     return (
         <Grid container spacing={2}>

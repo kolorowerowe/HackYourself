@@ -1,4 +1,4 @@
-import {getRecipients} from "./utils";
+import {getRecipients} from "../utils";
 import moment from "moment";
 
 const AVG_LENGTH_ROUNDING_FACTOR = 10;

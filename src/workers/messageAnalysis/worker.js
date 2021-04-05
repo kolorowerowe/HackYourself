@@ -1,7 +1,8 @@
 import registerPromiseWorker from 'promise-worker/register';
-import {getWordStats, getWordStatsPerRecipient} from "../../algorithms/wordAlgorithms";
-import {getTimeStats, getTimeStatsPerRecipient} from "../../algorithms/timeAlgorithms";
-import {getTotalStats} from "../../algorithms/totalAlgorithms";
+import {getWordStats, getWordStatsPerRecipient} from "../../algorithms/message/wordAlgorithms";
+import {getTimeStats, getTimeStatsPerRecipient} from "../../algorithms/message/timeAlgorithms";
+import {getTotalStats} from "../../algorithms/message/totalAlgorithms";
+import {getAboutYouStatistics} from "../../algorithms/aboutYou/aboutYouAlgorithms";
 
 
 registerPromiseWorker((message) => {
@@ -24,6 +25,10 @@ registerPromiseWorker((message) => {
 
     if (message.type === 'getTimeStatsPerRecipient') {
         return getTimeStatsPerRecipient(message.threadList, message.userName);
+    }
+
+    if (message.type === 'getAboutYouStatistics') {
+        return getAboutYouStatistics(message.aboutYou);
     }
 
 

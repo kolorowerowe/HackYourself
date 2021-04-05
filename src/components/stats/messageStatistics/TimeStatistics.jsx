@@ -7,7 +7,7 @@ import {unfixEncoding} from '../../../algorithms/encoding';
 import moment from "moment";
 import {NO_FILTER} from "../../root/constans";
 import {Typography, useTheme} from "@material-ui/core";
-import {MONTH_YEAR_FORMAT} from "../../../algorithms/timeAlgorithms";
+import {MONTH_YEAR_FORMAT} from "../../../algorithms/message/timeAlgorithms";
 
 const TimeStatistics = (props) => {
 

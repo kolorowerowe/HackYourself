@@ -18,3 +18,7 @@ export const getUserNameFromThreads = (threadList) => {
     }
     return Object.keys(users).length ? fixEncoding(Object.keys(users).reduce((a, b) => users[a] > users[b] ? a : b)) : "";
 }
+
+export const reduceToSum = (acc, x) => acc + x;
+
+export const reduceToSumFromString = (acc, x) => acc + parseFloat(x);

@@ -1,4 +1,4 @@
-import {S_MESSENGER, S_TOPICS} from "../components/root/constans";
+import {S_ABOUT_YOU, S_MESSENGER, S_TOPICS} from "../components/root/constans";
 
 const MESSAGE_FILE_PREFIX = "message_";
 
@@ -28,6 +28,13 @@ const getAllThreads = (rootDirPath, dirNames, fs) => {
     return [...map.values()];
 }
 
+const getAboutYou = (aboutYouDirPath, fs) => {
+    let data = readJsonFile(`${aboutYouDirPath}/viewed.json`, fs);
+    return {
+        viewed: data
+    };
+}
+
 const getTopics = (topicsDirPath, fs) => {
     let data = readJsonFile(`${topicsDirPath}/your_topics.json`, fs);
     return data.inferred_topics;
@@ -44,20 +51,28 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
 
     let rawDataResult = {
         threadList: undefined,
+        aboutYou: undefined,
         topics: undefined
     };
 
 
     const messengerResult = inspectionResults.filter(({type}) => type === S_MESSENGER)[0];
-    if (messengerResult.enabled){
+    if (messengerResult.enabled) {
         const inboxPath = `${fbDataDirPath}/${messengerResult.dirPath}`
         const threadDirs = getDirectoriesInsidePath(inboxPath, fs);
         rawDataResult.threadList = getAllThreads(inboxPath, threadDirs, fs);
     }
 
 
+    const aboutYouResult = inspectionResults.filter(({type}) => type === S_ABOUT_YOU)[0];
+    if (aboutYouResult.enabled) {
+        const aboutYouDirPath = `${fbDataDirPath}/${aboutYouResult.dirPath}`;
+        rawDataResult.aboutYou = getAboutYou(aboutYouDirPath, fs);
+    }
+
+
     const topicsResult = inspectionResults.filter(({type}) => type === S_TOPICS)[0];
-    if (topicsResult.enabled){
+    if (topicsResult.enabled) {
         const topicsPath = `${fbDataDirPath}/${topicsResult.dirPath}`
         rawDataResult.topics = getTopics(topicsPath, fs);
     }

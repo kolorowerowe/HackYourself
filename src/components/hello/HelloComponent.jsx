@@ -6,7 +6,7 @@ import {useHistory} from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS_MESSAGE, R_STATS_TOPICS} from "../root/routes";
+import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS_MESSAGE, R_STATS_TOPICS} from "../root/sidebar/routes";
 
 const HelloComponent = () => {
 
