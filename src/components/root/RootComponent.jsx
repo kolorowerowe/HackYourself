@@ -17,7 +17,7 @@ import {Route, Switch, useHistory} from "react-router-dom";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import HelpComponent from "../help/HelpComponent";
 import ContactComponent from "../contact/ContactComponent";
-import MessageStatisticsComponent from "../stats/messageStatistics/MessageStatisticsComponentContainer";
+import MessageStatisticsComponent from "../stats/messageStatistics/MessageStatisticsComponent";
 import ChooseFolderComponent from "../loadData/ChooseFolderComponent";
 import HelloComponent from "../hello/HelloComponent";
 import {useSnackbar} from "notistack";
