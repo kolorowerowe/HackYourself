@@ -36,8 +36,8 @@ const getAboutYou = (aboutYouDirPath, fs) => {
 }
 
 const getTopics = (topicsDirPath, fs) => {
-    let data = readJsonFile(`${topicsDirPath}/your_topics.json`, fs);
-    return data.inferred_topics;
+    let {inferred_topics, inferred_topics_v2} = readJsonFile(`${topicsDirPath}/your_topics.json`, fs);
+    return inferred_topics_v2 ? inferred_topics_v2 : inferred_topics;
 }
 
 const readJsonFile = (path, fs) => {
@@ -56,7 +56,7 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     };
 
 
-    const messengerResult = inspectionResults.filter(({type}) => type === S_MESSENGER)[0];
+    const messengerResult = inspectionResults.find(({type}) => type === S_MESSENGER);
     if (messengerResult.enabled) {
         const inboxPath = `${fbDataDirPath}/${messengerResult.dirPath}`
         const threadDirs = getDirectoriesInsidePath(inboxPath, fs);
@@ -64,14 +64,14 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     }
 
 
-    const aboutYouResult = inspectionResults.filter(({type}) => type === S_ABOUT_YOU)[0];
+    const aboutYouResult = inspectionResults.find(({type}) => type === S_ABOUT_YOU);
     if (aboutYouResult.enabled) {
         const aboutYouDirPath = `${fbDataDirPath}/${aboutYouResult.dirPath}`;
         rawDataResult.aboutYou = getAboutYou(aboutYouDirPath, fs);
     }
 
 
-    const topicsResult = inspectionResults.filter(({type}) => type === S_TOPICS)[0];
+    const topicsResult = inspectionResults.find(({type}) => type === S_TOPICS);
     if (topicsResult.enabled) {
         const topicsPath = `${fbDataDirPath}/${topicsResult.dirPath}`
         rawDataResult.topics = getTopics(topicsPath, fs);
