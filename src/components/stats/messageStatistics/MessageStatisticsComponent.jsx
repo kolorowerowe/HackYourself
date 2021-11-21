@@ -13,7 +13,7 @@ import {NO_FILTER} from "../../root/constans";
 import StatisticsStatusBoundary from "../StatisticsStatusBoundary";
 
 
-const StatisticsComponentContainer = (props) => {
+const MessageStatisticsComponent = (props) => {
 
     const {
         messengerStatisticsStatus,
@@ -112,4 +112,4 @@ const StatisticsComponentContainer = (props) => {
 };
 
 
-export default StatisticsComponentContainer;
+export default MessageStatisticsComponent;

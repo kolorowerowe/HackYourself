@@ -17,7 +17,7 @@ import {Route, Switch, useHistory} from "react-router-dom";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import HelpComponent from "../help/HelpComponent";
 import ContactComponent from "../contact/ContactComponent";
-import StatisticsComponentContainer from "../stats/messageStatistics/StatisticsComponentContainer";
+import MessageStatisticsComponent from "../stats/messageStatistics/MessageStatisticsComponentContainer";
 import ChooseFolderComponent from "../loadData/ChooseFolderComponent";
 import HelloComponent from "../hello/HelloComponent";
 import {useSnackbar} from "notistack";
@@ -122,8 +122,8 @@ const RootComponent = () => {
                                                   loadingLabel={loadingLabel}/>
                     </Route>
                     <Route exact path={R_STATS_MESSAGE}>
-                        <StatisticsComponentContainer messengerStatistics={messengerStatistics}
-                                                      messengerStatisticsStatus={statisticsStatus.message}
+                        <MessageStatisticsComponent messengerStatistics={messengerStatistics}
+                                                    messengerStatisticsStatus={statisticsStatus.message}
                         />
                     </Route>
                     <Route exact path={R_STATS_ABOUT_YOU}>
