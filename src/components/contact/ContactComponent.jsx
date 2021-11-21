@@ -34,8 +34,8 @@ const ContactComponent = ({userName}) => {
         name: 'Dominik Kołodziej',
         email: 'dominos55555@gmail.com'
     }, {
-        name: 'Grzegorz Nieużyła',
-        email: 'grzegorznieuzyla@gmail.com'
+        name: 'Grzegorz Gruszczyk',
+        email: 'grzesiu15432@gmail.com'
     }];
 
     const optionalName = useMemo(() => {
