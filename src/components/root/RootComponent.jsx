@@ -126,6 +126,8 @@ const RootComponent = () => {
                                                     messengerStatisticsStatus={statisticsStatus.message}
                         />
                     </Route>
+
+                    {/*THIS IS NOT USED*/}
                     <Route exact path={R_STATS_ABOUT_YOU}>
                         <AboutYouComponentContainer aboutYouStatistics={aboutYouStatistics}
                                                     aboutYouStatisticsStatus={statisticsStatus.aboutYou}/>

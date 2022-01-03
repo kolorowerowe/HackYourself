@@ -64,11 +64,11 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     }
 
 
-    const aboutYouResult = inspectionResults.find(({type}) => type === S_ABOUT_YOU);
-    if (aboutYouResult.enabled) {
-        const aboutYouDirPath = `${fbDataDirPath}/${aboutYouResult.dirPath}`;
-        rawDataResult.aboutYou = getAboutYou(aboutYouDirPath, fs);
-    }
+    // const aboutYouResult = inspectionResults.find(({type}) => type === S_ABOUT_YOU);
+    // if (aboutYouResult.enabled) {
+    //     const aboutYouDirPath = `${fbDataDirPath}/${aboutYouResult.dirPath}`;
+    //     rawDataResult.aboutYou = getAboutYou(aboutYouDirPath, fs);
+    // }
 
 
     const topicsResult = inspectionResults.find(({type}) => type === S_TOPICS);

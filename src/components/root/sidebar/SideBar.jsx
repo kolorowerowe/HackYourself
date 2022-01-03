@@ -32,10 +32,10 @@ const SideBar = () => {
         value: R_STATS_MESSAGE,
         IconComponent: MessageIcon
     }, {
-        name: 'About you',
-        value: R_STATS_ABOUT_YOU,
-        IconComponent: VisibilityIcon
-    }, {
+    //     name: 'About you',
+    //     value: R_STATS_ABOUT_YOU,
+    //     IconComponent: VisibilityIcon
+    // }, {
         name: 'Topics',
         value: R_STATS_TOPICS,
         IconComponent: GamesIcon,

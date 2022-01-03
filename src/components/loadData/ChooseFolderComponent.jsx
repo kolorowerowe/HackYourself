@@ -8,7 +8,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {PATH_TO_FOLDER, USER_NAME} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
 import InspectionDataResult from "./InspectionDataResult";
-import {S_ABOUT_YOU, S_MESSENGER, S_TOPICS} from "../root/constans";
+import {S_MESSENGER, S_TOPICS} from "../root/constans";
 import CustomLinearProgress from "../generic/CustomLinearProgress";
 import {inspectDataExists} from "../../utils/fileLoader";
 import _ from 'lodash';
@@ -28,25 +28,29 @@ const ChooseFolderComponent = (props) => {
 
     const [pathToFolder, setPathToFolder] = useState('');
 
-    const [inspectionResults, setInspectionResults] = useState([{
-        type: S_MESSENGER,
-        name: 'Messenger',
-        dirPath: '/messages/inbox',
-        available: false,
-        enabled: true
-    }, {
-        type: S_ABOUT_YOU,
-        name: 'About you',
-        dirPath: '/about_you',
-        available: false,
-        enabled: true
-    }, {
-        type: S_TOPICS,
-        name: 'Topics',
-        dirPath: '/your_topics',
-        available: false,
-        enabled: false
-    }]);
+    const [inspectionResults, setInspectionResults] = useState([
+        {
+            type: S_MESSENGER,
+            name: 'Messenger',
+            dirPath: '/messages/inbox',
+            available: false,
+            enabled: true
+        },
+        // {
+        //     type: S_ABOUT_YOU,
+        //     name: 'About you',
+        //     dirPath: '/about_you',
+        //     available: false,
+        //     enabled: true
+        // },
+        {
+            type: S_TOPICS,
+            name: 'Topics',
+            dirPath: '/your_topics',
+            available: false,
+            enabled: false
+        }
+    ]);
 
 
     const inspectDataCallback = useCallback(_.debounce(() => {
