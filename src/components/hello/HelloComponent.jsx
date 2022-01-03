@@ -6,7 +6,16 @@ import {useHistory} from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS_MESSAGE, R_STATS_TOPICS} from "../root/sidebar/routes";
+import {
+    R_CHOOSE_FOLDER,
+    R_CHOOSE_STATS_FILE,
+    R_CONTACT,
+    R_HELP,
+    R_STATS_EVENTS,
+    R_STATS_MESSAGE,
+    R_STATS_TOPICS
+} from "../root/sidebar/routes";
+import {useTranslation} from "react-i18next";
 
 const HelloComponent = () => {
 
@@ -14,6 +23,7 @@ const HelloComponent = () => {
     const styles = useStyles();
 
     const history = useHistory();
+    const {t} = useTranslation();
 
     const MenuCard = ({title, path, description, xs}) => {
 
@@ -36,42 +46,47 @@ const HelloComponent = () => {
         <Grid container spacing={3} className={commonStyles.containerPadding}>
             <Grid item xs={12}>
                 <Typography variant={'h4'} align={'center'}>
-                    Hello, let's start hacking!
+                    {t('description:welcome')}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Typography>
-                    Please, choose what you want to do
+                    {t('description:ask_text')}
                 </Typography>
             </Grid>
 
-            <MenuCard title={'Choose dir'}
-                      description={'First time? Select downloaded data and begin your hacking.'}
+            <MenuCard title={t('general:choose_dir')}
+                      description={t('description:choose_dir')}
                       path={R_CHOOSE_FOLDER}
                       xs={6}/>
 
-            <MenuCard title={'Choose stats file'}
-                      description={'Analysed data before? Load them into app.'}
+            <MenuCard title={t('general:choose_stats_file')}
+                      description={t('description:choose_stats_file')}
                       path={R_CHOOSE_STATS_FILE}
                       xs={6}/>
 
-            <MenuCard title={'Messenger stats'}
-                      description={'Messages you\'ve exchanged with other people on Messenger'}
+            <MenuCard title={t('general:messenger_stats')}
+                      description={t('description:messenger_stats')}
                       path={R_STATS_MESSAGE}
                       xs={12}/>
 
-            <MenuCard title={'Topics'}
-                      description={'Topics you are interested in on Facebook'}
+            <MenuCard title={t('general:topics')}
+                      description={t('description:topics')}
                       path={R_STATS_TOPICS}
                       xs={12}/>
 
-            <MenuCard title={'Help'}
-                      description={'Don\'t know where to start? Open instructions.'}
+            <MenuCard title={t('general:events')}
+                      description={t('description:events')}
+                      path={R_STATS_EVENTS}
+                      xs={12}/>
+
+            <MenuCard title={t('general:help')}
+                      description={t('description:help')}
                       path={R_HELP}
                       xs={6}/>
 
-            <MenuCard title={'Contact'}
-                      description={'Find a problem or want to see authors?'}
+            <MenuCard title={t('general:contact')}
+                      description={t('description:contact')}
                       path={R_CONTACT}
                       xs={6}/>
         </Grid>

@@ -1,0 +1,11 @@
+{
+    "welcome": "Hello, let's start hacking!",
+    "ask_text": "Please, choose what you want to do",
+    "topics": "Topics you are interested in on Facebook.",
+    "choose_dir": "First time? Select downloaded data and begin your hacking.",
+    "messenger_stats": "Messages you've exchanged with other people on Messenger",
+    "events": "Statistics about events that were related with you.",
+    "help": "Don't know where to start? Open instructions.",
+    "contact": "Find a problem or want to see authors?",
+    "choose_stats_file": "Analysed data before? Load them into app."
+}
