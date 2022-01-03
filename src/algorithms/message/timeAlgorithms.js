@@ -6,11 +6,11 @@ const AVG_LENGTH_ROUNDING_FACTOR = 10;
 export const MONTH_YEAR_FORMAT = 'YYYY-MM';
 
 
-const getMonthYear = (timestamp) => {
+export const getMonthYear = (timestamp) => {
     return moment(timestamp).format(MONTH_YEAR_FORMAT);
 }
 
-const compareYearMonth = (a, b) => {
+export const compareYearMonth = (a, b) => {
     return moment(a[0]).valueOf() - moment(b[0]).valueOf();
 }
 

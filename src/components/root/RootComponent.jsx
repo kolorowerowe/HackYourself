@@ -24,7 +24,7 @@ import {useSnackbar} from "notistack";
 import {useStatistics} from "../../hooks/StatisticsHook";
 import TopicsComponentContainer from "../stats/topics/TopicsComponentContainer";
 import AboutYouComponentContainer from "../stats/aboutYou/AboutYouComponentContainer";
-import EventsComponentContainer from "../stats/eventStatistics/EventsComponentContainer";
+import EventsComponent from "../stats/eventStatistics/EventsComponent";
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -139,8 +139,8 @@ const RootComponent = () => {
                                                   topicsStatisticsStatus={statisticsStatus.topics}/>
                     </Route>
                     <Route exact path={R_STATS_EVENTS}>
-                        <EventsComponentContainer eventStatistics={eventStatistics}
-                                                  eventStatisticsStatus={statisticsStatus.events}/>
+                        <EventsComponent eventStatistics={eventStatistics}
+                                         eventStatisticsStatus={statisticsStatus.events}/>
                     </Route>
                     <Route exact path={R_HELP}>
                         <HelpComponent navigateToChooseDir={() => history.push(R_CHOOSE_FOLDER)}/>

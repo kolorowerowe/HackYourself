@@ -10,7 +10,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ShareIcon from '@material-ui/icons/Share';
 import {CustomCountUp} from "../../generic/DataDisplay";
 
-const GeneralStatistics = ({totalStats}) => {
+const MessageGeneralStatistics = ({totalStats}) => {
 
     const {
         totalMessages,
@@ -131,6 +131,6 @@ const GeneralStatistics = ({totalStats}) => {
     );
 };
 
-GeneralStatistics.propTypes = {};
+MessageGeneralStatistics.propTypes = {};
 
-export default GeneralStatistics;
+export default MessageGeneralStatistics;

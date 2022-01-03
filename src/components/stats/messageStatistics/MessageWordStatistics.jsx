@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {unfixEncoding} from '../../../algorithms/encoding';
 import {NO_FILTER} from "../../root/constans";
 
-const WordStatistics = (props) => {
+const MessageWordStatistics = (props) => {
 
     const {
         wordStats: {
@@ -91,6 +91,6 @@ const WordStatistics = (props) => {
     );
 };
 
-WordStatistics.propTypes = {};
+MessageWordStatistics.propTypes = {};
 
-export default WordStatistics;
+export default MessageWordStatistics;
