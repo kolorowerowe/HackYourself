@@ -6,7 +6,15 @@ import {useHistory} from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {R_CHOOSE_FOLDER, R_CHOOSE_STATS_FILE, R_CONTACT, R_HELP, R_STATS_MESSAGE, R_STATS_TOPICS} from "../root/sidebar/routes";
+import {
+    R_CHOOSE_FOLDER,
+    R_CHOOSE_STATS_FILE,
+    R_CONTACT,
+    R_HELP,
+    R_STATS_EVENTS,
+    R_STATS_MESSAGE,
+    R_STATS_TOPICS
+} from "../root/sidebar/routes";
 
 const HelloComponent = () => {
 
@@ -63,6 +71,11 @@ const HelloComponent = () => {
             <MenuCard title={'Topics'}
                       description={'Topics you are interested in on Facebook'}
                       path={R_STATS_TOPICS}
+                      xs={12}/>
+
+            <MenuCard title={'Events'}
+                      description={'Statistics about events that were related with you'}
+                      path={R_STATS_EVENTS}
                       xs={12}/>
 
             <MenuCard title={'Help'}

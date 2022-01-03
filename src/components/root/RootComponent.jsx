@@ -9,7 +9,7 @@ import {
     R_HELP,
     R_STATS_MESSAGE,
     R_STATS_TOPICS,
-    R_STATS_ABOUT_YOU
+    R_STATS_ABOUT_YOU, R_STATS_EVENTS
 } from "./sidebar/routes";
 import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
 import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USER_NAME} from "./localStorageKeys";
@@ -24,6 +24,7 @@ import {useSnackbar} from "notistack";
 import {useStatistics} from "../../hooks/StatisticsHook";
 import TopicsComponentContainer from "../stats/topics/TopicsComponentContainer";
 import AboutYouComponentContainer from "../stats/aboutYou/AboutYouComponentContainer";
+import EventsComponentContainer from "../stats/eventStatistics/EventsComponentContainer";
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -37,7 +38,8 @@ const RootComponent = () => {
         statistics: {
             messengerStatistics = {},
             aboutYouStatistics = {},
-            topics = []
+            topics = [],
+            eventStatistics = {}
         } = {},
         loadingLabel,
         statisticsStatus,
@@ -135,6 +137,10 @@ const RootComponent = () => {
                     <Route exact path={R_STATS_TOPICS}>
                         <TopicsComponentContainer topics={topics}
                                                   topicsStatisticsStatus={statisticsStatus.topics}/>
+                    </Route>
+                    <Route exact path={R_STATS_EVENTS}>
+                        <EventsComponentContainer eventStatistics={eventStatistics}
+                                                  eventStatisticsStatus={statisticsStatus.events}/>
                     </Route>
                     <Route exact path={R_HELP}>
                         <HelpComponent navigateToChooseDir={() => history.push(R_CHOOSE_FOLDER)}/>

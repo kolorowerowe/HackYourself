@@ -27,13 +27,7 @@ export const useCommonStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    countUp: {
-        fontSize: 40,
-        display: 'flex',
-        justifyContent: 'center',
-    },
     countUpSmall: {
-        fontSize: 30,
         display: 'flex',
         justifyContent: 'center',
         marginLeft: theme.spacing(1)

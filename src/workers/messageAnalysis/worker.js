@@ -3,6 +3,7 @@ import {getWordStats, getWordStatsPerRecipient} from "../../algorithms/message/w
 import {getTimeStats, getTimeStatsPerRecipient} from "../../algorithms/message/timeAlgorithms";
 import {getTotalStats} from "../../algorithms/message/totalAlgorithms";
 import {getAboutYouStatistics} from "../../algorithms/aboutYou/aboutYouAlgorithms";
+import {getEventStatistics} from "../../algorithms/events/eventAlgorithms";
 
 
 registerPromiseWorker((message) => {
@@ -29,6 +30,10 @@ registerPromiseWorker((message) => {
 
     if (message.type === 'getAboutYouStatistics') {
         return getAboutYouStatistics(message.aboutYou);
+    }
+
+    if (message.type === 'getEventStatistics') {
+        return getEventStatistics(message.events);
     }
 
 

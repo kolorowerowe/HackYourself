@@ -31,11 +31,17 @@ const postForAboutYouStatistics = (aboutYou) => promiseWorker.postMessage({
     type: 'getAboutYouStatistics', aboutYou
 });
 
+
+const postForEventStatistics = (events) => promiseWorker.postMessage({
+    type: 'getEventStatistics', events
+});
+
 export default {
     postForTotalStats,
     postForWordStats,
     postForTimeStats,
     postForTimeStatsPerRecipient,
     postForWordStatsPerRecipient,
-    postForAboutYouStatistics
+    postForAboutYouStatistics,
+    postForEventStatistics
 }
