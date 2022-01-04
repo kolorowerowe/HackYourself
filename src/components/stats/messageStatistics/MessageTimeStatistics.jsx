@@ -9,7 +9,7 @@ import {NO_FILTER} from "../../root/constans";
 import {Typography, useTheme} from "@material-ui/core";
 import {MONTH_YEAR_FORMAT} from "../../../algorithms/message/timeAlgorithms";
 
-const TimeStatistics = (props) => {
+const MessageTimeStatistics = (props) => {
 
     const {
         timeStats,
@@ -141,6 +141,6 @@ const TimeStatistics = (props) => {
     );
 };
 
-TimeStatistics.propTypes = {};
+MessageTimeStatistics.propTypes = {};
 
-export default TimeStatistics;
+export default MessageTimeStatistics;

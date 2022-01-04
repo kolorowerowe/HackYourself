@@ -12,14 +12,15 @@ export const useStatistics = () => {
     const [statisticsStatus, setStatisticsStatus] = useState({
         message: STATS_NOT_READY,
         aboutYou: STATS_NOT_READY,
-        topics: STATS_NOT_READY
+        topics: STATS_NOT_READY,
+        events: STATS_NOT_READY
     });
 
     const [loadingLabel, setLoadingLabel] = useState('');
 
     const setStatisticsFromRawData = async (data, userName) => {
 
-        const {threadList, aboutYou, topics} = data;
+        const {threadList, aboutYou, topics, events} = data;
 
         setLoadingLabel('Started analyzing data');
         const userNameOriginal = unfixEncoding(userName);
@@ -28,7 +29,8 @@ export const useStatistics = () => {
         let newStatistics = {
             messengerStatistics: {},
             aboutYouStatistics: {},
-            topics: []
+            topics: [],
+            events: {}
         };
 
         if (!isObjectEmpty(threadList)) {
@@ -89,6 +91,23 @@ export const useStatistics = () => {
             }));
         }
 
+        if (!isObjectEmpty(events)) {
+            setLoadingLabel('Analyzing events ...');
+            newStatistics.eventStatistics = await analysisWorker.postForEventStatistics(events);
+
+            setStatisticsStatus(prev => ({
+                ...prev,
+                events: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                events: STATS_MISSING
+            }));
+        }
+
+
+
         setStatistics(newStatistics);
         setLoadingLabel('Done!');
 
@@ -134,6 +153,18 @@ export const useStatistics = () => {
             setStatisticsStatus(prev => ({
                 ...prev,
                 topics: STATS_MISSING
+            }));
+        }
+
+        if (!isObjectEmpty(newStats.eventStatistics)) {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                events: STATS_OK
+            }));
+        } else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                events: STATS_MISSING
             }));
         }
     }

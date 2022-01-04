@@ -1,4 +1,4 @@
-import {S_ABOUT_YOU, S_MESSENGER, S_TOPICS} from "../components/root/constans";
+import {S_MESSENGER, S_TOPICS, S_EVENTS} from "../components/root/constans";
 
 const MESSAGE_FILE_PREFIX = "message_";
 
@@ -40,6 +40,18 @@ const getTopics = (topicsDirPath, fs) => {
     return inferred_topics_v2 ? inferred_topics_v2 : inferred_topics;
 }
 
+const getEvents = (eventsDirPath, fs) => {
+    let {events_invited, events_invited_v2} = readJsonFile(`${eventsDirPath}/event_invitations.json`, fs);
+    let {your_events, your_events_v2} = readJsonFile(`${eventsDirPath}/your_events.json`, fs);
+    let {event_responses, event_responses_v2} = readJsonFile(`${eventsDirPath}/your_event_responses.json`, fs);
+
+    return {
+        events_invited: events_invited_v2 ? events_invited_v2 : events_invited,
+        your_events: your_events_v2 ? your_events_v2 : your_events,
+        event_responses: event_responses_v2 ? event_responses_v2 : event_responses
+    }
+}
+
 const readJsonFile = (path, fs) => {
     return JSON.parse(fs.readFileSync(path));
 }
@@ -52,7 +64,8 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     let rawDataResult = {
         threadList: undefined,
         aboutYou: undefined,
-        topics: undefined
+        topics: undefined,
+        events: undefined
     };
 
 
@@ -64,17 +77,23 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     }
 
 
-    const aboutYouResult = inspectionResults.find(({type}) => type === S_ABOUT_YOU);
-    if (aboutYouResult.enabled) {
-        const aboutYouDirPath = `${fbDataDirPath}/${aboutYouResult.dirPath}`;
-        rawDataResult.aboutYou = getAboutYou(aboutYouDirPath, fs);
-    }
+    // const aboutYouResult = inspectionResults.find(({type}) => type === S_ABOUT_YOU);
+    // if (aboutYouResult.enabled) {
+    //     const aboutYouDirPath = `${fbDataDirPath}/${aboutYouResult.dirPath}`;
+    //     rawDataResult.aboutYou = getAboutYou(aboutYouDirPath, fs);
+    // }
 
 
     const topicsResult = inspectionResults.find(({type}) => type === S_TOPICS);
     if (topicsResult.enabled) {
         const topicsPath = `${fbDataDirPath}/${topicsResult.dirPath}`
         rawDataResult.topics = getTopics(topicsPath, fs);
+    }
+
+    const eventsResult = inspectionResults.find(({type}) => type === S_EVENTS);
+    if (eventsResult.enabled) {
+        const eventsPath = `${fbDataDirPath}/${eventsResult.dirPath}`
+        rawDataResult.events = getEvents(eventsPath, fs);
     }
 
     return rawDataResult;

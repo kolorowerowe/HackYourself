@@ -1,16 +1,16 @@
 import React, {useMemo, useState} from 'react';
-import GeneralStatistics from "./GeneralStatistics";
+import MessageGeneralStatistics from "./MessageGeneralStatistics";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import SwipeableViews from 'react-swipeable-views';
 import useTheme from "@material-ui/core/styles/useTheme";
-import Box from "@material-ui/core/Box";
-import WordStatistics from "./WordStatistics";
-import TimeStatistics from './TimeStatistics';
+import MessageWordStatistics from "./MessageWordStatistics";
+import MessageTimeStatistics from './MessageTimeStatistics';
 import {fixEncoding} from "../../../algorithms/encoding";
 import {NO_FILTER} from "../../root/constans";
 import StatisticsStatusBoundary from "../StatisticsStatusBoundary";
+import {TabPanel} from "../../generic/TabPabel";
 
 
 const MessageStatisticsComponent = (props) => {
@@ -45,26 +45,6 @@ const MessageStatisticsComponent = (props) => {
         setValue(index);
     };
 
-    function TabPanel(tabPanelProps) {
-        const {children, index, ...other} = tabPanelProps;
-
-        return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`full-width-tabpanel-${index}`}
-                aria-labelledby={`full-width-tab-${index}`}
-                {...other}
-            >
-                {value === index && (
-                    <Box p={3}>
-                        {children}
-                    </Box>
-                )}
-            </div>
-        );
-    }
-
     return (
         <div>
             <StatisticsStatusBoundary statisticsStatus={messengerStatisticsStatus}>
@@ -86,23 +66,23 @@ const MessageStatisticsComponent = (props) => {
                     index={value}
                     onChangeIndex={handleChangeIndex}
                 >
-                    <TabPanel index={0} dir={theme.direction}>
-                        <GeneralStatistics totalStats={totalStats}/>
+                    <TabPanel index={0} value={value} dir={theme.direction}>
+                        <MessageGeneralStatistics totalStats={totalStats}/>
                     </TabPanel>
-                    <TabPanel index={1} dir={theme.direction}>
-                        <TimeStatistics timeStats={timeStats}
-                                        timeStatsPerRecipient={timeStatsPerRecipient}
-                                        recipients={recipients}
-                                        recipientFilter={recipientFilter}
-                                        setRecipientFilter={setRecipientFilter}
+                    <TabPanel index={1} value={value} dir={theme.direction}>
+                        <MessageTimeStatistics timeStats={timeStats}
+                                               timeStatsPerRecipient={timeStatsPerRecipient}
+                                               recipients={recipients}
+                                               recipientFilter={recipientFilter}
+                                               setRecipientFilter={setRecipientFilter}
                         />
                     </TabPanel>
-                    <TabPanel index={2} dir={theme.direction}>
-                        <WordStatistics wordStats={wordStats}
-                                        wordStatsPerRecipient={wordStatsPerRecipient}
-                                        recipients={recipients}
-                                        recipientFilter={recipientFilter}
-                                        setRecipientFilter={setRecipientFilter}/>
+                    <TabPanel index={2} value={value} dir={theme.direction}>
+                        <MessageWordStatistics wordStats={wordStats}
+                                               wordStatsPerRecipient={wordStatsPerRecipient}
+                                               recipients={recipients}
+                                               recipientFilter={recipientFilter}
+                                               setRecipientFilter={setRecipientFilter}/>
                     </TabPanel>
                 </SwipeableViews>
             </StatisticsStatusBoundary>

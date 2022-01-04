@@ -8,9 +8,9 @@ import ImageIcon from '@material-ui/icons/Image';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ShareIcon from '@material-ui/icons/Share';
-import {BigCountUp, SmallCountUp} from "../../generic/DataDisplay";
+import {CustomCountUp} from "../../generic/DataDisplay";
 
-const GeneralStatistics = ({totalStats}) => {
+const MessageGeneralStatistics = ({totalStats}) => {
 
     const {
         totalMessages,
@@ -35,29 +35,33 @@ const GeneralStatistics = ({totalStats}) => {
     return (
         <Grid container spacing={2}>
 
-            <BigCountUp label={'Messages sent by you'}
-                        value={totalMessagesSent}/>
+            <CustomCountUp label={'Messages sent by you'}
+                           value={totalMessagesSent}
+                           xs={6}
+                           big/>
 
-            <BigCountUp label={'All messages'}
-                        value={totalMessages}/>
+            <CustomCountUp label={'All messages'}
+                           value={totalMessages}
+                           xs={6}
+                           big/>
 
             <Grid item xs={12}/>
 
-            <SmallCountUp label={'Total images sent'}
-                          value={totalImagesSent}
-                          iconComponent={<ImageIcon color={'secondary'}/>}/>
+            <CustomCountUp tooltip={'Total images sent'}
+                           value={totalImagesSent}
+                           iconComponent={<ImageIcon color={'secondary'}/>}/>
 
-            <SmallCountUp label={'Total videos sent'}
-                          value={totalVideosSent}
-                          iconComponent={<VideocamIcon color={'secondary'}/>}/>
+            <CustomCountUp tooltip={'Total videos sent'}
+                           value={totalVideosSent}
+                           iconComponent={<VideocamIcon color={'secondary'}/>}/>
 
-            <SmallCountUp label={'Total files sent'}
-                          value={totalFilesSent}
-                          iconComponent={<AttachFileIcon color={'secondary'}/>}/>
+            <CustomCountUp tooltip={'Total files sent'}
+                           value={totalFilesSent}
+                           iconComponent={<AttachFileIcon color={'secondary'}/>}/>
 
-            <SmallCountUp label={'Total shares sent'}
-                          value={totalSharesSent}
-                          iconComponent={<ShareIcon color={'secondary'}/>}/>
+            <CustomCountUp tooltip={'Total shares sent'}
+                           value={totalSharesSent}
+                           iconComponent={<ShareIcon color={'secondary'}/>}/>
 
             <Grid item xs={12}>
                 <Divider className={styles.bigDivider}/>
@@ -127,6 +131,6 @@ const GeneralStatistics = ({totalStats}) => {
     );
 };
 
-GeneralStatistics.propTypes = {};
+MessageGeneralStatistics.propTypes = {};
 
-export default GeneralStatistics;
+export default MessageGeneralStatistics;

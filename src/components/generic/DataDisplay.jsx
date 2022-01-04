@@ -21,39 +21,27 @@ const DataLabeled = ({value, label}) => {
     )
 };
 
-const BigCountUp = ({value, label}) => {
+const CustomCountUp = ({value, label, tooltip = '', iconComponent, xs = 3, big = false}) => {
 
     const styles = useCommonStyles();
 
     return (
-        <Grid item xs={6}>
-            <div className={styles.oneUnderAnother}>
-                <CountUp end={value} className={styles.countUp}/>
-                <Typography variant={'h5'} align={'center'} color={'secondary'}>
-                    {label}
-                </Typography>
-            </div>
-        </Grid>
-    );
-};
-
-const SmallCountUp = ({value, label, iconComponent}) => {
-
-    const styles = useCommonStyles();
-
-    return (
-        <Grid item xs={3}>
-            <div className={styles.oneUnderAnother}>
-                <Tooltip title={label}>
+        <Grid item xs={xs}>
+            <Tooltip title={tooltip}>
+                <div className={styles.oneUnderAnother}>
                     <div className={styles.flexAligned}>
-                        {iconComponent}
-                        <CountUp end={value} className={styles.countUpSmall}/>
+                        {!!iconComponent && iconComponent}
+                        <CountUp end={value} className={styles.countUpSmall} style={{fontSize: big ? 40 : 30}}/>
                     </div>
-                </Tooltip>
-            </div>
+                    {!!label && <Typography variant={big ? 'h5' : 'h6'} align={'center'} color={'secondary'}>
+                        {label}
+                    </Typography>}
+                </div>
+            </Tooltip>
+
         </Grid>
     );
 };
 
 
-export {DataLabeled, BigCountUp, SmallCountUp};
+export {DataLabeled, CustomCountUp};

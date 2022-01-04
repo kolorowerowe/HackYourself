@@ -12,3 +12,4 @@ export const STATS_OK = 'STATS_OK';
 export const S_MESSENGER = 'S_MESSENGER';
 export const S_ABOUT_YOU = 'S_ABOUT_YOU';
 export const S_TOPICS = 'S_TOPICS';
+export const S_EVENTS = 'S_EVENTS';

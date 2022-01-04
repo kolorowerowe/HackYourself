@@ -8,7 +8,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {PATH_TO_FOLDER, USER_NAME} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
 import InspectionDataResult from "./InspectionDataResult";
-import {S_ABOUT_YOU, S_MESSENGER, S_TOPICS} from "../root/constans";
+import {S_MESSENGER, S_EVENTS, S_TOPICS} from "../root/constans";
 import CustomLinearProgress from "../generic/CustomLinearProgress";
 import {inspectDataExists} from "../../utils/fileLoader";
 import _ from 'lodash';
@@ -37,16 +37,25 @@ const ChooseFolderComponent = (props) => {
         dirPath: '/messages/inbox',
         available: false,
         enabled: true
-    }, {
-        type: S_ABOUT_YOU,
-        name: t('general:about_you'),
-        dirPath: '/about_you',
-        available: false,
-        enabled: true
-    }, {
+    },
+    // {
+    //     type: S_ABOUT_YOU,
+    //     name: t('general:about_you'),
+    //     dirPath: '/about_you',
+    //     available: false,
+    //     enabled: true
+    // }, 
+    {
         type: S_TOPICS,
         name: t('general:topics'),
         dirPath: '/your_topics',
+        available: false,
+        enabled: false
+    },
+    {
+        type:S_EVENTS ,
+        name: 'Events',
+        dirPath: '/events',
         available: false,
         enabled: false
     }]);
