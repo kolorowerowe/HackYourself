@@ -11,7 +11,6 @@ import {
     R_CHOOSE_STATS_FILE,
     R_CONTACT,
     R_HELP,
-    R_STATS_EVENTS,
     R_STATS_MESSAGE,
     R_STATS_TOPICS
 } from "../root/sidebar/routes";

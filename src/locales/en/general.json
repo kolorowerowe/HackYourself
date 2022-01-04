@@ -6,5 +6,10 @@
     "events": "Events",
     "help": "Help",
     "contact": "Contact",
-    "choose_stats_file": "Choose stats file"
+    "choose_stats_file": "Choose stats file",
+    "hello": "Hello there",
+    "thanks_for_downloading": "We are very happy for downloading our app.",
+    "any_question": "If you have any questions or you would like to give a feedback - don't hesitate to contact us.",
+    "about_you": "About you",
+    "messenger": "Messenger"
 }

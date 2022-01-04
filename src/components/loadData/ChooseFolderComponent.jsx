@@ -12,6 +12,7 @@ import {S_ABOUT_YOU, S_MESSENGER, S_TOPICS} from "../root/constans";
 import CustomLinearProgress from "../generic/CustomLinearProgress";
 import {inspectDataExists} from "../../utils/fileLoader";
 import _ from 'lodash';
+import {useTranslation} from "react-i18next";
 
 const ChooseFolderComponent = (props) => {
 
@@ -28,21 +29,23 @@ const ChooseFolderComponent = (props) => {
 
     const [pathToFolder, setPathToFolder] = useState('');
 
+    const {t} = useTranslation();
+
     const [inspectionResults, setInspectionResults] = useState([{
         type: S_MESSENGER,
-        name: 'Messenger',
+        name: t('general:messenger'),
         dirPath: '/messages/inbox',
         available: false,
         enabled: true
     }, {
         type: S_ABOUT_YOU,
-        name: 'About you',
+        name: t('general:about_you'),
         dirPath: '/about_you',
         available: false,
         enabled: true
     }, {
         type: S_TOPICS,
-        name: 'Topics',
+        name: t('general:topics'),
         dirPath: '/your_topics',
         available: false,
         enabled: false
@@ -91,7 +94,7 @@ const ChooseFolderComponent = (props) => {
         <Grid container spacing={5} className={styles.containerPadding}>
             <Grid item xs={12}>
                 <Typography variant={'h6'}>
-                    Start analysing from your Facebook data.
+                    {t('description:start_analysing_long')}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -100,17 +103,17 @@ const ChooseFolderComponent = (props) => {
                                name="path"
                                value={pathToFolder}
                                placeholder={'C:\\Users\\domin\\Documents\\Downloads\\facebook-kolorowerowe'}
-                               label={'Relative path to the facebook data folder'}
+                               label={t('description:fb_path')}
                                onChange={e => setPathToFolder(e.target.value)}
                                disabled={loading}
                                fullWidth
                     />
-                    <Tooltip title={'Select folder from your drive'}>
+                    <Tooltip title={t('description:select_folder')}>
                         <IconButton onClick={onClick}>
                             <FolderOpenIcon/>
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title={'Paste last used path'}>
+                    <Tooltip title={t('description:paste_last')}>
                         <IconButton onClick={() => {
                             setPathToFolder(localStorage.getItem(PATH_TO_FOLDER) || '');
                         }}>
@@ -125,12 +128,12 @@ const ChooseFolderComponent = (props) => {
                                name="username"
                                value={userName}
                                placeholder={'Dominik Kołodziej'}
-                               label={'Facebook username (optional)'}
+                               label={t('description:fb_username')}
                                onChange={e => setUserName(e.target.value)}
                                disabled={loading}
                                fullWidth
                     />
-                    <Tooltip title={'Paste last used path'}>
+                    <Tooltip title={t('description:paste_last')}>
                         <IconButton onClick={() => {
                             setUserName(localStorage.getItem(USER_NAME) || '');
                         }}>
@@ -155,7 +158,7 @@ const ChooseFolderComponent = (props) => {
                         fullWidth
                         disabled={loading || analyzeDisabled}
                         variant={'outlined'}>
-                    Start analysing data!
+                    {t('description:start_analysing_short')}
                 </Button>
             </Grid>
             <Grid item xs={12}>
@@ -164,12 +167,11 @@ const ChooseFolderComponent = (props) => {
                     variant="body2"
                     onClick={goToChooseStatsFile}
                 >
-                    Got a stats file? Click here!
+                    {t('description:got_stats')}
                 </Link>
             </Grid>
         </Grid>
     );
 };
-
 
 export default ChooseFolderComponent;

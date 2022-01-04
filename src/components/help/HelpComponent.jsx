@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import {useCommonStyles} from "../../theme/commonStyles";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import StorageIcon from "@material-ui/icons/Storage";
-
+import {useTranslation} from "react-i18next";
 
 const HelpComponent = ({navigateToChooseDir}) => {
 
@@ -15,45 +15,47 @@ const HelpComponent = ({navigateToChooseDir}) => {
         shell.openExternal(link);
     }
 
+    const {t} = useTranslation();
+
     const guides = [
         {
-            text: "Login into the Facebook page."
+            text: t('description:guide_step_1')
         }, {
-            text: "Go to the settings."
+            text: t('description:guide_step_2')
         }, {
-            text: "Go to \"Your Facebook information\"."
+            text: t('description:guide_step_3')
         }, {
-            text: "Click on \"Download Your Information\"."
+            text: t('description:guide_step_4')
         }, {
-            text: "Here you can find direct link to your Facebook's info:",
+            text: t('description:guide_step_5'),
             button: <Button startIcon={<FacebookIcon/>}
                             onClick={() => openExternalLink('https://www.facebook.com/dyi/?referrer=yfi_settings')}
                             size={'small'}>
                 Facebook
             </Button>
         }, {
-            text: "In the top bar select Format = JSON."
+            text: t('description:guide_step_6')
         }, {
-            text: "Ensure that \"Messages\" option is checked."
+            text: t('description:guide_step_7')
         }, {
-            text: "Create file."
+            text: t('description:guide_step_8')
         }, {
-            text: "Creating files may take up while. When the file will be ready you will be notified by Facebook."
+            text: t('description:guide_step_9')
         }, {
-            text: "Download the file from the tab \"Available Copies\"."
+            text: t('description:guide_step_10')
         }, {
-            text: "Unpack the files."
+            text: t('description:guide_step_11')
         }, {
-            text: "Go to the \"Choose dir\" section in HackYourself.",
+            text: t('description:guide_step_12'),
             button: <Button startIcon={<StorageIcon/>}
                             onClick={navigateToChooseDir}
                             size={'small'}>
-                Choose dir
+                {t('description:guide_step_15')}
             </Button>
         }, {
-            text: "Select the path to the \"Inbox\" folder and load data."
+            text: t('description:guide_step_13')
         }, {
-            text: "Enjoy watching your statistics!"
+            text: t('description:guide_step_14')
         }
     ];
 
@@ -61,7 +63,7 @@ const HelpComponent = ({navigateToChooseDir}) => {
         <Grid container spacing={3} className={styles.containerPadding}>
             <Grid item xs={12}>
                 <Typography>
-                    You can find below short instructions about how to hack yourself.
+                    {t('description:guide_info')}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
