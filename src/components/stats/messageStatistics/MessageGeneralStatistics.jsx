@@ -9,6 +9,7 @@ import VideocamIcon from '@material-ui/icons/Videocam';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ShareIcon from '@material-ui/icons/Share';
 import {CustomCountUp} from "../../generic/DataDisplay";
+import {useTranslation} from "react-i18next";
 
 const MessageGeneralStatistics = ({totalStats}) => {
 
@@ -23,6 +24,7 @@ const MessageGeneralStatistics = ({totalStats}) => {
     } = totalStats;
 
     const styles = useCommonStyles();
+    const {t} = useTranslation();
 
     const [userPattern, setUserPattern] = useState('')
 
@@ -35,31 +37,31 @@ const MessageGeneralStatistics = ({totalStats}) => {
     return (
         <Grid container spacing={2}>
 
-            <CustomCountUp label={'Messages sent by you'}
+            <CustomCountUp label={t('general:mess_sent')}
                            value={totalMessagesSent}
                            xs={6}
                            big/>
 
-            <CustomCountUp label={'All messages'}
+            <CustomCountUp label={t('general:all_mess')}
                            value={totalMessages}
                            xs={6}
                            big/>
 
             <Grid item xs={12}/>
 
-            <CustomCountUp tooltip={'Total images sent'}
+            <CustomCountUp tooltip={t('general:tot_img')}
                            value={totalImagesSent}
                            iconComponent={<ImageIcon color={'secondary'}/>}/>
 
-            <CustomCountUp tooltip={'Total videos sent'}
+            <CustomCountUp tooltip={t('general:tot_video')}
                            value={totalVideosSent}
                            iconComponent={<VideocamIcon color={'secondary'}/>}/>
 
-            <CustomCountUp tooltip={'Total files sent'}
+            <CustomCountUp tooltip={t('general:tot_files')}
                            value={totalFilesSent}
                            iconComponent={<AttachFileIcon color={'secondary'}/>}/>
 
-            <CustomCountUp tooltip={'Total shares sent'}
+            <CustomCountUp tooltip={t('general:tot_shares')}
                            value={totalSharesSent}
                            iconComponent={<ShareIcon color={'secondary'}/>}/>
 
@@ -81,22 +83,22 @@ const MessageGeneralStatistics = ({totalStats}) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    No.
+                                    {t('general:no')}
                                 </TableCell>
                                 <TableCell>
-                                    Name
+                                    {t('general:name')}
                                 </TableCell>
                                 <TableCell>
-                                    Messages Sent
+                                    {t('general:name')}
                                 </TableCell>
                                 <TableCell>
-                                    All messages
+                                    {t('general:all_mess')}
                                 </TableCell>
                                 <TableCell>
-                                    Participants
+                                    {t('general:participants')}
                                 </TableCell>
                                 <TableCell>
-                                    Activity ratio
+                                    {t('general:activity_ratio')}
                                 </TableCell>
                             </TableRow>
                         </TableHead>

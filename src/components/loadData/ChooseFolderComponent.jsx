@@ -54,7 +54,7 @@ const ChooseFolderComponent = (props) => {
     },
     {
         type:S_EVENTS ,
-        name: 'Events',
+        name: t('general:events'),
         dirPath: '/events',
         available: false,
         enabled: false

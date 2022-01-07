@@ -8,6 +8,7 @@ import moment from "moment";
 import {NO_FILTER} from "../../root/constans";
 import {Typography, useTheme} from "@material-ui/core";
 import {MONTH_YEAR_FORMAT} from "../../../algorithms/message/timeAlgorithms";
+import {useTranslation} from "react-i18next";
 
 const MessageTimeStatistics = (props) => {
 
@@ -20,12 +21,13 @@ const MessageTimeStatistics = (props) => {
     } = props;
 
     const theme = useTheme();
+    const {t} = useTranslation();
 
     const getLineChartBase = useCallback((data = [], getLabel = () => '') => () => ({
         labels: data.map(getLabel),
         datasets: [
             {
-                label: 'Messages sent',
+                label: t('general:m_sent'),
                 data: data.map(({count}) => count),
                 fill: false,
                 backgroundColor: theme.palette.secondary.main,
@@ -33,7 +35,7 @@ const MessageTimeStatistics = (props) => {
                 yAxisID: 'y-axis-1'
             },
             {
-                label: 'Avg msg length',
+                label: t('general:avg_mess_l'),
                 data: data.map(({averageLength}) => averageLength),
                 fill: false,
                 backgroundColor: theme.palette.primary.main,
@@ -121,19 +123,19 @@ const MessageTimeStatistics = (props) => {
             </Grid>
             <Grid item xs={6}>
                 <Typography>
-                    Hourly statistics
+                    {t('general:hour_stats')}
                 </Typography>
                 <Line data={hourlyData} options={chartOptions}/>
             </Grid>
             <Grid item xs={6}>
                 <Typography>
-                    Weekly statistics
+                    {t('general:week_stats')}
                 </Typography>
                 <Line data={weeklyData} options={chartOptions}/>
             </Grid>
             <Grid item xs={12}>
                 <Typography>
-                    Timeline statistics
+                    {t('general:time_stats')}
                 </Typography>
                 <Line data={timelineData} options={chartOptions}/>
             </Grid>

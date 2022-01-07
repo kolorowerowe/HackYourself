@@ -8,8 +8,10 @@ import {TabPanel} from "../../generic/TabPabel";
 import EventsGeneralStatistics from "./EventsGeneralStatistics";
 import useTheme from "@material-ui/core/styles/useTheme";
 import EventsTimeStatistics from "./EventsTimeStatistics";
+import {useTranslation} from "react-i18next";
 
 const EventsComponent = (props) => {
+    const {t} = useTranslation();
 
     const {
         eventStatistics: {
@@ -49,8 +51,8 @@ const EventsComponent = (props) => {
                     textColor="primary"
                     variant="fullWidth"
                 >
-                    <Tab label="General"/>
-                    <Tab label="Time"/>
+                    <Tab label={t('general:general')}/>
+                    <Tab label={t('general:time')}/>
                 </Tabs>
             </AppBar>
             <SwipeableViews

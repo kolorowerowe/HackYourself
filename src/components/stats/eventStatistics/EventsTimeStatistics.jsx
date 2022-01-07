@@ -5,8 +5,10 @@ import {useCommonStyles} from "../../../theme/commonStyles";
 import moment from "moment";
 import {MONTH_YEAR_FORMAT} from "../../../algorithms/message/timeAlgorithms";
 import {Line} from "react-chartjs-2";
+import {useTranslation} from "react-i18next";
 
 const EventsTimeStatistics = (props) => {
+    const {t} = useTranslation();
 
     const {
         hourly,
@@ -20,7 +22,7 @@ const EventsTimeStatistics = (props) => {
         labels: data.map(getLabel),
         datasets: [
             {
-                label: 'Events count',
+                label: t('general:events_count'),
                 data: data.map(({count}) => count),
                 fill: false,
                 backgroundColor: theme.palette.secondary.main,
@@ -71,19 +73,19 @@ const EventsTimeStatistics = (props) => {
         <Grid container spacing={2}>
             <Grid item xs={6}>
                 <Typography>
-                    Hourly statistics
+                    {t('general:hour_stats')}
                 </Typography>
                 <Line data={hourlyData} options={chartOptions}/>
             </Grid>
             <Grid item xs={6}>
                 <Typography>
-                    Weekly statistics
+                    {t('general:week_stats')}
                 </Typography>
                 <Line data={weeklyData} options={chartOptions}/>
             </Grid>
             <Grid item xs={12}>
                 <Typography>
-                    Timeline statistics
+                    {t('general:time_stats')}
                 </Typography>
                 <Line data={timelineData} options={chartOptions}/>
             </Grid>

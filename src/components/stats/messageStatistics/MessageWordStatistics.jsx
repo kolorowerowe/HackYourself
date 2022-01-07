@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {unfixEncoding} from '../../../algorithms/encoding';
 import {NO_FILTER} from "../../root/constans";
+import {useTranslation} from "react-i18next";
 
 const MessageWordStatistics = (props) => {
 
@@ -21,6 +22,7 @@ const MessageWordStatistics = (props) => {
     } = props;
 
     const [wordPattern, setWordPattern] = useState('')
+    const {t} = useTranslation();
 
     const visibleWord = useMemo(() => {
         const occList = recipientFilter === NO_FILTER ? occurrencesList : wordStatsPerRecipient[unfixEncoding(recipientFilter)].occurrencesList;
@@ -52,7 +54,7 @@ const MessageWordStatistics = (props) => {
                            name="wordPattern"
                            value={wordPattern}
                            placeholder={'hi'}
-                           label={'Word to search'}
+                           label={t('general:word_to_search')}
                            onChange={e => setWordPattern(e.target.value)}
                            fullWidth
                 />
@@ -61,13 +63,13 @@ const MessageWordStatistics = (props) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    No.
+                                    {t('general:no')}
                                 </TableCell>
                                 <TableCell>
-                                    Word
+                                    {t('general:word')}
                                 </TableCell>
                                 <TableCell>
-                                    Occurrences
+                                    {t('general:occurrences')}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
