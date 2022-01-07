@@ -8,6 +8,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {PATH_TO_STATS_FILE} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
 import CustomLinearProgress from "../generic/CustomLinearProgress";
+import {useTranslation} from "react-i18next";
 
 const ChooseStatsFileComponent = (props) => {
 
@@ -21,6 +22,7 @@ const ChooseStatsFileComponent = (props) => {
     const styles = useCommonStyles();
 
     const [pathToStatsFile, setPathToStatsFile] = useState('');
+    const {t} = useTranslation();
 
     const onClick = () => {
         const {
@@ -51,7 +53,7 @@ const ChooseStatsFileComponent = (props) => {
         <Grid container spacing={5} className={styles.containerPadding}>
             <Grid item xs={12}>
                 <Typography variant={'h6'}>
-                    Let's load already analysed data.
+                    {t('description:load_data_long')}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -60,17 +62,17 @@ const ChooseStatsFileComponent = (props) => {
                                name="path"
                                value={pathToStatsFile}
                                placeholder={'C:\\Users\\domin\\Documents\\Downloads\\stats.json'}
-                               label={'Path to the json file with statistics'}
+                               label={t('description:path_to_file')}
                                onChange={e => setPathToStatsFile(e.target.value)}
                                disabled={loading}
                                fullWidth
                     />
-                    <Tooltip title={'Select folder from your drive'}>
+                    <Tooltip title={t('description:select_folder')}>
                         <IconButton onClick={onClick}>
                             <FolderOpenIcon/>
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title={'Paste last used path'}>
+                    <Tooltip title={t('description:paste_last')}>
                         <IconButton onClick={() => {
                             setPathToStatsFile(localStorage.getItem(PATH_TO_STATS_FILE) || '');
                         }}>
@@ -89,7 +91,7 @@ const ChooseStatsFileComponent = (props) => {
                         fullWidth
                         disabled={loading}
                         variant={'outlined'}>
-                    Load data!
+                    {t('description:load_data_short')}
                 </Button>
             </Grid>
             <Grid item xs={12}>
@@ -98,7 +100,7 @@ const ChooseStatsFileComponent = (props) => {
                     variant="body2"
                     onClick={goToChooseFolder}
                 >
-                    Want to analyse data from beginning? Click here!
+                    {t('description:beginning')}
                 </Link>
             </Grid>
         </Grid>

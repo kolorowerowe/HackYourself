@@ -5,11 +5,13 @@ import TableCell from "@material-ui/core/TableCell";
 import Checkbox from "@material-ui/core/Checkbox";
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import {useTranslation} from "react-i18next";
 
 const InspectionDataResult = props => {
 
 
     const {results = [], handleEnableStatisticsChange} = props;
+    const {t} = useTranslation();
 
     return (
         <div>
@@ -18,13 +20,13 @@ const InspectionDataResult = props => {
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                Statistics
+                                {t('general:statistic')}
                             </TableCell>
                             <TableCell align={'center'}>
-                                Is available
+                                {t('general:is_available')}
                             </TableCell>
                             <TableCell align={'center'}>
-                                Analyze data
+                                {t('general:analyze_data')}
                             </TableCell>
                         </TableRow>
                     </TableHead>

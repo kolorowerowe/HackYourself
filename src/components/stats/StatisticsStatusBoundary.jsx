@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import {STATS_MISSING, STATS_NOT_READY, STATS_OK} from "../root/constans";
 import Alert from "@material-ui/lab/Alert";
 import {useCommonStyles} from "../../theme/commonStyles";
+import {useTranslation} from "react-i18next";
 
 const StatisticsStatusBoundary = props => {
 
     const {statisticsStatus, children} = props;
+    const {t} = useTranslation();
 
     const styles = useCommonStyles();
 
@@ -14,13 +16,13 @@ const StatisticsStatusBoundary = props => {
         case STATS_NOT_READY:
             return <div className={styles.containerPadding}>
                 <Alert severity={'warning'} variant={'filled'}>
-                    This statistics haven't been loaded yet. Go to 'Choose dir' site and load data.
+                    {t('general:stats_no_loaded')}
                 </Alert>
             </div>;
         case STATS_MISSING:
             return <div className={styles.containerPadding}>
                 <Alert severity={'warning'} variant={'filled'}>
-                    This statistics are missing.
+                    {t('general:stats_missing')}
                 </Alert>
             </div>;
         case STATS_OK:

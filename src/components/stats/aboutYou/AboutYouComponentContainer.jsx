@@ -6,9 +6,10 @@ import StatisticsStatusBoundary from "../StatisticsStatusBoundary";
 import moment from "moment";
 import {formatDuration} from "../../../utils/dateTimeUtils";
 import {DataLabeled} from "../../generic/DataDisplay";
-
+import {useTranslation} from "react-i18next";
 
 const AboutYouComponentContainer = (props) => {
+    const {t} = useTranslation();
 
     const {
         aboutYouStatistics: {
@@ -26,12 +27,12 @@ const AboutYouComponentContainer = (props) => {
             <Grid container spacing={5} className={styles.containerPadding}>
                 <Grid item xs={12}>
                     <Typography variant={'h6'}>
-                        Things you have viewed
+                        {t('general:things')}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <DataLabeled label={'All videos viewed length'}
-                                 value={formatDuration(moment.duration(totalTimeViewed, 'second'))}/>
+                    <DataLabeled label={t('general:video_lenght')}
+                                 value={formatDuration(moment.duration(totalTimeViewed, t('general:second')))}/>
                 </Grid>
             </Grid>
         </StatisticsStatusBoundary>

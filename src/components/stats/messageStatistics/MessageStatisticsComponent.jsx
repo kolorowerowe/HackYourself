@@ -11,7 +11,7 @@ import {fixEncoding} from "../../../algorithms/encoding";
 import {NO_FILTER} from "../../root/constans";
 import StatisticsStatusBoundary from "../StatisticsStatusBoundary";
 import {TabPanel} from "../../generic/TabPabel";
-
+import {useTranslation} from "react-i18next";
 
 const MessageStatisticsComponent = (props) => {
 
@@ -27,6 +27,7 @@ const MessageStatisticsComponent = (props) => {
     } = props;
 
     const theme = useTheme();
+    const {t} = useTranslation();
 
     const recipients = useMemo(() =>
             (timeStatsPerRecipient ? fixEncoding([...new Set(Object.keys(timeStatsPerRecipient))].sort()) : [])
@@ -56,9 +57,9 @@ const MessageStatisticsComponent = (props) => {
                         textColor="primary"
                         variant="fullWidth"
                     >
-                        <Tab label="General"/>
-                        <Tab label="Time"/>
-                        <Tab label="Words"/>
+                        <Tab label={t('general:general')}/>
+                        <Tab label={t('general:time')}/>
+                        <Tab label={t('general:words')}/>
                     </Tabs>
                 </AppBar>
                 <SwipeableViews

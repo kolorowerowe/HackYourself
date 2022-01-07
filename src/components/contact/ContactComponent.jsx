@@ -4,11 +4,13 @@ import PersonIcon from '@material-ui/icons/Person';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Grid from "@material-ui/core/Grid";
 import {useCommonStyles} from "../../theme/commonStyles";
+import {useTranslation} from "react-i18next";
 
 const ContactComponent = ({userName}) => {
 
     const styles = useCommonStyles();
-
+    const {t} = useTranslation();
+    
     const ContactPerson = ({name, email}) => {
 
         return <div style={{padding: 10}}>
@@ -53,17 +55,17 @@ const ContactComponent = ({userName}) => {
         <Grid container spacing={3} className={styles.containerPadding}>
             <Grid item xs={12}>
                 <Typography variant={'h4'}>
-                    Hello there {optionalName}
+                    {t('general:hello')} {optionalName}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Typography>
-                    We are very happy for downloading our app.
+                    {t('general:thanks_for_downloading')}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Typography>
-                    If you have any questions or you would like to give a feedback - don't hesitate to contact us.
+                    {t('general:any_question')}
                 </Typography>
             </Grid>
             <Grid item xs={12}>

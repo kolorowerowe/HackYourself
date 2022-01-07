@@ -5,7 +5,7 @@ import {useCommonStyles} from "../../../theme/commonStyles";
 import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import StatisticsStatusBoundary from "../StatisticsStatusBoundary";
-
+import {useTranslation} from "react-i18next";
 
 const TopicsComponentContainer = (props) => {
 
@@ -15,19 +15,19 @@ const TopicsComponentContainer = (props) => {
     } = props;
 
     const styles = useCommonStyles();
+    const {t} = useTranslation();
 
     return (
         <StatisticsStatusBoundary statisticsStatus={topicsStatisticsStatus}>
             <Grid container spacing={5} className={styles.containerPadding}>
                 <Grid item xs={12}>
                     <Typography variant={'h6'}>
-                        Your topics
+                        {t('general:your_topics')}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography>
-                        A collection of topics determined by your activity on Facebook that is used to create
-                        recommendations for you in different areas of Facebook such as News Feed, News and Watch
+                        {t('description:topic_desc')}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -36,10 +36,10 @@ const TopicsComponentContainer = (props) => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>
-                                        No.
+                                        {t('general:no')}
                                     </TableCell>
                                     <TableCell>
-                                        Topic
+                                        {t('general:topic')}
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
