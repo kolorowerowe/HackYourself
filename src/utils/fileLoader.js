@@ -1,4 +1,4 @@
-import {S_MESSENGER, S_TOPICS, S_EVENTS} from "../components/root/constans";
+import {S_MESSENGER, S_TOPICS, S_EVENTS, S_POSTS} from "../components/root/constans";
 
 const MESSAGE_FILE_PREFIX = "message_";
 
@@ -52,6 +52,13 @@ const getEvents = (eventsDirPath, fs) => {
     }
 }
 
+const getPosts = (postsDirPath, fs) =>{
+    //TODO perform here files parsing
+    return {
+
+    }
+}
+
 const readJsonFile = (path, fs) => {
     return JSON.parse(fs.readFileSync(path));
 }
@@ -65,7 +72,8 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
         threadList: undefined,
         aboutYou: undefined,
         topics: undefined,
-        events: undefined
+        events: undefined,
+        posts: undefined
     };
 
 
@@ -94,6 +102,12 @@ export const loadDataFromDirPath = async (fbDataDirPath, inspectionResults) => {
     if (eventsResult.enabled) {
         const eventsPath = `${fbDataDirPath}/${eventsResult.dirPath}`
         rawDataResult.events = getEvents(eventsPath, fs);
+    }
+
+    const postsResult = inspectionResults.find(({type}) => type === S_POSTS);
+    if(postsResult.enabled){
+        const postsPath = `${fbDataDirPath}/${postsResult.dirPath}`
+        rawDataResult.posts = getPosts(postsPath, fs);
     }
 
     return rawDataResult;

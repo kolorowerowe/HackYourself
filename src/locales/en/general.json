@@ -48,5 +48,6 @@
     "your_topics": "Your topics",
     "topic": "Topic",
     "stats_no_loaded": "This statistics haven't been loaded yet. Go to 'Choose dir' site and load data.",
-    "stats_missing": "This statistics are missing."
+    "stats_missing": "This statistics are missing.",
+    "posts": "Posts"
 }

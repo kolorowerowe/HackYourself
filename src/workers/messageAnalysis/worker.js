@@ -36,5 +36,9 @@ registerPromiseWorker((message) => {
         return getEventStatistics(message.events);
     }
 
+    if(message.type === 'getPostsStatistics'){
+        //TODO add algorithm
+        return {}
+    }
 
 });

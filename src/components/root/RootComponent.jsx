@@ -9,7 +9,7 @@ import {
     R_HELP,
     R_STATS_MESSAGE,
     R_STATS_TOPICS,
-    R_STATS_ABOUT_YOU, R_STATS_EVENTS
+    R_STATS_ABOUT_YOU, R_STATS_EVENTS, R_STATS_POSTS
 } from "./sidebar/routes";
 import ChooseStatsFileComponent from "../loadData/ChooseStatsFileComponent";
 import {PATH_TO_FOLDER, PATH_TO_STATS_FILE, USER_NAME} from "./localStorageKeys";
@@ -142,6 +142,12 @@ const RootComponent = () => {
                         <EventsComponent eventStatistics={eventStatistics}
                                          eventStatisticsStatus={statisticsStatus.events}/>
                     </Route>
+
+                    <Route exact path={R_STATS_POSTS}>
+                        <EventsComponent eventStatistics={eventStatistics}
+                                         eventStatisticsStatus={statisticsStatus.events}/>
+                    </Route>
+
                     <Route exact path={R_HELP}>
                         <HelpComponent navigateToChooseDir={() => history.push(R_CHOOSE_FOLDER)}/>
                     </Route>

@@ -48,5 +48,6 @@
     "your_topics": "Twoje tematy",
     "topic": "Temat",
     "stats_no_loaded": "Statystyki nie zostały jeszcze załadowane. Przejdź do zakładki 'Wybierz folder' i załaduj dane.",
-    "stats_missing": "Brakujące statystyki."
+    "stats_missing": "Brakujące statystyki.",
+    "posts": "Posty"
 }
