@@ -25,6 +25,7 @@ import {useStatistics} from "../../hooks/StatisticsHook";
 import TopicsComponentContainer from "../stats/topics/TopicsComponentContainer";
 import AboutYouComponentContainer from "../stats/aboutYou/AboutYouComponentContainer";
 import EventsComponent from "../stats/eventStatistics/EventsComponent";
+import PostsComponent from '../stats/postsStatisitcs/PostsComponent';
 
 const RootComponent = () => {
     const classes = useStyles();
@@ -39,7 +40,8 @@ const RootComponent = () => {
             messengerStatistics = {},
             aboutYouStatistics = {},
             topics = [],
-            eventStatistics = {}
+            eventStatistics = {},
+            postsStatistics = {}
         } = {},
         loadingLabel,
         statisticsStatus,
@@ -144,8 +146,8 @@ const RootComponent = () => {
                     </Route>
 
                     <Route exact path={R_STATS_POSTS}>
-                        <EventsComponent eventStatistics={eventStatistics}
-                                         eventStatisticsStatus={statisticsStatus.events}/>
+                        <PostsComponent postsStatistics={postsStatistics}
+                                         postsStatisticsStatus={statisticsStatus.posts}/>
                     </Route>
 
                     <Route exact path={R_HELP}>

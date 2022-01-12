@@ -53,9 +53,10 @@ const getEvents = (eventsDirPath, fs) => {
 }
 
 const getPosts = (postsDirPath, fs) =>{
+    let posts = readJsonFile(`${postsDirPath}/your_posts_1.json`, fs);
     //TODO perform here files parsing
     return {
-
+        posts: posts
     }
 }
 

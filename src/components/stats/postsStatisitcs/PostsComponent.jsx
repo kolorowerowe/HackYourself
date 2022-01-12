@@ -5,14 +5,13 @@ import { useTranslation } from "react-i18next"
 import StatisticsStatusBoundary from "../StatisticsStatusBoundary";
 import SwipeableViews from "react-swipeable-views";
 import {TabPanel} from "../../generic/TabPabel";
+import PostsGeneralStatistics from "./PostsGeneralStatistics";
 
 const PostsComponent = (props) => {
     const {t} = useTranslation()
 
     const {
-        postsStatisits :{
-
-        } = {},
+        postsStatistics,
         postsStatisticsStatus
     } = props
 
@@ -27,7 +26,7 @@ const PostsComponent = (props) => {
     const handleChangeIndex = (index) => {
         setValue(index);
     }
-
+    console.log("statistics: ", postsStatistics);
     return (
         <StatisticsStatusBoundary statisticsStatus={postsStatisticsStatus}>
             <AppBar position="static" color="default">
@@ -38,8 +37,8 @@ const PostsComponent = (props) => {
                     textColor="primary"
                     variant="fullWidth"
                 >
-                    <Tab label={t('general:general')}/>
-                    <Tab label={t('general:time')}/>
+                    <Tabs label={t('general:general')}/>
+                    <Tabs label={t('general:time')}/>
                 </Tabs>
             </AppBar>
             <SwipeableViews
@@ -48,10 +47,32 @@ const PostsComponent = (props) => {
                 onChangeIndex={handleChangeIndex}
             >
                 <TabPanel index={0} value={value} dir={theme.direction}>
-                    <h3>TODO fill me</h3>
+                    <PostsGeneralStatistics 
+                        postsCount={postsStatistics.postsCount} 
+                        postsWithPlacesCount={postsStatistics.postsWithPlacesCount} 
+                        postsWithGifsCount={postsStatistics.postsWithGifsCount} 
+                        postsWithImagesCount={postsStatistics.postsWithImagesCount}
+                        postsWithVideoCount={postsStatistics.postsWithVideoCount}
+                        avgTextLength={postsStatistics.avgTextLength}
+                        topUsedEmojies={postsStatistics.topUsedEmojies}
+                        topTaggedPersons={postsStatistics.topTaggedPersons}
+                        topUsedPlaces={postsStatistics.topUsedPlaces}                        
+                        >                        
+                    </PostsGeneralStatistics>
                 </TabPanel>
                 <TabPanel index={1} value={value} dir={theme.direction}>
-                    <h3>TODO fill me</h3>
+                    <PostsGeneralStatistics 
+                        postsCount={postsStatistics.postsCount} 
+                        postsWithPlacesCount={postsStatistics.postsWithPlacesCount} 
+                        postsWithGifsCount={postsStatistics.postsWithGifsCount} 
+                        postsWithImagesCount={postsStatistics.postsWithImagesCount}
+                        postsWithVideoCount={postsStatistics.postsWithVideoCount}
+                        avgTextLength={postsStatistics.avgTextLength}
+                        topUsedEmojies={postsStatistics.topUsedEmojies}
+                        topTaggedPersons={postsStatistics.topTaggedPersons}
+                        topUsedPlaces={postsStatistics.topUsedPlaces}                        
+                        >                        
+                    </PostsGeneralStatistics>
                 </TabPanel>
             </SwipeableViews>
         </StatisticsStatusBoundary>

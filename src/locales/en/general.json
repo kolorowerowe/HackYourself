@@ -49,5 +49,15 @@
     "topic": "Topic",
     "stats_no_loaded": "This statistics haven't been loaded yet. Go to 'Choose dir' site and load data.",
     "stats_missing": "This statistics are missing.",
-    "posts": "Posts"
+    "posts": "Posts",
+    "your_posts": "Your Posts",
+    "posts_count": "All posted",
+    "posts_avg_length": "Average length",
+    "posts_with_places_count": "Places",
+    "posts_with_gifs_count": "Gifs",
+    "posts_with_images_count": "Images",
+    "posts_with_video_count": "Videos",
+    "posts_top_used_emoji": "Top used emoji",
+    "posts_top_tagged_place": "Top tagged place",
+    "posts_top_tagged_person": "Top tagged person"
 }

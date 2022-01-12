@@ -49,5 +49,15 @@
     "topic": "Temat",
     "stats_no_loaded": "Statystyki nie zostały jeszcze załadowane. Przejdź do zakładki 'Wybierz folder' i załaduj dane.",
     "stats_missing": "Brakujące statystyki.",
-    "posts": "Posty"
+    "posts": "Posty",
+    "your_posts": "Twoje Posty",
+    "posts_count": "Wszystkie",
+    "posts_avg_length": "Średnia długość",
+    "posts_with_places_count": "Oznaczone miejsca",
+    "posts_with_gifs_count": "Gify",
+    "posts_with_images_count": "Zdjęcia",
+    "posts_with_video_count": "Wideo",
+    "posts_top_used_emoji": "Najczęściej używane emoji",
+    "posts_top_tagged_place": "Najczęściej oznaczane miejsce",
+    "posts_top_tagged_person": "Najczęściej oznaczana osoba"
 }
