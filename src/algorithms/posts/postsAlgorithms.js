@@ -1,4 +1,10 @@
 import utf8 from "utf8";
+import moment from "moment";
+import {
+  compareYearMonth,
+  getMonthYear,
+  MONTH_YEAR_FORMAT,
+} from "../message/timeAlgorithms";
 
 export const getPostsStatistics = ({ posts = [] }) => {
   decodeUtf8InStrings(posts);
@@ -35,7 +41,8 @@ export const getPostsStatistics = ({ posts = [] }) => {
     postsWithImagesCount: media.filter((x) => isImg(x.uri)).length,
     postsWithVideoCount: media.filter((x) => isVideo(x.uri)).length,
     avgTextLength: Math.round(avg(texts.map((x) => x.length))),
-    postsCount: posts.length
+    postsCount: posts.length,
+    ...getTimeStat(posts)
   };
   function isVideo(uri) {
     const extension = get_url_extension(uri);
@@ -105,6 +112,86 @@ export const getPostsStatistics = ({ posts = [] }) => {
       }, {});
     }
   }
+};
+
+function getTimeStat(posts) {
+  const dataList = posts.map((p) => moment.unix(p.timestamp));
+
+  let hourly = [];
+  for (let i = 0; i < 24; ++i) {
+    hourly[i] = getHourlyStats(i, dataList);
+  }
+
+  let weekly = [];
+  for (let i = 1; i <= 7; ++i) {
+    weekly = [...weekly, getWeeklyStats(i, dataList)];
+  }
+
+  const timelineStats = getTimelineStats(dataList);
+
+  return { hourly, weekly, timelineStats };
+}
+
+const getHourlyStats = (hour, dateList) => {
+  let filtered = dateList.filter(d => d.hours() === hour);
+
+  return {
+      hour,
+      count: filtered.length,
+  };
+};
+
+const getWeeklyStats = (isoWeekday, dateList) => {
+  let filtered = dateList.filter(d => d.isoWeekday() === isoWeekday);
+
+  return {
+      isoWeekday,
+      count: filtered.length,
+  };
+};
+
+const getTimelineStats = (dateList) => {
+
+  const resMap = dateList.reduce((map, date) => {
+      const monthYear = getMonthYear(date);
+
+      const currCount = map.get(monthYear) || 0;
+
+      map.set(monthYear, currCount + 1);
+
+      return map;
+  }, new Map());
+
+  const timelineStatsInActiveMonth = [...resMap.entries()].sort(compareYearMonth).map(obj => ({
+      date: moment(obj[0]).format(MONTH_YEAR_FORMAT),
+      count: obj[1],
+  }));
+
+  if (timelineStatsInActiveMonth.length === 0) {
+      return [];
+  }
+
+  let firstMonth = moment(timelineStatsInActiveMonth[0].date, MONTH_YEAR_FORMAT);
+  const lastMonth = moment(timelineStatsInActiveMonth[timelineStatsInActiveMonth.length - 1].date, MONTH_YEAR_FORMAT);
+
+  let generatedMonths = [];
+  while (moment(firstMonth).isSameOrBefore(lastMonth, 'month')) {
+      generatedMonths.push(firstMonth.format(MONTH_YEAR_FORMAT));
+      firstMonth = firstMonth.add(1, 'month');
+  }
+
+  let timelineStatsPointer = 0;
+  const timelineStatsAllMonths = generatedMonths.map(month => {
+      if (month === timelineStatsInActiveMonth[timelineStatsPointer].date) {
+          return timelineStatsInActiveMonth[timelineStatsPointer++]
+      }
+      return {
+          date: month,
+          count: 0,
+      }
+  });
+
+  return timelineStatsAllMonths;
 };
 
 function decodeUtf8InStrings(obj) {
