@@ -14,6 +14,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import MessageIcon from '@material-ui/icons/Message';
 import GamesIcon from '@material-ui/icons/Games';
 import EventIcon from '@material-ui/icons/Event';
+import AssignmentIcon from '@material-ui/icons/Assignment'
 import {
     R_CHOOSE_FOLDER,
     R_CONTACT,
@@ -22,7 +23,8 @@ import {
     R_STATS_MESSAGE,
     R_STATS_TOPICS,
     R_STATS_ABOUT_YOU,
-    R_STATS_EVENTS
+    R_STATS_EVENTS,
+    R_STATS_POSTS
 } from "./routes";
 import {useHistory, useLocation} from "react-router-dom";
 import Divider from "@material-ui/core/Divider";
@@ -59,9 +61,15 @@ const SideBar = () => {
     }, {
         name: t('general:events'),
         value: R_STATS_EVENTS,
-        IconComponent: EventIcon,
+        IconComponent: EventIcon,        
+    },
+    {
+        name: t('general:posts'),
+        value: R_STATS_POSTS,
+        IconComponent: AssignmentIcon,
         divider: true
-    },{
+    },
+    {
         name: t('general:help'),
         value: R_HELP,
         IconComponent: HelpOutlineIcon

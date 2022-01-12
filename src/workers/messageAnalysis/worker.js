@@ -4,6 +4,7 @@ import {getTimeStats, getTimeStatsPerRecipient} from "../../algorithms/message/t
 import {getTotalStats} from "../../algorithms/message/totalAlgorithms";
 import {getAboutYouStatistics} from "../../algorithms/aboutYou/aboutYouAlgorithms";
 import {getEventStatistics} from "../../algorithms/events/eventAlgorithms";
+import {getPostsStatistics} from "../../algorithms/posts/postsAlgorithms";
 
 
 registerPromiseWorker((message) => {
@@ -36,5 +37,8 @@ registerPromiseWorker((message) => {
         return getEventStatistics(message.events);
     }
 
+    if(message.type === 'getPostsStatistics'){        
+        return getPostsStatistics(message.posts);
+    }
 
 });

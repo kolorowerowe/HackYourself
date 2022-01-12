@@ -35,5 +35,6 @@
     "load_data_short": "Załąduj dane!",
     "beginning": "Chcesz zacząć analizę on początku? Kliknij tutaj!",
     "path_to_file": "Ścieżka do pliku JSON ze statystykami.",
-    "topic_desc": "Kolekcja tematów utworzonych na podstawie Twojej aktywności na Facebooku. Są używane do rekomendowania rzeczy w obszarach News Feed, News and Watch"
+    "topic_desc": "Kolekcja tematów utworzonych na podstawie Twojej aktywności na Facebooku. Są używane do rekomendowania rzeczy w obszarach News Feed, News and Watch",
+    "posts":"Statystyki na temat postów"
 }

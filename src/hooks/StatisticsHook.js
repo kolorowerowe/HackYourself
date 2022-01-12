@@ -13,14 +13,15 @@ export const useStatistics = () => {
         message: STATS_NOT_READY,
         aboutYou: STATS_NOT_READY,
         topics: STATS_NOT_READY,
-        events: STATS_NOT_READY
+        events: STATS_NOT_READY,
+        posts: STATS_NOT_READY
     });
 
     const [loadingLabel, setLoadingLabel] = useState('');
 
     const setStatisticsFromRawData = async (data, userName) => {
 
-        const {threadList, aboutYou, topics, events} = data;
+        const {threadList, aboutYou, topics, events, posts} = data;
 
         setLoadingLabel('Started analyzing data');
         const userNameOriginal = unfixEncoding(userName);
@@ -30,7 +31,8 @@ export const useStatistics = () => {
             messengerStatistics: {},
             aboutYouStatistics: {},
             topics: [],
-            events: {}
+            events: {},
+            posts: {}
         };
 
         if (!isObjectEmpty(threadList)) {
@@ -106,6 +108,20 @@ export const useStatistics = () => {
             }));
         }
 
+        if(!isObjectEmpty(posts)) {
+            setLoadingLabel('Analyzing posts ...');
+            newStatistics.postsStatistics = await analysisWorker.postForPostsStatistics(posts);
+
+            setStatisticsStatus(prev =>({
+                ...prev,
+                posts: STATS_OK
+            }));
+        }else {
+            setStatisticsStatus(prev => ({
+                ...prev,
+                posts: STATS_MISSING
+            }))
+        }
 
 
         setStatistics(newStatistics);
@@ -165,6 +181,18 @@ export const useStatistics = () => {
             setStatisticsStatus(prev => ({
                 ...prev,
                 events: STATS_MISSING
+            }));
+        }
+
+        if(!isObjectEmpty(newStats.postsStatistics)) {
+            setStatisticsStatus(prev =>({
+                ...prev,
+                posts: STATS_OK
+            }));
+        }else {
+            setStatisticsStatus(prev =>({
+                ...prev,
+                posts: STATS_MISSING
             }));
         }
     }

@@ -8,7 +8,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {PATH_TO_FOLDER, USER_NAME} from "../root/localStorageKeys";
 import Link from "@material-ui/core/Link";
 import InspectionDataResult from "./InspectionDataResult";
-import {S_MESSENGER, S_EVENTS, S_TOPICS} from "../root/constans";
+import {S_MESSENGER, S_EVENTS, S_TOPICS, S_POSTS} from "../root/constans";
 import CustomLinearProgress from "../generic/CustomLinearProgress";
 import {inspectDataExists} from "../../utils/fileLoader";
 import _ from 'lodash';
@@ -53,9 +53,16 @@ const ChooseFolderComponent = (props) => {
         enabled: false
     },
     {
-        type:S_EVENTS ,
+        type: S_EVENTS ,
         name: t('general:events'),
         dirPath: '/events',
+        available: false,
+        enabled: false
+    },
+    {
+        type: S_POSTS,
+        name: t('general:posts'),
+        dirPath: '/posts',
         available: false,
         enabled: false
     }]);

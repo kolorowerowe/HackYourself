@@ -13,6 +13,7 @@ import {
     R_HELP,
     R_STATS_EVENTS,
     R_STATS_MESSAGE,
+    R_STATS_POSTS,
     R_STATS_TOPICS
 } from "../root/sidebar/routes";
 import {useTranslation} from "react-i18next";
@@ -78,6 +79,11 @@ const HelloComponent = () => {
             <MenuCard title={t('general:events')}
                       description={t('description:events')}
                       path={R_STATS_EVENTS}
+                      xs={12}/>
+
+            <MenuCard title={t('general:posts')}
+                      description={t('description:posts')}
+                      path={R_STATS_POSTS}
                       xs={12}/>
 
             <MenuCard title={t('general:help')}
