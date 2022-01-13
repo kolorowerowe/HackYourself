@@ -73,7 +73,7 @@ const MessageGeneralStatistics = ({totalStats}) => {
                        name="wordPattern"
                        value={userPattern}
                        placeholder={'Elon'}
-                       label={'Search user'}
+                       label={t('general:search_user')}
                        onChange={e => setUserPattern(e.target.value)}
                        fullWidth
             />

@@ -95,7 +95,7 @@ const SideBar = () => {
     // let languageCodeGlobal = 'en'
 
     const [languageMenu, setLanguageMenu] = useState(null);
-    const [languageCodeGlobal, setLanguageCodeGlobal] = useState('en');
+    const [languageCodeGlobal, setLanguageCodeGlobal] = useState(localStorage.getItem('languageCode') || 'en');
 
     const handleLanguageIconClick = (event) => {
         setLanguageMenu(event.currentTarget);
@@ -104,7 +104,8 @@ const SideBar = () => {
     const handleLanguageChange = (languageCode) => {
         setLanguageMenu(null);
         i18next.changeLanguage(languageCode);
-        setLanguageCodeGlobal(languageCode)
+        setLanguageCodeGlobal(languageCode);
+        localStorage.setItem("languageCode", languageCode);
     };
 
     return (

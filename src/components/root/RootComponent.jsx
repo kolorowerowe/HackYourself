@@ -26,11 +26,13 @@ import TopicsComponentContainer from "../stats/topics/TopicsComponentContainer";
 import AboutYouComponentContainer from "../stats/aboutYou/AboutYouComponentContainer";
 import EventsComponent from "../stats/eventStatistics/EventsComponent";
 import PostsComponent from '../stats/postsStatisitcs/PostsComponent';
+import {useTranslation} from "react-i18next";
 
 const RootComponent = () => {
     const classes = useStyles();
     const history = useHistory();
     const {enqueueSnackbar} = useSnackbar();
+    const {t} = useTranslation();
 
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(false);
@@ -69,7 +71,7 @@ const RootComponent = () => {
 
             await setStatisticsFromRawData(data, _userName);
             history.push(R_STATS_MESSAGE);
-            enqueueSnackbar('Successfully analysed data', {variant: 'success'});
+            enqueueSnackbar(t('general:successfully_analyzed_data'), {variant: 'success'});
 
         }).catch(e => {
             console.error(e);
@@ -92,7 +94,7 @@ const RootComponent = () => {
             history.push(R_STATS_MESSAGE);
             setLoading(false);
 
-            enqueueSnackbar('Loaded successfully from file', {variant: 'success'});
+            enqueueSnackbar(t('general:loaded_from_file'), {variant: 'success'});
 
         }).catch(e => {
             console.error(e);

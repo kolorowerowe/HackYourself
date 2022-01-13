@@ -3,10 +3,12 @@ import {unfixEncoding} from "../algorithms/encoding";
 import analysisWorker from "../workers/messageAnalysis";
 import {saveToFile} from "../utils/fileSaver";
 import {STATS_MISSING, STATS_NOT_READY, STATS_OK} from "../components/root/constans";
+import {useTranslation} from "react-i18next";
 
 
 export const useStatistics = () => {
 
+    const {t} = useTranslation();
     const [statistics, setStatistics] = useState({});
 
     const [statisticsStatus, setStatisticsStatus] = useState({
@@ -23,7 +25,7 @@ export const useStatistics = () => {
 
         const {threadList, aboutYou, topics, events, posts} = data;
 
-        setLoadingLabel('Started analyzing data');
+        setLoadingLabel(t('general:analyzing.started'));
         const userNameOriginal = unfixEncoding(userName);
 
 
@@ -36,23 +38,22 @@ export const useStatistics = () => {
         };
 
         if (!isObjectEmpty(threadList)) {
-            setLoadingLabel('Analyzing total statistics ...');
+            setLoadingLabel(t('general:analyzing_message_total_statistics'));
             newStatistics.messengerStatistics.totalStats = await analysisWorker.postForTotalStats(threadList, userNameOriginal);
 
-            setLoadingLabel('Analyzing time statistics ...');
+            setLoadingLabel(t('general:analyzing_message_time_statistics'));
             newStatistics.messengerStatistics.timeStats = await analysisWorker.postForTimeStats(threadList, userNameOriginal);
 
-            setLoadingLabel('Analyzing word statistics ...');
+            setLoadingLabel(t('general:analyzing_message_word_statistics'));
             newStatistics.messengerStatistics.wordStats = await analysisWorker.postForWordStats(threadList, userNameOriginal);
 
-            setLoadingLabel('Analyzing time statistics per recipient ...');
+            setLoadingLabel(t('general:analyzing_message_time_per_recipient'));
             newStatistics.messengerStatistics.timeStatsPerRecipient = await analysisWorker.postForTimeStatsPerRecipient(threadList, userNameOriginal);
 
-
-            setLoadingLabel('Analyzing word statistics per recipient ...');
+            setLoadingLabel(t('general:analyzing_message_word_per_recipient'));
             newStatistics.messengerStatistics.wordStatsPerRecipient = await analysisWorker.postForWordStatsPerRecipient(threadList, userNameOriginal);
 
-            setLoadingLabel('Analyzed messenger statistics.');
+            setLoadingLabel(t('general:message_ready'));
             setStatisticsStatus(prev => ({
                 ...prev,
                 message: STATS_OK
@@ -65,7 +66,7 @@ export const useStatistics = () => {
         }
 
         if (!isObjectEmpty(aboutYou)) {
-            setLoadingLabel('Analyzing about you ...');
+            setLoadingLabel(t('general:analyzing_about_you'));
             newStatistics.aboutYouStatistics = await analysisWorker.postForAboutYouStatistics(aboutYou);
 
             setStatisticsStatus(prev => ({
@@ -80,7 +81,7 @@ export const useStatistics = () => {
         }
 
         if (!isObjectEmpty(topics)) {
-            setLoadingLabel('Setting topics ...');
+            setLoadingLabel(t('general:setting_topics'));
             newStatistics.topics = topics;
             setStatisticsStatus(prev => ({
                 ...prev,
@@ -94,7 +95,7 @@ export const useStatistics = () => {
         }
 
         if (!isObjectEmpty(events)) {
-            setLoadingLabel('Analyzing events ...');
+            setLoadingLabel(t('general:analyzing_events'));
             newStatistics.eventStatistics = await analysisWorker.postForEventStatistics(events);
 
             setStatisticsStatus(prev => ({
@@ -109,7 +110,7 @@ export const useStatistics = () => {
         }
 
         if(!isObjectEmpty(posts)) {
-            setLoadingLabel('Analyzing posts ...');
+            setLoadingLabel(t('general:analyzing_posts'));
             newStatistics.postsStatistics = await analysisWorker.postForPostsStatistics(posts);
 
             setStatisticsStatus(prev =>({
@@ -125,7 +126,7 @@ export const useStatistics = () => {
 
 
         setStatistics(newStatistics);
-        setLoadingLabel('Done!');
+        setLoadingLabel(t('general:all_things_done'));
 
         saveToFile('stats.json', newStatistics);
 

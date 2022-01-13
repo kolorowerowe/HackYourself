@@ -11,7 +11,6 @@ const resources = {
     en: {
         general: generalEN,
         description: descriptionEN
-
     },
     pl: {
         general: generalPL,
@@ -30,7 +29,6 @@ i18n
         lng: localStorage.getItem("languageCode"),
         fallbackLng: "en",
         keySeparator: false, // we do not use keys in form messages.welcome
-
         interpolation: {
             escapeValue: false // react already safes from xss
         }
