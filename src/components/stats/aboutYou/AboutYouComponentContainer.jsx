@@ -31,7 +31,7 @@ const AboutYouComponentContainer = (props) => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <DataLabeled label={t('general:video_lenght')}
+                    <DataLabeled label={t('general:video_length')}
                                  value={formatDuration(moment.duration(totalTimeViewed, t('general:second')))}/>
                 </Grid>
             </Grid>
